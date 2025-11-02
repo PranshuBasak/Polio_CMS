@@ -1,0 +1,1 @@
+- Follow the Best Practices and Design Patterns.
