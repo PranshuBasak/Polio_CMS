@@ -5,12 +5,12 @@ import type React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useBlogStore, useProjectsStore, useSkillsStore } from '@/lib/stores';
 import {
-  ArrowDown,
-  ArrowUp,
-  BarChart3,
-  Eye,
-  FileText,
-  FolderKanban,
+    ArrowDown,
+    ArrowUp,
+    BarChart3,
+    Eye,
+    FileText,
+    FolderKanban,
 } from 'lucide-react';
 
 type StatChangeType = 'increase' | 'decrease';
@@ -26,7 +26,7 @@ type Stat = {
 
 export default function AdminStats() {
   const projects = useProjectsStore((state) => state.projects);
-  const internalPosts = useBlogStore((state) => state.blogPosts);
+  const internalPosts = useBlogStore((state) => state.internalPosts);
   const skills = useSkillsStore((state) => state.skills);
 
   const stats: Stat[] = [

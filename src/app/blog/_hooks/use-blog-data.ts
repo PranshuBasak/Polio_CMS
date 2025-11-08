@@ -8,25 +8,25 @@ import { useBlogStore } from '../../../lib/stores';
  * Provides computed values and selectors with null safety
  */
 export function useBlogData() {
-  const blogPosts = useBlogStore((state) => state.blogPosts) || [];
-  const externalBlogPosts =
-    useBlogStore((state) => state.externalBlogPosts) || [];
+  const internalPosts = useBlogStore((state) => state.internalPosts) || [];
+  const externalPosts =
+    useBlogStore((state) => state.externalPosts) || [];
   const getBlogPostBySlug = useBlogStore((state) => state.getBlogPostBySlug);
 
   // Memoized latest posts (first 3)
   const latestInternalPosts = useMemo(() => {
-    return Array.isArray(blogPosts) ? blogPosts.slice(0, 3) : [];
-  }, [blogPosts]);
+    return Array.isArray(internalPosts) ? internalPosts.slice(0, 3) : [];
+  }, [internalPosts]);
 
   const latestExternalPosts = useMemo(() => {
-    return Array.isArray(externalBlogPosts)
-      ? externalBlogPosts.slice(0, 3)
+    return Array.isArray(externalPosts)
+      ? externalPosts.slice(0, 3)
       : [];
-  }, [externalBlogPosts]);
+  }, [externalPosts]);
 
   return {
-    internalPosts: blogPosts || [],
-    externalPosts: externalBlogPosts || [],
+    internalPosts: internalPosts || [],
+    externalPosts: externalPosts || [],
     latestInternalPosts,
     latestExternalPosts,
     getBlogPostBySlug,

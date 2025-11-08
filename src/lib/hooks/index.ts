@@ -22,6 +22,40 @@ export function useHydration() {
   return isHydrated;
 }
 
+export function useStoreHydration() {
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    // Wait for stores to hydrate by checking multiple times
+    // Zustand persist rehydration happens asynchronously
+    const checkHydration = () => {
+      // Check if stores exist and have data
+      const hasStores =
+        typeof window !== 'undefined' &&
+        localStorage.getItem('blog-storage') &&
+        localStorage.getItem('projects-storage') &&
+        localStorage.getItem('skills-storage');
+
+      if (hasStores) {
+        // Use requestAnimationFrame to ensure DOM updates complete
+        requestAnimationFrame(() => {
+          setIsHydrated(true);
+        });
+      }
+    };
+
+    // Check immediately
+    checkHydration();
+
+    // Also check after a small delay to catch late hydration
+    const timeout = setTimeout(checkHydration, 100);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return isHydrated;
+}
+
 export function useDebounce<T>(value: T, delay = 500): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 

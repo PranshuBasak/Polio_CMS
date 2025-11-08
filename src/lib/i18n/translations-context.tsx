@@ -60,6 +60,7 @@ const translations: Record<Language, Record<string, string>> = {
     'projects.caseStudy.results': 'Results',
     'projects.caseStudy.viewCode': 'View Code',
     'skills.title': 'Skills',
+    'skills.description': 'My technical expertise and proficiency across various technologies, frameworks, and tools.',
     'skills.category.core': 'Core',
     'skills.category.devops': 'DevOps',
     'skills.category.databases': 'Databases',
@@ -80,6 +81,7 @@ const translations: Record<Language, Record<string, string>> = {
     'blog.search': 'Search blog posts...',
     'blog.noResults': 'No posts found matching your search.',
     'contact.title': 'Contact Me',
+    'contact.description': "Let's discuss your next project or collaboration opportunity. I'm always open to new challenges.",
     'contact.form.title': 'Get in Touch',
     'contact.form.description':
       "Fill out the form and I'll get back to you as soon as possible.",
@@ -142,6 +144,7 @@ const translations: Record<Language, Record<string, string>> = {
     'projects.caseStudy.results': 'Resultados',
     'projects.caseStudy.viewCode': 'Ver Código',
     'skills.title': 'Habilidades',
+    'skills.description': 'Mi experiencia técnica y competencia en varias tecnologías, frameworks y herramientas.',
     'skills.category.core': 'Principales',
     'skills.category.devops': 'DevOps',
     'skills.category.databases': 'Bases de Datos',
@@ -162,6 +165,7 @@ const translations: Record<Language, Record<string, string>> = {
     'blog.noResults':
       'No se encontraron publicaciones que coincidan con tu búsqueda.',
     'contact.title': 'Contáctame',
+    'contact.description': 'Hablemos sobre tu próximo proyecto u oportunidad de colaboración. Siempre estoy abierto a nuevos desafíos.',
     'contact.form.title': 'Ponte en Contacto',
     'contact.form.description':
       'Completa el formulario y te responderé lo antes posible.',
@@ -224,12 +228,13 @@ const translations: Record<Language, Record<string, string>> = {
     'projects.caseStudy.solution': 'Solution',
     'projects.caseStudy.results': 'Résultats',
     'projects.caseStudy.viewCode': 'Voir le Code',
-    'skills.title': 'Compétences',
+        'skills.title': 'Compétences',
+    'skills.description': 'Mon expertise technique et ma maîtrise de diverses technologies, frameworks et outils.',
     'skills.category.core': 'Principales',
     'skills.category.devops': 'DevOps',
     'skills.category.databases': 'Bases de Données',
-    'skills.category.learning': 'En Apprentissage',
-    'testimonials.title': "Ce Qu'on Dit de Moi",
+    'skills.category.learning': 'Apprentissage',
+    'testimonials.title': 'Ce Que Disent Les Gens',
     'testimonials.description':
       'Retours de clients et collègues sur mon travail et ma collaboration.',
     'timeline.title': 'Expérience et Formation',
@@ -245,6 +250,7 @@ const translations: Record<Language, Record<string, string>> = {
     'blog.search': 'Rechercher des articles...',
     'blog.noResults': 'Aucun article correspondant à votre recherche.',
     'contact.title': 'Me Contacter',
+    'contact.description': 'Discutons de votre prochain projet ou opportunité de collaboration. Je suis toujours ouvert à de nouveaux défis.',
     'contact.form.title': 'Entrer en Contact',
     'contact.form.description':
       'Remplissez le formulaire et je vous répondrai dès que possible.',
@@ -307,6 +313,7 @@ const translations: Record<Language, Record<string, string>> = {
     'projects.caseStudy.results': '结果',
     'projects.caseStudy.viewCode': '查看代码',
     'skills.title': '技能',
+    'skills.description': '我在各种技术、框架和工具方面的技术专长和熟练程度。',
     'skills.category.core': '核心',
     'skills.category.devops': 'DevOps',
     'skills.category.databases': '数据库',
@@ -324,8 +331,9 @@ const translations: Record<Language, Record<string, string>> = {
     'blog.search': '搜索博客文章...',
     'blog.noResults': '未找到符合您搜索条件的文章。',
     'contact.title': '联系我',
+    'contact.description': '让我们讨论您的下一个项目或合作机会。我总是乐于接受新的挑战。',
     'contact.form.title': '取得联系',
-    'contact.form.description': '填写表单，我会尽快回复您。',
+    'contact.form.description': '填写表格，我会尽快回复您。',
     'contact.form.name': '姓名',
     'contact.form.email': '电子邮件',
     'contact.form.message': '留言',
@@ -384,6 +392,7 @@ const translations: Record<Language, Record<string, string>> = {
     'projects.caseStudy.results': 'النتائج',
     'projects.caseStudy.viewCode': 'عرض الكود',
     'skills.title': 'المهارات',
+    'skills.description': 'خبرتي التقنية وإتقاني عبر مختلف التقنيات والأطر والأدوات.',
     'skills.category.core': 'أساسية',
     'skills.category.devops': 'DevOps',
     'skills.category.databases': 'قواعد البيانات',
@@ -402,6 +411,7 @@ const translations: Record<Language, Record<string, string>> = {
     'blog.search': 'البحث في المقالات...',
     'blog.noResults': 'لم يتم العثور على مقالات تطابق بحثك.',
     'contact.title': 'اتصل بي',
+    'contact.description': 'لنناقش مشروعك القادم أو فرصة التعاون. أنا دائمًا منفتح على التحديات الجديدة.',
     'contact.form.title': 'تواصل معي',
     'contact.form.description': 'املأ النموذج وسأرد عليك في أقرب وقت ممكن.',
     'contact.form.name': 'الاسم',
@@ -483,9 +493,10 @@ const translations: Record<Language, Record<string, string>> = {
     'blog.noResults':
       'আপনার অনুসন্ধানের সাথে মিলে এমন কোন পোস্ট পাওয়া যায়নি।',
     'contact.title': 'যোগাযোগ করুন',
+    'contact.description': 'আপনার পরবর্তী প্রকল্প বা সহযোগিতার সুযোগ নিয়ে আলোচনা করি। আমি সর্বদা নতুন চ্যালেঞ্জের জন্য উন্মুখ।',
     'contact.form.title': 'যোগাযোগ করুন',
     'contact.form.description':
-      'ফর্মটি পূরণ করুন এবং আমি যত তাড়াতাড়ি সম্ভব আপনার সাথে যোগাযোগ করব।',
+      'ফর্মটি পূরণ করুন এবং আমি যত তাড়াতাড়ি সম্ভব আপনার সাথে যোগাযোগ করব।',
     'contact.form.name': 'নাম',
     'contact.form.email': 'ইমেইল',
     'contact.form.message': 'বার্তা',
@@ -521,7 +532,7 @@ export function TranslationsProvider({
 }) {
   // Get initial language from localStorage or browser settings
   const [language, setLanguageState] = useState<Language>('en');
-  const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   // Set the language and store it in localStorage
   const setLanguage = (lang: Language) => {
@@ -539,31 +550,25 @@ export function TranslationsProvider({
 
   // Initialize language from localStorage or browser settings
   useEffect(() => {
+    setMounted(true);
     const savedLanguage = localStorage.getItem(
       'preferred-language'
     ) as Language | null;
-    const browserLanguage = navigator.language.split('-')[0] as Language;
 
-    // Use saved language, browser language, or default to English
-    const initialLanguage =
-      savedLanguage ||
-      (['en', 'es', 'fr', 'zh', 'ar', 'bn'].includes(browserLanguage)
-        ? browserLanguage
-        : 'en');
-
-    // Use requestAnimationFrame to delay state update until after paint
-    const frame = requestAnimationFrame(() => {
-      setLanguage(initialLanguage as Language);
-      setIsLoading(false);
-    });
-
-    return () => cancelAnimationFrame(frame);
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+    } else {
+      // Try to use browser language
+      const browserLanguage = navigator.language.split('-')[0] as Language;
+      if (['en', 'es', 'fr', 'zh', 'ar', 'bn'].includes(browserLanguage)) {
+        setLanguage(browserLanguage);
+      }
+    }
   }, []);
 
-  // Translation function
+  // Translation function - always return translation, never the key
   const t = (key: string): string => {
-    if (isLoading) return key; // Return the key while loading
-    return translations[language]?.[key] || key; // Fallback to key if translation not found
+    return translations[language]?.[key] || translations['en']?.[key] || key;
   };
 
   // Date formatter based on current language

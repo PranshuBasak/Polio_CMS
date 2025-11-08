@@ -1,6 +1,6 @@
+import { nanoid } from "nanoid"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { nanoid } from "nanoid"
 
 export type Testimonial = {
   id: string
@@ -28,7 +28,7 @@ const defaultTestimonials: Testimonial[] = [
     author: "Sarah Johnson",
     position: "CTO",
     company: "TechInnovate",
-    avatar: "/placeholder.svg?height=80&width=80",
+    avatar: "/avatar-placeholder.svg",
     rating: 5,
   },
   {
@@ -38,7 +38,7 @@ const defaultTestimonials: Testimonial[] = [
     author: "Michael Chen",
     position: "Founder",
     company: "DataFlow Systems",
-    avatar: "/placeholder.svg?height=80&width=80",
+    avatar: "/avatar-placeholder.svg",
     rating: 5,
   },
   {
@@ -48,7 +48,7 @@ const defaultTestimonials: Testimonial[] = [
     author: "Priya Patel",
     position: "Lead Developer",
     company: "CloudScale",
-    avatar: "/placeholder.svg?height=80&width=80",
+    avatar: "/avatar-placeholder.svg",
     rating: 5,
   },
 ]

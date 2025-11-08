@@ -7,17 +7,17 @@ import { useHeroStore, useUIStore } from '@/lib/stores';
 import { cn } from '@/lib/utils';
 import { ModeToggle } from '@/shared/components/layout/mode-toggle';
 import {
-  BarChart3,
-  FileAxis3d,
-  FileText,
-  FolderKanban,
-  Home,
-  LayoutDashboard,
-  LogOut,
-  Menu,
-  Settings,
-  User,
-  X,
+    BarChart3,
+    FileAxis3d,
+    FileText,
+    FolderKanban,
+    Home,
+    LayoutDashboard,
+    LogOut,
+    Menu,
+    Settings,
+    User,
+    X,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -33,6 +33,7 @@ export function AdminSidebar() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -116,7 +117,7 @@ export function AdminSidebar() {
             <div className="flex items-center gap-2 overflow-hidden">
               <Avatar className="h-8 w-8 shrink-0">
                 <AvatarImage
-                  src={heroData.image || '/placeholder.svg?height=32&width=32'}
+                  src={heroData.image || '/avatar-placeholder.svg'}
                   alt={heroData.name}
                 />
                 <AvatarFallback>

@@ -4,11 +4,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { Project } from '@/lib/data-provider';
@@ -39,9 +39,9 @@ export default function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
       'Deployed the solution using Docker and Kubernetes for scalability',
     ],
     screenshots: [
-      '/placeholder.svg?height=300&width=500',
-      '/placeholder.svg?height=300&width=500',
-      '/placeholder.svg?height=300&width=500',
+      '/project-placeholder.svg',
+      '/project-placeholder.svg',
+      '/project-placeholder.svg',
     ],
   };
 

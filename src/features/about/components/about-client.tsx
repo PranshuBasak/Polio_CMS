@@ -11,7 +11,7 @@ import { AboutValues } from './about-values';
 /**
  * About Client - Client Component Wrapper
  *
- * Manages tab state and coordinates sub-components
+ * Manages tab state and coordinates sub-components with enhanced styling
  */
 interface AboutClientProps {
   aboutData: AboutData;
@@ -21,7 +21,7 @@ export function AboutClient({ aboutData }: AboutClientProps) {
   const { t } = useTranslations();
 
   return (
-    <section id="about" className="section-container">
+    <section id="about" className="section-container bg-dot-pattern">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -30,22 +30,28 @@ export function AboutClient({ aboutData }: AboutClientProps) {
       >
         <h2 className="section-heading text-center">{t('about.title')}</h2>
 
-        <Tabs defaultValue="bio" className="w-full max-w-4xl mx-auto">
-          <TabsList className="grid grid-cols-3 mb-8">
-            <TabsTrigger value="bio">{t('about.tab.bio')}</TabsTrigger>
-            <TabsTrigger value="journey">{t('about.tab.journey')}</TabsTrigger>
-            <TabsTrigger value="values">{t('about.tab.values')}</TabsTrigger>
+        <Tabs defaultValue="bio" className="w-full max-w-5xl mx-auto">
+          <TabsList className="grid grid-cols-3 mb-12 h-12 bg-muted/50">
+            <TabsTrigger value="bio" className="tab-enhanced text-base">
+              {t('about.tab.bio')}
+            </TabsTrigger>
+            <TabsTrigger value="journey" className="tab-enhanced text-base">
+              {t('about.tab.journey')}
+            </TabsTrigger>
+            <TabsTrigger value="values" className="tab-enhanced text-base">
+              {t('about.tab.values')}
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="bio" className="space-y-6">
+          <TabsContent value="bio" className="space-y-6 animate-fade-in">
             <AboutBio bio={aboutData.bio} focus={aboutData.focus} />
           </TabsContent>
 
-          <TabsContent value="journey" className="space-y-6">
+          <TabsContent value="journey" className="space-y-6 animate-fade-in">
             <AboutJourney journey={aboutData.journey} />
           </TabsContent>
 
-          <TabsContent value="values" className="space-y-6">
+          <TabsContent value="values" className="space-y-6 animate-fade-in">
             <AboutValues
               values={aboutData.values}
               mission={aboutData.mission}

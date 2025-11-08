@@ -1,6 +1,6 @@
+import { nanoid } from "nanoid"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { nanoid } from "nanoid"
 
 export type Project = {
   id: string
@@ -50,9 +50,9 @@ const defaultProjects: Project[] = [
         "Deployed the solution using Docker and Kubernetes for scalability",
       ],
       screenshots: [
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
       ],
     },
   },
@@ -78,9 +78,9 @@ const defaultProjects: Project[] = [
         "Implemented comprehensive logging and monitoring",
       ],
       screenshots: [
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
       ],
     },
   },
@@ -105,9 +105,9 @@ const defaultProjects: Project[] = [
         "Developed a mechanism to rebuild read models from the event store",
       ],
       screenshots: [
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
       ],
     },
   },

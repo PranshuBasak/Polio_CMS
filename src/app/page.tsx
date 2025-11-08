@@ -1,11 +1,11 @@
 import AnimatedWaves from '@/shared/components/ui-enhancements/animated-waves';
 import { Suspense } from 'react';
 import {
-  BlogSkeleton,
-  ContactSkeleton,
-  ProjectsSkeleton,
-  SkillsSkeleton,
-  TestimonialsSkeleton,
+    BlogSkeleton,
+    ContactSkeleton,
+    ProjectsSkeleton,
+    SkillsSkeleton,
+    TestimonialsSkeleton,
 } from '../components/ui/skeleton-loader';
 import { ErrorBoundary } from '../shared/components/ui-enhancements/error-boundary';
 
@@ -32,7 +32,7 @@ export default function Home() {
 
       {/* About Section with Animation Waves */}
       <div className="relative">
-        <AnimatedWaves position="top" color="hsl(var(--primary))" />
+        <AnimatedWaves position="top" />
         <ErrorBoundary>
           <Suspense fallback={<div className="py-20" />}>
             <AboutSection />
@@ -41,7 +41,7 @@ export default function Home() {
         <Suspense fallback={<div className="py-8" />}>
           <TechStackLogos />
         </Suspense>
-        <AnimatedWaves position="bottom" color="hsl(var(--primary))" />
+        <AnimatedWaves position="bottom" />
       </div>
 
       {/* Projects Section - Server Component */}
@@ -53,7 +53,7 @@ export default function Home() {
 
       {/* Skills Section - Server Component */}
       <div className="relative">
-        <AnimatedWaves position="top" color="hsl(var(--primary))" flip={true} />
+        <AnimatedWaves position="top" flip={true} />
         <ErrorBoundary>
           <Suspense fallback={<SkillsSkeleton />}>
             <SkillsSection />
@@ -61,7 +61,6 @@ export default function Home() {
         </ErrorBoundary>
         <AnimatedWaves
           position="bottom"
-          color="hsl(var(--primary))"
           flip={true}
         />
       </div>

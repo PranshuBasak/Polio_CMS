@@ -1,13 +1,14 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
+import { useHydration } from '@/lib/hooks';
 import {
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+    Area,
+    AreaChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis
 } from 'recharts';
 
 type ChartData = {
@@ -37,13 +38,14 @@ const generateData = (): ChartData[] => {
 };
 
 export default function AdminActivityChart() {
+  const isHydrated = useHydration();
   const data = generateData();
 
   return (
     <div className="w-full h-[300px]">
-      {data.length > 0 ? (
+      {isHydrated && data.length > 0 ? (
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
+          <AreaChart
             data={data}
             margin={{
               top: 5,
@@ -52,6 +54,12 @@ export default function AdminActivityChart() {
               bottom: 0,
             }}
           >
+            <defs>
+              <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
             <XAxis
               dataKey="date"
               stroke="#888888"
@@ -82,15 +90,15 @@ export default function AdminActivityChart() {
                 return null;
               }}
             />
-            <Line
+            <Area
               type="monotone"
               dataKey="value"
-              stroke="hsl(var(--primary))"
+              stroke="#8B5CF6"
               strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 6, style: { fill: 'hsl(var(--primary))' } }}
+              fill="url(#colorValue)"
+              activeDot={{ r: 6, style: { fill: '#8B5CF6' } }}
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       ) : (
         <div className="flex items-center justify-center h-full">

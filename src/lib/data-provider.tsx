@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 
 // Types
 export type HeroData = {
@@ -144,7 +144,7 @@ const defaultHeroData: HeroData = {
   title: "Software Architect & Backend Developer",
   description:
     "I build scalable backend systems and architect software solutions with a focus on performance, security, and maintainability.",
-  image: "/placeholder.svg?height=400&width=400",
+  image: "/avatar-placeholder.svg",
 }
 
 const defaultAboutData: AboutData = {
@@ -223,9 +223,9 @@ const defaultProjects: Project[] = [
         "Deployed the solution using Docker and Kubernetes for scalability",
       ],
       screenshots: [
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
       ],
     },
   },
@@ -251,9 +251,9 @@ const defaultProjects: Project[] = [
         "Implemented comprehensive logging and monitoring",
       ],
       screenshots: [
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
       ],
     },
   },
@@ -278,9 +278,9 @@ const defaultProjects: Project[] = [
         "Developed a mechanism to rebuild read models from the event store",
       ],
       screenshots: [
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
-        "/placeholder.svg?height=300&width=500",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
       ],
     },
   },
@@ -542,7 +542,7 @@ const defaultTestimonials: Testimonial[] = [
     author: "Sarah Johnson",
     position: "CTO",
     company: "TechInnovate",
-    avatar: "/placeholder.svg?height=80&width=80",
+    avatar: "/avatar-placeholder.svg",
     rating: 5,
   },
   {
@@ -552,7 +552,7 @@ const defaultTestimonials: Testimonial[] = [
     author: "Michael Chen",
     position: "Founder",
     company: "DataFlow Systems",
-    avatar: "/placeholder.svg?height=80&width=80",
+    avatar: "/avatar-placeholder.svg",
     rating: 5,
   },
   {
@@ -562,7 +562,7 @@ const defaultTestimonials: Testimonial[] = [
     author: "Priya Patel",
     position: "Lead Developer",
     company: "CloudScale",
-    avatar: "/placeholder.svg?height=80&width=80",
+    avatar: "/avatar-placeholder.svg",
     rating: 5,
   },
 ]

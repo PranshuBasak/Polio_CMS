@@ -1,20 +1,20 @@
 "use client"
 
-import { useState } from "react"
-import { useBlogStore } from "../../../lib/stores"
 import AdminHeader from "@/features/admin/components/admin-header"
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card"
-import { Button } from "../../../components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
-import { Pencil, Trash2, Plus, RefreshCw } from "lucide-react"
-import { useToast } from "../../../hooks/use-toast"
+import { Pencil, Plus, RefreshCw, Trash2 } from "lucide-react"
 import Link from "next/link"
-import { useHydration } from "../../../lib/hooks"
+import { useState } from "react"
+import { Button } from "../../../components/ui/button"
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card"
 import { Spinner } from "../../../components/ui/spinner"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
+import { useToast } from "../../../hooks/use-toast"
+import { useHydration } from "../../../lib/hooks"
+import { useBlogStore } from "../../../lib/stores"
 
 export default function BlogPage() {
   const isHydrated = useHydration()
-  const posts = useBlogStore((state) => state.posts ?? [])
+  const internalPosts = useBlogStore((state) => state.internalPosts ?? [])
   const externalPosts = useBlogStore((state) => state.externalPosts ?? [])
   const deletePost = useBlogStore((state) => state.deletePost)
   const setExternalPosts = useBlogStore((state) => state.setExternalPosts)
@@ -76,14 +76,14 @@ export default function BlogPage() {
 
       <Tabs defaultValue="internal" className="w-full">
         <TabsList className="grid grid-cols-2 mb-8">
-          <TabsTrigger value="internal">My Posts ({posts?.length ?? 0})</TabsTrigger>
+          <TabsTrigger value="internal">My Posts ({internalPosts?.length ?? 0})</TabsTrigger>
           <TabsTrigger value="external">External Posts ({externalPosts?.length ?? 0})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="internal">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {posts && posts.length > 0 ? (
-              posts.map((post) => (
+            {internalPosts && internalPosts.length > 0 ? (
+              internalPosts.map((post) => (
                 <Card key={post.id}>
                   <CardHeader>
                     <div className="flex items-center text-sm text-muted-foreground mb-2">
@@ -129,7 +129,7 @@ export default function BlogPage() {
               </Card>
             )}
 
-            {posts && posts.length > 0 && (
+            {internalPosts && internalPosts.length > 0 && (
               <Card className="flex flex-col items-center justify-center p-6 border-dashed">
                 <Link href="/admin/blog/new">
                   <Button variant="outline" className="mb-2 bg-transparent">

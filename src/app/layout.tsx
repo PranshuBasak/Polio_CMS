@@ -18,8 +18,60 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Tanzim | Software Architect & Backend Developer',
   description:
-    'Portfolio website of Tanzim, a Software Architect and Backend Developer specializing in TypeScript, Java, Spring Boot, and Node.js',
-  generator: 'v0.app',
+    'Portfolio of Tanzim - Expert Software Architect & Backend Developer specializing in scalable systems, microservices, TypeScript, Java, Spring Boot, and Node.js. Building enterprise-grade solutions.',
+  keywords: [
+    'Software Architect',
+    'Backend Developer',
+    'TypeScript',
+    'Java',
+    'Spring Boot',
+    'Node.js',
+    'Microservices',
+    'System Design',
+    'Full Stack Developer',
+    'Tanzim',
+    'Portfolio',
+  ],
+  authors: [{ name: 'Tanzim', url: 'https://github.com/0xTanzim' }],
+  creator: 'Tanzim',
+  publisher: 'Tanzim',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://0xtanzim.dev',
+    title: 'Tanzim | Software Architect & Backend Developer',
+    description:
+      'Expert Software Architect specializing in scalable backend systems, microservices architecture, and enterprise solutions.',
+    siteName: 'Tanzim Portfolio',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Tanzim | Software Architect & Backend Developer',
+    description:
+      'Expert Software Architect specializing in scalable backend systems and microservices architecture.',
+    creator: '@0xTanzim',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32' },
+    ],
+    shortcut: '/favicon.svg',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
+  generator: 'Next.js',
 };
 
 export default function RootLayout({

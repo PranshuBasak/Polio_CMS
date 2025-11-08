@@ -162,7 +162,7 @@ const defaultHeroData: HeroData = {
   title: 'Software Architect & Backend Developer',
   description:
     'I build scalable backend systems and architect software solutions with a focus on performance, security, and maintainability.',
-  image: '/placeholder.svg?height=400&width=400',
+  image: '/avatar-placeholder.svg',
 };
 
 const defaultAboutData: AboutData = {
@@ -399,10 +399,8 @@ export const useSkillsStore = create<SkillsStore>()(
 // ============================================================================
 
 type BlogStore = {
-  posts: BlogPost[];
+  internalPosts: BlogPost[];
   externalPosts: ExternalBlogPost[];
-  blogPosts: BlogPost[];
-  externalBlogPosts: ExternalBlogPost[];
   addBlogPost: (post: BlogPost) => void;
   removeBlogPost: (id: string) => void;
   updateBlogPost: (id: string, post: Partial<BlogPost>) => void;
@@ -417,45 +415,39 @@ type BlogStore = {
 export const useBlogStore = create<BlogStore>()(
   persist(
     (set, get) => ({
-      blogPosts: [],
-      externalBlogPosts: [],
-      get posts() {
-        return get().blogPosts;
-      },
-      get externalPosts() {
-        return get().externalBlogPosts;
-      },
+      internalPosts: [],
+      externalPosts: [],
       addBlogPost: (post) =>
         set((state) => ({
-          blogPosts: [...state.blogPosts, post],
+          internalPosts: [...state.internalPosts, post],
         })),
       removeBlogPost: (id) =>
         set((state) => ({
-          blogPosts: state.blogPosts.filter((post) => post.id !== id),
+          internalPosts: state.internalPosts.filter((post) => post.id !== id),
         })),
       updateBlogPost: (id, updatedPost) =>
         set((state) => ({
-          blogPosts: state.blogPosts.map((post) =>
+          internalPosts: state.internalPosts.map((post) =>
             post.id === id ? { ...post, ...updatedPost } : post
           ),
         })),
       addExternalBlogPost: (post) =>
         set((state) => ({
-          externalBlogPosts: [...state.externalBlogPosts, post],
+          externalPosts: [...state.externalPosts, post],
         })),
       removeExternalBlogPost: (id) =>
         set((state) => ({
-          externalBlogPosts: state.externalBlogPosts.filter(
+          externalPosts: state.externalPosts.filter(
             (post) => post.id !== id
           ),
         })),
       setExternalPosts: (posts) =>
         set({
-          externalBlogPosts: posts,
+          externalPosts: posts,
         }),
       deletePost: (id) => get().removeBlogPost(id),
-      getBlogPostBySlug: (slug) => get().blogPosts.find((p) => p.slug === slug),
-      resetBlogPosts: () => set({ blogPosts: [], externalBlogPosts: [] }),
+      getBlogPostBySlug: (slug) => get().internalPosts.find((p) => p.slug === slug),
+      resetBlogPosts: () => set({ internalPosts: [], externalPosts: [] }),
     }),
     {
       name: 'blog-storage',
@@ -545,31 +537,5 @@ export const useTestimonialsStore = create<TestimonialsStore>()(
 // UI STORE
 // ============================================================================
 
-type UIStore = {
-  theme: string;
-  toggleTheme: () => void;
-  isSidebarOpen: boolean;
-  toggleSidebar: () => void;
-  openSidebar: () => void;
-  closeSidebar: () => void;
-};
-
-export const useUIStore = create<UIStore>()(
-  persist(
-    (set) => ({
-      theme: 'light',
-      toggleTheme: () =>
-        set((state) => ({
-          theme: state.theme === 'light' ? 'dark' : 'light',
-        })),
-      isSidebarOpen: false,
-      toggleSidebar: () =>
-        set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
-      openSidebar: () => set({ isSidebarOpen: true }),
-      closeSidebar: () => set({ isSidebarOpen: false }),
-    }),
-    {
-      name: 'ui-storage',
-    }
-  )
-);
+// Re-export from ui-store.ts to avoid duplication
+export { useUIStore } from './ui-store';

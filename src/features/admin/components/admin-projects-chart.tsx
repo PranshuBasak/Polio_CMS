@@ -1,6 +1,7 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
+import { useHydration } from '@/lib/hooks';
 import { useProjectsStore } from '@/lib/stores';
 import { useEffect, useState } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
@@ -11,6 +12,7 @@ type ChartData = {
 };
 
 export default function AdminProjectsChart() {
+  const isHydrated = useHydration();
   const projects = useProjectsStore((state) => state.projects);
   const [data, setData] = useState<ChartData[]>([
     { name: 'TypeScript', value: 4 },
@@ -47,18 +49,18 @@ export default function AdminProjectsChart() {
     }
   }, [projects]);
 
-  // Colors for the pie chart
+  // Vibrant color palette for better visual distinction
   const COLORS = [
-    'hsl(var(--primary))',
-    'hsl(var(--primary) / 0.8)',
-    'hsl(var(--primary) / 0.6)',
-    'hsl(var(--primary) / 0.4)',
-    'hsl(var(--primary) / 0.2)',
+    '#8B5CF6', // Purple
+    '#3B82F6', // Blue
+    '#10B981', // Green
+    '#F59E0B', // Amber
+    '#EF4444', // Red
   ];
 
   return (
     <div className="w-full h-[300px] flex items-center justify-center">
-      {data.length > 0 ? (
+      {isHydrated && data.length > 0 ? (
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie

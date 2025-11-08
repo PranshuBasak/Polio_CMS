@@ -19,7 +19,7 @@ const defaultHeroData: HeroData = {
   title: "Software Architect & Backend Developer",
   description:
     "I build scalable backend systems and architect software solutions with a focus on performance, security, and maintainability.",
-  image: "/placeholder.svg?height=400&width=400",
+  image: "/avatar-placeholder.svg",
 }
 
 export const useHeroStore = create<HeroStore>()(

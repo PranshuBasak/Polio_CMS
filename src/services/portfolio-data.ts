@@ -8,16 +8,26 @@
  */
 
 import type {
-  AboutData,
-  BlogPost,
-  ExternalBlogPost,
-  HeroData,
-  Project,
-  ResumeData,
-  Skill,
-  SkillCategory,
-  Testimonial,
+    AboutData,
+    BlogPost,
+    ExternalBlogPost,
+    HeroData,
+    Project,
+    ResumeData,
+    Skill,
+    SkillCategory,
+    Testimonial,
 } from '@/lib/types';
+
+// Import default data
+import {
+    defaultBlogPosts,
+    defaultExternalPosts,
+    defaultProjects,
+    defaultSkillCategories,
+    defaultSkills,
+    defaultTestimonials,
+} from '@/lib/data/defaults';
 
 // Storage keys match Zustand persist configuration
 const STORAGE_KEYS = {
@@ -64,7 +74,7 @@ export async function getHeroData(): Promise<HeroData> {
       title: 'Software Architect & Backend Developer',
       description:
         'I build scalable backend systems and architect software solutions with a focus on performance, security, and maintainability.',
-      image: '/placeholder.svg?height=400&width=400',
+      image: '/avatar-placeholder.svg',
     }
   );
 }
@@ -77,11 +87,57 @@ export async function getAboutData(): Promise<AboutData> {
 
   return (
     data?.aboutData ?? {
-      bio: '',
-      focus: '',
-      journey: [],
-      values: [],
-      mission: '',
+      bio: "I'm a software architect and backend developer with expertise in TypeScript, Java, Spring Boot, and Node.js. I specialize in designing and implementing scalable, maintainable, and secure backend systems.",
+      focus:
+        "My focus areas include system design, microservices architecture, and DevOps practices. I'm passionate about creating efficient solutions that solve complex problems while maintaining code quality and performance.",
+      journey: [
+        {
+          id: "1",
+          title: "Senior Software Architect",
+          company: "TechInnovate",
+          date: "2022 - Present",
+          description:
+            "Leading the architecture design for distributed systems and microservices. Implementing event-driven architecture and CQRS patterns for scalable and maintainable systems.",
+        },
+        {
+          id: "2",
+          title: "Backend Team Lead",
+          company: "DataFlow Systems",
+          date: "2019 - 2022",
+          description:
+            "Led a team of 6 backend developers. Designed and implemented scalable APIs and services using Spring Boot and Node.js. Mentored junior developers and established coding standards.",
+        },
+        {
+          id: "3",
+          title: "Software Engineer",
+          company: "CloudScale",
+          date: "2017 - 2019",
+          description:
+            "Developed and maintained backend services for high-traffic applications. Implemented CI/CD pipelines and DevOps practices to improve deployment efficiency and system reliability.",
+        },
+      ],
+      values: [
+        {
+          id: "1",
+          title: "Passion",
+          description: "I'm deeply passionate about creating elegant solutions to complex problems.",
+          icon: "Heart",
+        },
+        {
+          id: "2",
+          title: "Excellence",
+          description: "I strive for excellence in every line of code and system design decision.",
+          icon: "Target",
+        },
+        {
+          id: "3",
+          title: "Innovation",
+          description: "I believe in continuous learning and embracing innovative approaches.",
+          icon: "Lightbulb",
+        },
+      ],
+      mission:
+        "To create elegant, scalable, and maintainable software solutions that solve real-world problems and deliver exceptional value to users and businesses.",
     }
   );
 }
@@ -91,7 +147,7 @@ export async function getAboutData(): Promise<AboutData> {
  */
 export async function getProjects(): Promise<Project[]> {
   const data = getStorageData<{ projects: Project[] }>(STORAGE_KEYS.PROJECTS);
-  return data?.projects ?? [];
+  return data?.projects ?? defaultProjects;
 }
 
 export async function getProjectById(id: string): Promise<Project | null> {
@@ -109,14 +165,14 @@ export async function getFeaturedProjects(limit = 6): Promise<Project[]> {
  */
 export async function getSkills(): Promise<Skill[]> {
   const data = getStorageData<{ skills: Skill[] }>(STORAGE_KEYS.SKILLS);
-  return data?.skills ?? [];
+  return data?.skills ?? defaultSkills;
 }
 
 export async function getSkillCategories(): Promise<SkillCategory[]> {
   const data = getStorageData<{ categories: SkillCategory[] }>(
     STORAGE_KEYS.SKILLS
   );
-  return data?.categories ?? [];
+  return data?.categories ?? defaultSkillCategories;
 }
 
 export async function getSkillsByCategory(category: string): Promise<Skill[]> {
@@ -128,21 +184,22 @@ export async function getSkillsByCategory(category: string): Promise<Skill[]> {
  * Blog Data Service
  */
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  const data = getStorageData<{ blogPosts: BlogPost[] }>(STORAGE_KEYS.BLOG);
-  return data?.blogPosts ?? [];
+  const data = getStorageData<{ internalPosts: BlogPost[] }>(STORAGE_KEYS.BLOG);
+  return data?.internalPosts ?? defaultBlogPosts;
 }
 
 export async function getExternalBlogPosts(): Promise<ExternalBlogPost[]> {
-  const data = getStorageData<{ externalBlogPosts: ExternalBlogPost[] }>(
+  const data = getStorageData<{ externalPosts: ExternalBlogPost[] }>(
     STORAGE_KEYS.BLOG
   );
-  return data?.externalBlogPosts ?? [];
+  return data?.externalPosts ?? defaultExternalPosts;
 }
 
 export async function getBlogPostBySlug(
   slug: string
 ): Promise<BlogPost | null> {
-  const posts = await getBlogPosts();
+  const data = getStorageData<{ internalPosts: BlogPost[] }>(STORAGE_KEYS.BLOG);
+  const posts = data?.internalPosts ?? defaultBlogPosts;
   return posts.find((p) => p.slug === slug) ?? null;
 }
 
@@ -185,7 +242,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
   const data = getStorageData<{ testimonials: Testimonial[] }>(
     STORAGE_KEYS.TESTIMONIALS
   );
-  return data?.testimonials ?? [];
+  return data?.testimonials ?? defaultTestimonials;
 }
 
 export async function getFeaturedTestimonials(

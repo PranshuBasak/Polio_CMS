@@ -2,14 +2,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useTranslations } from '@/lib/i18n/translations-context';
 import type { AboutValue as AboutValueType } from '@/lib/types';
 import {
-  Award,
-  Compass,
-  Heart,
-  Lightbulb,
-  Shield,
-  Star,
-  Target,
-  Zap,
+    Award,
+    Compass,
+    Heart,
+    Lightbulb,
+    Shield,
+    Star,
+    Target,
+    Zap,
 } from 'lucide-react';
 
 /**
@@ -47,10 +47,10 @@ export function AboutValues({ values, mission }: AboutValuesProps) {
           return (
             <Card
               key={value.id}
-              className="border border-border hover:border-primary/50 transition-all"
+              className="border border-border hover:border-primary/50 transition-all duration-300 card-hover"
             >
               <CardContent className="p-6 flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-4 transition-transform duration-300 hover:scale-110">
                   <IconComponent className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">{value.title}</h3>
@@ -61,9 +61,9 @@ export function AboutValues({ values, mission }: AboutValuesProps) {
         })}
       </div>
 
-      <div className="mt-8 p-6 bg-muted/30 rounded-lg">
-        <h3 className="text-xl font-bold mb-4">{t('about.mission.title')}</h3>
-        <p className="text-lg">{mission}</p>
+      <div className="mt-8 p-8 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5 rounded-xl border border-primary/10 shadow-lg">
+        <h3 className="text-xl font-bold mb-4 gradient-text">{t('about.mission.title')}</h3>
+        <p className="text-lg leading-relaxed">{mission}</p>
       </div>
     </>
   );

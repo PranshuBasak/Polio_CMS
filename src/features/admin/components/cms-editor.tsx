@@ -2,24 +2,24 @@
 
 import type React from 'react';
 
-import { Code, Eye, Save, Undo } from 'lucide-react';
-import { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { Code, Eye, Save, Undo } from 'lucide-react';
+import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface CMSEditorProps {
   title: string;
@@ -199,8 +199,7 @@ export default function CMSEditor({
                     alt={label}
                     className="object-cover w-full h-full"
                     onError={(e) => {
-                      e.currentTarget.src =
-                        '/placeholder.svg?height=64&width=64';
+                      e.currentTarget.src = '/avatar-placeholder.svg';
                     }}
                   />
                 </div>

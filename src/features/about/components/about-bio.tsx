@@ -32,7 +32,7 @@ export function AboutBio({ bio, focus }: AboutBioProps) {
         {stackIcons.map((item) => (
           <Card
             key={item.name}
-            className="border border-border hover:border-primary/50 transition-colors"
+            className="border border-border hover:border-primary/50 transition-all duration-300 card-hover"
           >
             <CardContent className="flex flex-col items-center justify-center p-6">
               <item.icon className="h-10 w-10 mb-3 text-primary" />
