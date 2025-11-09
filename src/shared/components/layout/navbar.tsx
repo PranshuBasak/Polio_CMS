@@ -56,6 +56,11 @@ const Navbar = memo(function Navbar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
+  // Hide navbar on admin pages
+  if (isAdmin) {
+    return null;
+  }
+
   return (
     <header
       className={cn(

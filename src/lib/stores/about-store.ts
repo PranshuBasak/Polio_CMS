@@ -49,7 +49,7 @@ const defaultAboutData: AboutData = {
       id: "2",
       title: "Software Developer",
       company: "Softsasi",
-      date: "2024 - Present",
+      date: "2025 - Present",
       description:
         "Working on Next.js and TypeScript projects, building modern web applications with focus on performance and user experience. Contributing to team's technical growth and code quality standards.",
     },

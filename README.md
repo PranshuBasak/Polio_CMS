@@ -1,6 +1,23 @@
-# Portfolio CMS - Modern Next.js Portfolio Website
+# 🚀 DynamicFolio CMS
 
-A feature-rich, multi-language portfolio CMS built with Next.js 16, React 19, and TypeScript. This project provides a complete portfolio website with an admin dashboard for content management, internationalization support for 6 languages, and production-ready features.
+> **Your portfolio, your way — no backend required.**
+
+A dynamic portfolio CMS built with Next.js 16 that empowers developers to manage their entire portfolio content through an intuitive admin dashboard. Features real-time Medium blog integration, multi-language support (6 languages), and localStorage persistence—no database required.
+
+[![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+---
+
+## 🎬 **Demo**
+
+- **Live Site:** [https://dynamic-folio-cms.vercel.app/](https://dynamic-folio-cms.vercel.app/)
+- **Video Demo:** [Watch on YouTube](https://www.youtube.com/watch?v=2KLFdPBvUug) *(2:58)*
+- **Admin Dashboard:** `/admin` route
+
+---
 
 ## ✨ Features
 
@@ -13,7 +30,7 @@ A feature-rich, multi-language portfolio CMS built with Next.js 16, React 19, an
 - **Resume** - Complete work experience, education, and certifications
 - **Testimonials** - Client testimonials with ratings and photos
 
-### 🛠️ Admin Dashboard
+### �️ Admin Dashboard
 - **Content Management** - Edit all portfolio content through intuitive admin UI
 - **Drag & Drop** - Reorder items with `@hello-pangea/dnd`
 - **Form Validation** - Zod schemas for data integrity
@@ -67,7 +84,7 @@ A feature-rich, multi-language portfolio CMS built with Next.js 16, React 19, an
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/0xTanzim/dynamicFolio_CMS
 cd sec
 
 # Install dependencies
@@ -295,7 +312,6 @@ pnpm run type-check
 - **[DATABASE.md](./docs/DATABASE.md)** - Database setup and migration guide
 - **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Deployment instructions
 - **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System architecture overview
-- **[Copilot Instructions](./.github/copilot-instructions.md)** - AI agent development guide
 
 ## 🤝 Contributing
 
@@ -330,7 +346,7 @@ MIT License - see [LICENSE](./LICENSE) file for details.
 
 For questions or issues:
 - Open an issue on GitHub
-- Contact: [your-email@example.com]
+- Contact: [tanzimhossain2@gmail.com](mailto:tanzimhossain2@gmail.com)
 - Documentation: [docs/](./docs/)
 
 ---

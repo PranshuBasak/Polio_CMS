@@ -12,7 +12,6 @@ Complete guide for deploying your Portfolio CMS to production.
 - [CI/CD with GitHub Actions](#cicd-with-github-actions)
 - [Monitoring & Analytics](#monitoring--analytics)
 - [Troubleshooting](#troubleshooting)
-
 ---
 
 ## Vercel Deployment (Recommended)

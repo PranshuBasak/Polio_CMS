@@ -4,12 +4,20 @@ import { useTranslations } from '@/lib/i18n/translations-context';
 import { useHeroStore, useSiteSettingsStore } from '@/lib/stores';
 import { FileText, Github, Linkedin, Mail } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { memo } from 'react';
 
 export default memo(function Footer() {
   const { t } = useTranslations();
+  const pathname = usePathname();
+  const isAdmin = pathname.startsWith('/admin');
   const heroData = useHeroStore((state) => state.heroData);
   const settings = useSiteSettingsStore((state) => state.settings);
+
+  // Hide footer on admin pages
+  if (isAdmin) {
+    return null;
+  }
 
   return (
     <footer className="border-t bg-muted/40">

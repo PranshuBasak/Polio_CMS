@@ -1,7 +1,30 @@
 {
-  "name": "new",
+  "name": "dynamicfolio-cms",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "Tanzim Hossain",
+    "email": "tanzimhossain2@outlook.com",
+    "url": "https://github.com/0xTanzim"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0xTanzim/dynamicFolio_CMS"
+  },
+  "keywords": [
+    "portfolio",
+    "cms",
+    "nextjs",
+    "typescript",
+    "zustand",
+    "tailwindcss",
+    "shadcn-ui",
+    "no-backend",
+    "developer-portfolio",
+    "portfolio-website",
+    "content-management"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -62,6 +85,7 @@
     "react-markdown": "^10.1.0",
     "react-resizable-panels": "^3.0.6",
     "recharts": "^3.3.0",
+    "rss-parser": "^3.13.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",

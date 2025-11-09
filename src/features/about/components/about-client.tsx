@@ -31,14 +31,14 @@ export function AboutClient({ aboutData }: AboutClientProps) {
         <h2 className="section-heading text-center">{t('about.title')}</h2>
 
         <Tabs defaultValue="bio" className="w-full max-w-5xl mx-auto">
-          <TabsList className="grid grid-cols-3 mb-12 h-12 bg-muted/50">
-            <TabsTrigger value="bio" className="tab-enhanced text-base">
+          <TabsList className="grid grid-cols-3 mb-8 sm:mb-12 h-10 sm:h-12 bg-muted/50 w-full">
+            <TabsTrigger value="bio" className="tab-enhanced text-xs sm:text-sm md:text-base px-2 sm:px-4">
               {t('about.tab.bio')}
             </TabsTrigger>
-            <TabsTrigger value="journey" className="tab-enhanced text-base">
+            <TabsTrigger value="journey" className="tab-enhanced text-xs sm:text-sm md:text-base px-2 sm:px-4">
               {t('about.tab.journey')}
             </TabsTrigger>
-            <TabsTrigger value="values" className="tab-enhanced text-base">
+            <TabsTrigger value="values" className="tab-enhanced text-xs sm:text-sm md:text-base px-2 sm:px-4">
               {t('about.tab.values')}
             </TabsTrigger>
           </TabsList>

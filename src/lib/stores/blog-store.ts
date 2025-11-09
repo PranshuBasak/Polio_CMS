@@ -1,3 +1,4 @@
+import { fetchMediumPosts } from "@/lib/rss-fetcher"
 import { nanoid } from "nanoid"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
@@ -47,7 +48,7 @@ const defaultInternalPosts: BlogPost[] = [
       "# TypeScript Decorators: Legacy vs. New\n\nDecorators let you attach extra behavior to classes or methods with a simple @name tag. They're great for logging calls, validating inputs, and more. In this article, we'll explore the differences between legacy and new decorator syntax and their practical applications...",
     excerpt:
       "Decorators let you attach extra behavior to classes or methods with a simple @name tag. Great for logging calls, validating inputs, and understanding both legacy and new syntax.",
-    date: "2024-10-03",
+    date: "2025-10-03",
   },
   {
     id: "2",
@@ -57,7 +58,7 @@ const defaultInternalPosts: BlogPost[] = [
       "# Leaky Bucket Algorithm for System Design\n\nUnderstanding the Leaky Bucket Algorithm is crucial for implementing effective rate limiting in distributed systems. This guide covers implementation details, trade-offs, and real-world use cases...",
     excerpt:
       "Understanding the Leaky Bucket Algorithm for System Design - a comprehensive guide to implementing rate limiting in distributed systems.",
-    date: "2024-09-28",
+    date: "2025-09-28",
   },
   {
     id: "3",
@@ -67,7 +68,7 @@ const defaultInternalPosts: BlogPost[] = [
       "# Token Bucket Algorithm for Rate Limiting\n\nWhy rate limiting matters in modern applications and how the Token Bucket algorithm provides an elegant solution. Learn implementation strategies and best practices...",
     excerpt:
       "Why rate limiting matters and how the Token Bucket algorithm provides an elegant solution for controlling API request rates.",
-    date: "2024-09-27",
+    date: "2025-09-27",
   },
   {
     id: "4",
@@ -77,68 +78,8 @@ const defaultInternalPosts: BlogPost[] = [
       "# React Design Patterns\n\nMaster these three React design patterns to write scalable, reusable, and maintainable code. Detailed explanations and practical examples included...",
     excerpt:
       "Master recursive, partial, and composition patterns in React to write scalable, reusable, and maintainable code with detailed explanations.",
-    date: "2024-04-18",
-  },
-  {
-    id: "5",
-    title: "Mastering React HOCs: A Practical Guide to Reusable Code",
-    slug: "mastering-react-hocs",
-    content:
-      "# Higher-Order Components in React\n\nHigher-Order Components (HOCs) in React have been a game-changer for keeping code clean and reusable. Learn practical patterns and best practices...",
-    excerpt:
-      "Higher-Order Components (HOCs) in React help keep code clean and reusable. A practical guide with real-world examples.",
-    date: "2024-04-15",
-  },
-  {
-    id: "6",
-    title: "Mastering Container Components for Smarter React Apps",
-    slug: "react-container-components",
-    content:
-      "# Container Components in React\n\nReact's component-based approach is powerful, but as apps grow, mixing logic and UI can turn your code into a tangled mess. Container components provide the solution...",
-    excerpt:
-      "Learn how container components solve the problem of mixing logic and UI as React apps grow in complexity.",
-    date: "2024-04-13",
-  },
-  {
-    id: "7",
-    title: "Splitting Prisma Schema into Multiple Files: A Simple Guide",
-    slug: "splitting-prisma-schema-multiple-files",
-    content:
-      "# Splitting Prisma Schema\n\nBy default, Prisma uses just one file. As your project grows, this single file can become unwieldy. Here's how to split it effectively...",
-    excerpt:
-      "A solution for managing large Prisma schemas by splitting them into multiple files for better organization and maintainability.",
-    date: "2024-03-03",
-  },
-  {
-    id: "8",
-    title: "Implementing Multiple Middleware in Next.js",
-    slug: "nextjs-multiple-middleware",
-    content:
-      "# Multiple Middleware in Next.js\n\nCombining NextAuth and Internationalization in Next.js. Learn how to compose multiple middleware functions effectively...",
-    excerpt:
-      "Combining NextAuth and Internationalization in Next.js for powerful authentication and i18n support.",
-    date: "2024-05-21",
-  },
-  {
-    id: "9",
-    title: "Why Data Structures Matter: Optimizing the Fibonacci Sequence",
-    slug: "data-structures-fibonacci-optimization",
-    content:
-      "# Data Structures and Fibonacci\n\nThe Fibonacci sequence is a classic in computer science, not just for its mathematical charm but for what it teaches about efficiency...",
-    excerpt:
-      "The Fibonacci sequence teaches valuable lessons about efficiency, memoization, and algorithm optimization.",
-    date: "2023-12-31",
-  },
-  {
-    id: "10",
-    title: "How to Fix the Copilot Sidebar in Microsoft Edge on Linux",
-    slug: "fix-copilot-edge-linux",
-    content:
-      "# Fix Copilot on Linux\n\nA simple, two-command fix to get the AI assistant working on Ubuntu and other Linux distributions...",
-    excerpt:
-      "A simple, two-command fix to get the Copilot AI assistant working on Ubuntu and other Linux distros in Microsoft Edge.",
-    date: "2024-10-29",
-  },
+    date: "2025-04-18",
+  }
 ]
 
 const defaultExternalPosts: ExternalBlogPost[] = [
@@ -148,7 +89,7 @@ const defaultExternalPosts: ExternalBlogPost[] = [
     excerpt:
       "Explore more technical articles on software development, system design, React patterns, and backend engineering on Medium.",
     url: "https://medium.com/@0xTanzim",
-    date: "2024-11-09",
+    date: "2025-11-09",
     source: "Medium",
   },
 ]
@@ -183,18 +124,20 @@ export const useBlogStore = create<BlogStore>()(
       getBlogPostBySlug: (slug) => get().internalPosts.find((p) => p.slug === slug),
       refreshExternalPosts: async () => {
         try {
-          const timestamp = new Date().toISOString()
-          set((state) => ({
-            externalPosts: state.externalPosts.map((post) => ({
-              ...post,
-              title: post.title.includes("(Updated)")
-                ? post.title
-                : `${post.title} (Updated: ${new Date().toLocaleTimeString()})`,
-            })),
-          }))
+          // Fetch real Medium posts
+          const mediumPosts = await fetchMediumPosts("0xTanzim", 10)
+
+          if (mediumPosts.length > 0) {
+            set({
+              externalPosts: mediumPosts,
+            })
+          } else {
+            // Keep existing posts if fetch fails
+            console.warn("No Medium posts fetched, keeping existing posts")
+          }
         } catch (error) {
           console.error("Failed to refresh external posts:", error)
-          throw error
+          // Don't throw - keep existing posts on error
         }
       },
       resetBlog: () =>

@@ -108,13 +108,13 @@ export function AdminSidebar() {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 bg-background border-r shadow-lg transition-all duration-300 ease-in-out',
+          'fixed inset-y-0 left-0 z-50 bg-card border-r border-border shadow-xl transition-all duration-300 ease-in-out',
           isSidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full',
           'md:translate-x-0 md:w-64 md:z-30'
         )}
       >
         <div className="flex flex-col h-full">
-          <div className="flex items-center h-14 px-4 border-b justify-between">
+          <div className="flex items-center h-16 px-4 border-b border-border bg-muted/30 justify-between">
             <div className="flex items-center gap-2 overflow-hidden">
               <Avatar className="h-8 w-8 shrink-0">
                 <AvatarImage
@@ -156,10 +156,10 @@ export function AdminSidebar() {
                     }
                   }}
                   className={cn(
-                    'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
+                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                     pathname === route.href
-                      ? 'bg-primary text-primary-foreground'
-                      : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   )}
                 >
                   <route.icon className="h-5 w-5 flex-shrink-0" />
@@ -169,10 +169,10 @@ export function AdminSidebar() {
             </nav>
           </div>
 
-          <div className="p-4 border-t">
+          <div className="p-4 border-t border-border bg-muted/20">
             <Link
               href="/"
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted transition-colors"
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
             >
               <Home className="h-5 w-5" />
               <span>Back to Site</span>
@@ -180,10 +180,13 @@ export function AdminSidebar() {
 
             <Separator className="my-4" />
 
-            <div className="flex items-center rounded-md px-3 py-2 text-sm text-muted-foreground">
-              <LogOut className="h-5 w-5 mr-3" />
+            <button
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              onClick={() => console.log('Logout clicked')}
+            >
+              <LogOut className="h-5 w-5" />
               <span>Logout</span>
-            </div>
+            </button>
           </div>
         </div>
       </aside>

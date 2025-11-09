@@ -70,7 +70,7 @@ const defaultResumeData: ResumeData = {
       title: "Backend Developer",
       company: "Softsasi",
       location: "Remote",
-      startDate: "2024-01",
+      startDate: "2025-01",
       endDate: "Present",
       description:
         "Developing scalable backend systems and APIs using modern technologies. Building full-stack applications with focus on performance and maintainability.",
@@ -104,8 +104,8 @@ const defaultResumeData: ResumeData = {
       degree: "Bachelor of Science in Computer Science & Engineering",
       institution: "United International University",
       location: "Dhaka, Bangladesh",
-      startDate: "2019-09",
-      endDate: "2023-12",
+      startDate: "2020-09",
+      endDate: "2026-12",
       description:
         "Focused on software development, system design, data structures, and algorithms. Active participation in competitive programming and open-source contributions.",
       courses: [

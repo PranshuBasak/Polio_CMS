@@ -11,8 +11,8 @@ export default function AdminLayout({
     <ErrorBoundary>
       <div className="flex min-h-screen bg-background">
         <AdminSidebar />
-        <div className="flex-1 w-full transition-all duration-300 ease-in-out md:pl-64">
-          <div className="container p-4 pt-6 md:p-6 lg:p-8 max-w-7xl mx-auto">
+        <div className="flex-1 w-full min-h-screen transition-all duration-300 ease-in-out md:ml-64">
+          <div className="w-full p-4 pt-20 md:pt-6 md:p-8 lg:p-10 max-w-7xl mx-auto">
             {children}
           </div>
         </div>

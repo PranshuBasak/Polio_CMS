@@ -2,20 +2,20 @@
 
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from '@/components/ui/dialog';
 import { useResumeStore } from '@/lib/stores';
 import { Eye, FileDown, FileText } from 'lucide-react';
@@ -39,17 +39,18 @@ export default function ResumeDownload() {
           <FileText className="h-12 w-12 text-primary/60" />
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between pt-2">
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 bg-transparent"
-            >
-              <Eye className="h-4 w-4" />
-              Preview
-            </Button>
-          </DialogTrigger>
+      <CardFooter className="flex flex-col gap-2 pt-2">
+        <div className="flex justify-between w-full gap-2">
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 bg-transparent flex-1"
+              >
+                <Eye className="h-4 w-4" />
+                Preview
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-w-4xl h-[80vh]">
             <DialogHeader>
               <DialogTitle>Resume Preview</DialogTitle>
@@ -67,10 +68,19 @@ export default function ResumeDownload() {
           </DialogContent>
         </Dialog>
 
-        <Button asChild className="flex items-center gap-2">
-          <a href={resumeUrl} download="Tanzim_Resume.pdf">
-            <FileDown className="h-4 w-4" />
-            Download PDF
+          <Button asChild className="flex items-center gap-2 flex-1">
+            <a href={resumeUrl} download="Tanzim_Resume.pdf">
+              <FileDown className="h-4 w-4" />
+              Download PDF
+            </a>
+          </Button>
+        </div>
+
+        {/* Print Version Button */}
+        <Button asChild variant="secondary" className="flex items-center gap-2 w-full">
+          <a href="/resume/print" target="_blank" rel="noopener noreferrer">
+            <FileText className="h-4 w-4" />
+            Print Version
           </a>
         </Button>
       </CardFooter>
