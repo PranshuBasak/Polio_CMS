@@ -34,10 +34,21 @@ export const adminService = {
   },
 
   /**
-   * Validate admin access (placeholder for future auth)
+   * Validate admin access
+   *
+   * ⚠️ WARNING: This is a demo portfolio without authentication.
+   * In production, implement proper authentication using:
+   * - NextAuth.js for session management
+   * - JWT tokens for API security
+   * - Role-based access control (RBAC)
+   * - Rate limiting and CSRF protection
    */
   validateAdminAccess(): boolean {
-    // TODO: Implement actual authentication
-    return true
+    if (process.env.NODE_ENV === 'production') {
+      console.warn(
+        '⚠️ Admin panel is publicly accessible. Implement authentication before deploying!'
+      );
+    }
+    return true;
   },
 }

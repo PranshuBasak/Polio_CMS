@@ -1,3 +1,8 @@
+import {
+    JsonLd,
+    generatePersonSchema,
+    generateWebsiteSchema,
+} from '@/lib/seo/structured-data';
 import AnimatedWaves from '@/shared/components/ui-enhancements/animated-waves';
 import { Suspense } from 'react';
 import {
@@ -5,7 +10,6 @@ import {
     ContactSkeleton,
     ProjectsSkeleton,
     SkillsSkeleton,
-    TestimonialsSkeleton,
 } from '../components/ui/skeleton-loader';
 import { ErrorBoundary } from '../shared/components/ui-enhancements/error-boundary';
 
@@ -16,7 +20,6 @@ import ContactSection from '@/features/contact/components/contact-section';
 import HeroSection from '@/features/hero/components/hero-section';
 import ProjectsSection from '@/features/projects/components/projects-section';
 import SkillsSection from '@/features/skills/components/skills-section';
-import TestimonialsSection from '@/features/testimonials/components/testimonials-section';
 
 // Keep client-only components
 import TechStackLogos from '@/shared/components/ui-enhancements/tech-stack-logos';
@@ -24,7 +27,10 @@ import TimelineSection from '@/shared/components/ui-enhancements/timeline-sectio
 
 export default function Home() {
   return (
-    <div className="container mx-auto px-4">
+    <>
+      <JsonLd data={generatePersonSchema()} />
+      <JsonLd data={generateWebsiteSchema()} />
+      <div className="container mx-auto px-4">
       {/* Hero Section - Server Component */}
       <ErrorBoundary>
         <HeroSection />
@@ -65,13 +71,6 @@ export default function Home() {
         />
       </div>
 
-      {/* Testimonials Section - Server Component */}
-      <ErrorBoundary>
-        <Suspense fallback={<TestimonialsSkeleton />}>
-          <TestimonialsSection />
-        </Suspense>
-      </ErrorBoundary>
-
       {/* Timeline Section - Client Component (keep as is) */}
       <ErrorBoundary>
         <Suspense fallback={<div className="py-20" />}>
@@ -93,5 +92,6 @@ export default function Home() {
         </Suspense>
       </ErrorBoundary>
     </div>
+    </>
   );
 }

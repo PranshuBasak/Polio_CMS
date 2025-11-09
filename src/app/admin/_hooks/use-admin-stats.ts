@@ -1,7 +1,7 @@
 "use client"
 
-import { useProjectsStore, useBlogStore, useSkillsStore } from "../../../lib/stores"
 import { useMemo } from "react"
+import { useBlogStore, useProjectsStore, useSkillsStore } from "../../../lib/stores"
 
 /**
  * Custom hook for admin dashboard statistics
@@ -9,19 +9,19 @@ import { useMemo } from "react"
  */
 export function useAdminStats() {
   const projects = useProjectsStore((state) => state.projects)
-  const blogPosts = useBlogStore((state) => state.blogPosts)
-  const externalBlogPosts = useBlogStore((state) => state.externalBlogPosts)
+  const internalBlogPosts = useBlogStore((state) => state.internalPosts)
+  const externalBlogPosts = useBlogStore((state) => state.externalPosts)
   const skills = useSkillsStore((state) => state.skills)
 
   const stats = useMemo(
     () => ({
       totalProjects: projects?.length ?? 0,
-      totalBlogPosts: blogPosts?.length ?? 0,
+      totalBlogPosts: internalBlogPosts?.length ?? 0,
       totalExternalPosts: externalBlogPosts?.length ?? 0,
       totalSkills: skills?.length ?? 0,
-      totalContent: (projects?.length ?? 0) + (blogPosts?.length ?? 0) + (skills?.length ?? 0),
+      totalContent: (projects?.length ?? 0) + (internalBlogPosts?.length ?? 0) + (skills?.length ?? 0),
     }),
-    [projects, blogPosts, externalBlogPosts, skills],
+    [projects, internalBlogPosts, externalBlogPosts, skills],
   )
 
   return stats

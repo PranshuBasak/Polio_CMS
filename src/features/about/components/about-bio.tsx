@@ -25,7 +25,7 @@ export function AboutBio({ bio, focus }: AboutBioProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
       <div>
         <p className="text-lg mb-6">{bio}</p>
-        <p className="text-lg mb-6">{focus}</p>
+        <div className="text-lg mb-6 whitespace-pre-line">{focus}</div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">

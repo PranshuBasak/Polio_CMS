@@ -24,9 +24,9 @@ function SkillsSectionBase() {
           defaultValue={sortedCategories[0]?.id || 'core'}
           className="w-full"
         >
-          <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-8">
+          <TabsList className="flex flex-wrap justify-center gap-2 mb-8 h-auto p-2">
             {sortedCategories.map((category) => (
-              <TabsTrigger key={category.id} value={category.id}>
+              <TabsTrigger key={category.id} value={category.id} className="flex-shrink-0 text-xs sm:text-sm px-3 py-2">
                 {category.name}
               </TabsTrigger>
             ))}

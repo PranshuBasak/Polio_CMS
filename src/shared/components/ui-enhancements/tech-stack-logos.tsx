@@ -10,16 +10,12 @@ const techStack = [
     logo: 'https://cdn.simpleicons.org/typescript/3178C6',
   },
   {
-    name: 'Java',
-    logo: 'https://cdn.simpleicons.org/java/007396',
+    name: 'NestJS',
+    logo: 'https://cdn.simpleicons.org/nestjs/E0234E',
   },
   {
     name: 'Spring Boot',
     logo: 'https://cdn.simpleicons.org/springboot/6DB33F',
-  },
-  {
-    name: 'Node.js',
-    logo: 'https://cdn.simpleicons.org/nodedotjs/339933',
   },
   {
     name: 'Docker',

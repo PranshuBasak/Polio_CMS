@@ -33,12 +33,13 @@ export function AdminSidebar() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    // Mounted check happens once
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
     checkMobile();
+    setMounted(true);
     window.addEventListener('resize', checkMobile);
 
     return () => window.removeEventListener('resize', checkMobile);

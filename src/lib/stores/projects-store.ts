@@ -31,51 +31,115 @@ type ProjectsStore = {
 const defaultProjects: Project[] = [
   {
     id: "1",
-    title: "Microservice Architecture",
-    description: "A scalable microservice architecture using Spring Boot and Docker",
-    technologies: ["Java", "Spring Boot", "Docker", "Kubernetes", "RabbitMQ"],
-    githubUrl: "https://github.com/0xTanzim/microservice-architecture",
+    title: "nextRush",
+    description: "Zero-dependency backend framework built from scratch in TypeScript - A lightweight, modern framework for building scalable Node.js applications",
+    technologies: ["TypeScript", "Node.js", "Backend Framework", "Zero Dependencies"],
+    githubUrl: "https://github.com/0xTanzim/nextRush",
     caseStudy: {
       challenge:
-        "The client needed a scalable microservice architecture that could handle high traffic loads while maintaining data consistency across services.",
+        "Building a production-grade backend framework without relying on external dependencies, focusing on performance and simplicity.",
       solution:
-        "Implemented a robust microservice architecture using Spring Boot for core services and Node.js for lightweight services. Used Kafka for event-driven communication between services.",
+        "Developed nextRush as a zero-dependency backend framework from scratch, implementing core features like routing, middleware, request/response handling, and more using pure TypeScript.",
       results:
-        "The new architecture resulted in a 40% improvement in response times and enabled the system to handle 3x the previous traffic load without performance degradation.",
+        "Created a lightweight, performant framework that demonstrates deep understanding of backend architecture and Node.js internals without bloated dependencies.",
       process: [
-        "Analyzed the existing monolithic architecture and identified service boundaries",
-        "Designed the new microservice architecture with clear domain boundaries",
-        "Implemented core services using Spring Boot with domain-driven design principles",
-        "Set up Kafka for event-driven communication between services",
-        "Deployed the solution using Docker and Kubernetes for scalability",
+        "Architected core framework structure with TypeScript",
+        "Implemented custom routing engine and middleware system",
+        "Built request/response handling from scratch",
+        "Created developer-friendly API with minimal footprint",
+        "Optimized for performance with zero external dependencies",
       ],
-      screenshots: [
-        "/project-placeholder.svg",
-        "/project-placeholder.svg",
-        "/project-placeholder.svg",
-      ],
+      screenshots: [],
     },
   },
   {
     id: "2",
-    title: "API Gateway",
-    description: "A high-performance API gateway with rate limiting and authentication",
-    technologies: ["TypeScript", "Node.js", "Express", "Redis"],
-    githubUrl: "https://github.com/0xTanzim/api-gateway",
-    liveUrl: "https://api-gateway-demo.vercel.app",
+    title: "ContentChat AI",
+    description: "AI-powered content interaction platform with intelligent chat capabilities - Upload documents and have natural conversations with your content",
+    technologies: ["TypeScript", "Next.js", "OpenAI API", "AI/ML", "RAG"],
+    githubUrl: "https://github.com/0xTanzim/contentchat-ai",
     caseStudy: {
       challenge:
-        "The client needed a centralized API gateway to manage authentication, rate limiting, and request routing for multiple microservices.",
+        "Creating an intelligent system that allows users to interact with uploaded documents through natural language conversations.",
       solution:
-        "Built a custom API gateway using Node.js and Express with Redis for caching and rate limiting. Implemented JWT authentication and role-based access control.",
+        "Built an AI-powered platform integrating OpenAI's GPT models with custom RAG (Retrieval-Augmented Generation) pipeline, enabling semantic search and context-aware conversations.",
       results:
-        "The API gateway reduced unauthorized access attempts by 95% and improved overall API performance by 30% through effective caching and load balancing.",
+        "Delivered a seamless user experience where complex documents become interactive conversations, improving information accessibility and understanding.",
       process: [
-        "Designed the gateway architecture with security and performance in mind",
-        "Implemented JWT authentication and role-based access control",
-        "Set up Redis for caching and rate limiting",
-        "Created a flexible routing system for microservice endpoints",
-        "Implemented comprehensive logging and monitoring",
+        "Integrated OpenAI API for natural language processing",
+        "Developed content parsing and chunking algorithms",
+        "Implemented RAG pipeline for semantic search",
+        "Created real-time chat interface with streaming responses",
+        "Optimized for performance with efficient token usage",
+      ],
+      screenshots: [],
+    },
+  },
+  {
+    id: "3",
+    title: "Multivendor E-commerce Platform",
+    description: "Full-stack multivendor marketplace with vendor dashboards, product management, and order processing",
+    technologies: ["TypeScript", "Next.js", "Node.js", "PostgreSQL", "Stripe"],
+    githubUrl: "https://github.com/0xTanzim/Multivendor_E-commerce",
+    caseStudy: {
+      challenge:
+        "Building a scalable e-commerce platform that supports multiple vendors with separate dashboards, inventory management, and payment processing.",
+      solution:
+        "Developed a full-stack multivendor platform with vendor-specific dashboards, product catalogs, order management, and integrated payment system.",
+      results:
+        "Created a comprehensive marketplace enabling multiple vendors to manage their stores independently with centralized admin controls.",
+      process: [
+        "Designed multi-tenant database architecture",
+        "Implemented vendor authentication and authorization",
+        "Built product catalog and inventory management system",
+        "Integrated Stripe for payment processing",
+        "Created admin panel for platform oversight",
+      ],
+      screenshots: [],
+    },
+  },
+  {
+    id: "4",
+    title: "FileTree Pro",
+    description: "Advanced file tree visualization and navigation tool for developers - Generate beautiful directory structures",
+    technologies: ["TypeScript", "Node.js", "CLI", "File System"],
+    githubUrl: "https://github.com/0xTanzim/filetree-pro",
+    caseStudy: {
+      challenge:
+        "Creating a developer tool that generates clean, readable file tree visualizations for documentation and code exploration.",
+      solution:
+        "Built a CLI tool with advanced filtering, customization options, and beautiful ASCII tree generation for project directory structures.",
+      results:
+        "Developed a powerful yet simple tool used by developers for generating directory trees in documentation, README files, and code reviews.",
+      process: [
+        "Implemented recursive file system traversal",
+        "Created customizable ASCII tree rendering engine",
+        "Added filtering and ignore pattern support",
+        "Built CLI interface with intuitive commands",
+        "Optimized for performance with large directory structures",
+      ],
+      screenshots: [],
+    },
+  },
+  {
+    id: "5",
+    title: "Aquila WordPress Theme",
+    description: "Modern, responsive WordPress theme with custom JavaScript architecture",
+    technologies: ["JavaScript", "PHP", "WordPress", "CSS3", "HTML5"],
+    githubUrl: "https://github.com/code-BitLabs/Aquila",
+    caseStudy: {
+      challenge:
+        "Developing a professional WordPress theme that balances modern design with performance and customizability.",
+      solution:
+        "Created a custom WordPress theme from scratch with modern JavaScript, PHP best practices, and a flexible customization system.",
+      results:
+        "Delivered a production-ready WordPress theme with excellent performance scores, SEO optimization, and intuitive customization options.",
+      process: [
+        "Designed theme architecture following WordPress coding standards",
+        "Implemented custom Gutenberg blocks for content flexibility",
+        "Created responsive layouts with mobile-first approach",
+        "Optimized for performance with lazy loading and asset minification",
+        "Added comprehensive theme customizer options",
       ],
       screenshots: [
         "/project-placeholder.svg",
@@ -85,24 +149,51 @@ const defaultProjects: Project[] = [
     },
   },
   {
-    id: "3",
-    title: "Event Sourcing System",
-    description: "An event sourcing implementation with CQRS pattern",
-    technologies: ["Java", "Spring Boot", "Kafka", "MongoDB", "PostgreSQL"],
-    githubUrl: "https://github.com/0xTanzim/event-sourcing",
+    id: "6",
+    title: "Attendance System API",
+    description: "Robust backend API for managing attendance tracking with authentication and reporting",
+    technologies: ["JavaScript", "Node.js", "Express", "MongoDB", "JWT"],
+    githubUrl: "https://github.com/0xTanzim/attendance-system-api",
     caseStudy: {
       challenge:
-        "The client needed a system that could maintain a complete audit trail of all data changes while providing high-performance read operations.",
+        "Building a reliable attendance management system with secure authentication, role-based access, and comprehensive reporting capabilities.",
       solution:
-        "Implemented an event sourcing architecture with CQRS pattern using Spring Boot, Kafka for event streaming, MongoDB for the event store, and PostgreSQL for read models.",
+        "Developed a RESTful API with Express.js handling user management, attendance tracking, and automated report generation with proper security measures.",
       results:
-        "The system provided 100% data traceability with the ability to reconstruct the state at any point in time, while maintaining sub-100ms query response times.",
+        "Created a scalable backend system processing thousands of attendance records efficiently with real-time updates and detailed analytics.",
       process: [
-        "Designed the event sourcing and CQRS architecture",
-        "Implemented the event store using MongoDB",
-        "Set up Kafka for event streaming and processing",
-        "Created optimized read models in PostgreSQL",
-        "Developed a mechanism to rebuild read models from the event store",
+        "Designed database schema for users, attendance, and reports",
+        "Implemented JWT authentication with role-based authorization",
+        "Created CRUD APIs for attendance management",
+        "Built automated reporting system with data aggregation",
+        "Added real-time notifications and email alerts",
+      ],
+      screenshots: [
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
+        "/project-placeholder.svg",
+      ],
+    },
+  },
+  {
+    id: "7",
+    title: "Google ADK",
+    description: "Python-based development kit for Google API integrations and automation",
+    technologies: ["Python", "Google APIs", "REST", "OAuth2"],
+    githubUrl: "https://github.com/0xTanzim/google_adk",
+    caseStudy: {
+      challenge:
+        "Simplifying Google API integrations by creating a unified development kit that handles authentication and common operations.",
+      solution:
+        "Built a Python SDK wrapping multiple Google APIs with simplified interfaces, automatic authentication handling, and error management.",
+      results:
+        "Reduced integration time for Google services by 60% with reusable components and clear documentation.",
+      process: [
+        "Studied Google API documentation and common use cases",
+        "Implemented OAuth2 authentication flow wrapper",
+        "Created abstraction layers for frequently used APIs",
+        "Built comprehensive error handling and retry mechanisms",
+        "Wrote detailed documentation with code examples",
       ],
       screenshots: [
         "/project-placeholder.svg",

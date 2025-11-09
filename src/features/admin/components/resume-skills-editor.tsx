@@ -2,26 +2,26 @@
 
 import type React from 'react';
 
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { useData } from '@/lib/data-provider';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { useToast } from '@/hooks/use-toast';
+import { useResumeStore } from '@/lib/stores';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 export default function ResumeSkillsEditor() {
-  const { resumeData, updateResumeSkills } = useData();
+  const { resumeData, updateSkills } = useResumeStore();
   const { toast } = useToast();
   const [skillGroups, setSkillGroups] = useState([...resumeData.skills]);
   const [isEditingGroup, setIsEditingGroup] = useState<number | null>(null);
@@ -83,7 +83,7 @@ export default function ResumeSkillsEditor() {
       };
     }
     setSkillGroups(updatedGroups);
-    updateResumeSkills(updatedGroups);
+    updateSkills(updatedGroups);
 
     toast({
       title: 'Skill group updated',
@@ -98,7 +98,7 @@ export default function ResumeSkillsEditor() {
     const updatedGroups = [...skillGroups];
     updatedGroups.splice(index, 1);
     setSkillGroups(updatedGroups);
-    updateResumeSkills(updatedGroups);
+    updateSkills(updatedGroups);
 
     toast({
       title: 'Skill group deleted',
@@ -133,7 +133,7 @@ export default function ResumeSkillsEditor() {
 
     const updatedGroups = [...skillGroups, newGroup];
     setSkillGroups(updatedGroups);
-    updateResumeSkills(updatedGroups);
+    updateSkills(updatedGroups);
 
     toast({
       title: 'Skill group added',
@@ -176,7 +176,7 @@ export default function ResumeSkillsEditor() {
         level: skillFormData.level,
       };
       setSkillGroups(updatedGroups);
-      updateResumeSkills(updatedGroups);
+      updateSkills(updatedGroups);
 
       toast({
         title: 'Skill updated',
@@ -192,7 +192,7 @@ export default function ResumeSkillsEditor() {
     const updatedGroups = [...skillGroups];
     updatedGroups[groupIndex].items.splice(skillIndex, 1);
     setSkillGroups(updatedGroups);
-    updateResumeSkills(updatedGroups);
+    updateSkills(updatedGroups);
 
     toast({
       title: 'Skill deleted',
@@ -227,7 +227,7 @@ export default function ResumeSkillsEditor() {
         level: skillFormData.level,
       });
       setSkillGroups(updatedGroups);
-      updateResumeSkills(updatedGroups);
+      updateSkills(updatedGroups);
 
       toast({
         title: 'Skill added',
@@ -246,7 +246,7 @@ export default function ResumeSkillsEditor() {
     updatedGroups[index] = updatedGroups[index - 1];
     updatedGroups[index - 1] = temp;
     setSkillGroups(updatedGroups);
-    updateResumeSkills(updatedGroups);
+    updateSkills(updatedGroups);
   };
 
   const handleMoveGroupDown = (index: number) => {
@@ -256,7 +256,7 @@ export default function ResumeSkillsEditor() {
     updatedGroups[index] = updatedGroups[index + 1];
     updatedGroups[index + 1] = temp;
     setSkillGroups(updatedGroups);
-    updateResumeSkills(updatedGroups);
+    updateSkills(updatedGroups);
   };
 
   const handleMoveSkillUp = (groupIndex: number, skillIndex: number) => {
@@ -267,7 +267,7 @@ export default function ResumeSkillsEditor() {
       updatedGroups[groupIndex].items[skillIndex - 1];
     updatedGroups[groupIndex].items[skillIndex - 1] = temp;
     setSkillGroups(updatedGroups);
-    updateResumeSkills(updatedGroups);
+    updateSkills(updatedGroups);
   };
 
   const handleMoveSkillDown = (groupIndex: number, skillIndex: number) => {
@@ -278,7 +278,7 @@ export default function ResumeSkillsEditor() {
       updatedGroups[groupIndex].items[skillIndex + 1];
     updatedGroups[groupIndex].items[skillIndex + 1] = temp;
     setSkillGroups(updatedGroups);
-    updateResumeSkills(updatedGroups);
+    updateSkills(updatedGroups);
   };
 
   const handleDragEnd = (result: {
@@ -296,7 +296,7 @@ export default function ResumeSkillsEditor() {
       const [reorderedItem] = items.splice(source.index, 1);
       items.splice(destination.index, 0, reorderedItem);
       setSkillGroups(items);
-      updateResumeSkills(items);
+      updateSkills(items);
       return;
     }
 
@@ -310,7 +310,7 @@ export default function ResumeSkillsEditor() {
       const updatedGroups = [...skillGroups];
       updatedGroups[groupIndex].items = items;
       setSkillGroups(updatedGroups);
-      updateResumeSkills(updatedGroups);
+      updateSkills(updatedGroups);
     } else {
       // Handle skill moving between groups
       const sourceGroupIndex = Number.parseInt(source.droppableId);
@@ -327,7 +327,7 @@ export default function ResumeSkillsEditor() {
       updatedGroups[destGroupIndex].items = destItems;
 
       setSkillGroups(updatedGroups);
-      updateResumeSkills(updatedGroups);
+      updateSkills(updatedGroups);
     }
   };
 

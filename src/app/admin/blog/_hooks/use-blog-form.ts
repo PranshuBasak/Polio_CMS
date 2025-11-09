@@ -58,9 +58,7 @@ export function useBlogForm(post?: BlogPost) {
         });
       } else {
         addBlogPost({
-          id: crypto.randomUUID(),
           title: data.title,
-          slug: data.slug,
           excerpt: data.excerpt,
           content: data.content,
           date: new Date().toISOString().split('T')[0],

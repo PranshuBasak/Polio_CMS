@@ -1,1 +1,3 @@
 - Follow the Best Practices and Design Patterns.
+- Ensure proper error handling.
+

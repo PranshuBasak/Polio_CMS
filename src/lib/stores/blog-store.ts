@@ -1,6 +1,6 @@
+import { nanoid } from "nanoid"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { nanoid } from "nanoid"
 
 export type BlogPost = {
   id: string
@@ -41,63 +41,115 @@ const generateSlug = (title: string): string => {
 const defaultInternalPosts: BlogPost[] = [
   {
     id: "1",
-    title: "Microservices vs Monoliths: Making the Right Choice",
-    slug: "microservices-vs-monoliths",
+    title: "TypeScript Decorators: Legacy vs. New in Everyday Use",
+    slug: "typescript-decorators-legacy-vs-new",
     content:
-      "# Microservices vs Monoliths\n\nWhen designing a new system, one of the first architectural decisions you'll face is whether to build a monolith or microservices...",
+      "# TypeScript Decorators: Legacy vs. New\n\nDecorators let you attach extra behavior to classes or methods with a simple @name tag. They're great for logging calls, validating inputs, and more. In this article, we'll explore the differences between legacy and new decorator syntax and their practical applications...",
     excerpt:
-      "Exploring the trade-offs between microservices and monolithic architectures to help you make the right choice for your next project.",
-    date: "2023-10-15",
+      "Decorators let you attach extra behavior to classes or methods with a simple @name tag. Great for logging calls, validating inputs, and understanding both legacy and new syntax.",
+    date: "2024-10-03",
   },
   {
     id: "2",
-    title: "Event Sourcing: A Practical Introduction",
-    slug: "event-sourcing-introduction",
+    title: "Leaky Bucket Algorithm: A Comprehensive System Design Guide",
+    slug: "leaky-bucket-algorithm-system-design",
     content:
-      "# Event Sourcing: A Practical Introduction\n\nEvent sourcing is a powerful pattern that changes how we think about state in our applications...",
+      "# Leaky Bucket Algorithm for System Design\n\nUnderstanding the Leaky Bucket Algorithm is crucial for implementing effective rate limiting in distributed systems. This guide covers implementation details, trade-offs, and real-world use cases...",
     excerpt:
-      "Learn how event sourcing can improve auditability, scalability, and flexibility in your applications with practical examples.",
-    date: "2023-11-20",
+      "Understanding the Leaky Bucket Algorithm for System Design - a comprehensive guide to implementing rate limiting in distributed systems.",
+    date: "2024-09-28",
   },
   {
     id: "3",
-    title: "Optimizing Spring Boot Applications for Production",
-    slug: "optimizing-spring-boot",
+    title: "Understanding the Token Bucket Algorithm for Rate Limiting",
+    slug: "token-bucket-algorithm-rate-limiting",
     content:
-      "# Optimizing Spring Boot Applications\n\nSpring Boot makes it easy to create stand-alone, production-grade applications, but there's more to consider when preparing for production...",
+      "# Token Bucket Algorithm for Rate Limiting\n\nWhy rate limiting matters in modern applications and how the Token Bucket algorithm provides an elegant solution. Learn implementation strategies and best practices...",
     excerpt:
-      "Discover essential techniques to optimize your Spring Boot applications for production environments, focusing on performance and reliability.",
-    date: "2024-01-05",
+      "Why rate limiting matters and how the Token Bucket algorithm provides an elegant solution for controlling API request rates.",
+    date: "2024-09-27",
+  },
+  {
+    id: "4",
+    title: "Exploring React Design Patterns: Recursive, Partial, and Composition",
+    slug: "react-design-patterns-scalable-code",
+    content:
+      "# React Design Patterns\n\nMaster these three React design patterns to write scalable, reusable, and maintainable code. Detailed explanations and practical examples included...",
+    excerpt:
+      "Master recursive, partial, and composition patterns in React to write scalable, reusable, and maintainable code with detailed explanations.",
+    date: "2024-04-18",
+  },
+  {
+    id: "5",
+    title: "Mastering React HOCs: A Practical Guide to Reusable Code",
+    slug: "mastering-react-hocs",
+    content:
+      "# Higher-Order Components in React\n\nHigher-Order Components (HOCs) in React have been a game-changer for keeping code clean and reusable. Learn practical patterns and best practices...",
+    excerpt:
+      "Higher-Order Components (HOCs) in React help keep code clean and reusable. A practical guide with real-world examples.",
+    date: "2024-04-15",
+  },
+  {
+    id: "6",
+    title: "Mastering Container Components for Smarter React Apps",
+    slug: "react-container-components",
+    content:
+      "# Container Components in React\n\nReact's component-based approach is powerful, but as apps grow, mixing logic and UI can turn your code into a tangled mess. Container components provide the solution...",
+    excerpt:
+      "Learn how container components solve the problem of mixing logic and UI as React apps grow in complexity.",
+    date: "2024-04-13",
+  },
+  {
+    id: "7",
+    title: "Splitting Prisma Schema into Multiple Files: A Simple Guide",
+    slug: "splitting-prisma-schema-multiple-files",
+    content:
+      "# Splitting Prisma Schema\n\nBy default, Prisma uses just one file. As your project grows, this single file can become unwieldy. Here's how to split it effectively...",
+    excerpt:
+      "A solution for managing large Prisma schemas by splitting them into multiple files for better organization and maintainability.",
+    date: "2024-03-03",
+  },
+  {
+    id: "8",
+    title: "Implementing Multiple Middleware in Next.js",
+    slug: "nextjs-multiple-middleware",
+    content:
+      "# Multiple Middleware in Next.js\n\nCombining NextAuth and Internationalization in Next.js. Learn how to compose multiple middleware functions effectively...",
+    excerpt:
+      "Combining NextAuth and Internationalization in Next.js for powerful authentication and i18n support.",
+    date: "2024-05-21",
+  },
+  {
+    id: "9",
+    title: "Why Data Structures Matter: Optimizing the Fibonacci Sequence",
+    slug: "data-structures-fibonacci-optimization",
+    content:
+      "# Data Structures and Fibonacci\n\nThe Fibonacci sequence is a classic in computer science, not just for its mathematical charm but for what it teaches about efficiency...",
+    excerpt:
+      "The Fibonacci sequence teaches valuable lessons about efficiency, memoization, and algorithm optimization.",
+    date: "2023-12-31",
+  },
+  {
+    id: "10",
+    title: "How to Fix the Copilot Sidebar in Microsoft Edge on Linux",
+    slug: "fix-copilot-edge-linux",
+    content:
+      "# Fix Copilot on Linux\n\nA simple, two-command fix to get the AI assistant working on Ubuntu and other Linux distributions...",
+    excerpt:
+      "A simple, two-command fix to get the Copilot AI assistant working on Ubuntu and other Linux distros in Microsoft Edge.",
+    date: "2024-10-29",
   },
 ]
 
 const defaultExternalPosts: ExternalBlogPost[] = [
   {
     id: "e1",
-    title: "Building Resilient Microservices with Circuit Breakers",
+    title: "Read more articles on Medium",
     excerpt:
-      "Learn how to implement circuit breakers in your microservices architecture to prevent cascading failures and improve system resilience.",
-    url: "https://medium.com/@0xTanzim/building-resilient-microservices",
-    date: "2023-09-10",
+      "Explore more technical articles on software development, system design, React patterns, and backend engineering on Medium.",
+    url: "https://medium.com/@0xTanzim",
+    date: "2024-11-09",
     source: "Medium",
-  },
-  {
-    id: "e2",
-    title: "TypeScript Best Practices for Large-Scale Applications",
-    excerpt:
-      "Discover proven TypeScript patterns and practices that help maintain code quality and developer productivity in large-scale applications.",
-    url: "https://dev.to/@0xTanzim/typescript-best-practices",
-    date: "2023-12-05",
-    source: "Dev.to",
-  },
-  {
-    id: "e3",
-    title: "Implementing CQRS in Modern Applications",
-    excerpt:
-      "A deep dive into Command Query Responsibility Segregation (CQRS) and how it can be implemented in modern application architectures.",
-    url: "https://hashnode.com/@0xTanzim/implementing-cqrs",
-    date: "2024-02-15",
-    source: "Hashnode",
   },
 ]
 

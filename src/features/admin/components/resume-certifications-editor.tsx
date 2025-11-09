@@ -2,26 +2,26 @@
 
 import type React from 'react';
 
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { useData } from '@/lib/data-provider';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { useResumeStore } from '@/lib/stores';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 export default function ResumeCertificationsEditor() {
-  const { resumeData, updateResumeCertifications } = useData();
+  const { resumeData, updateCertifications } = useResumeStore();
   const { toast } = useToast();
   const [certifications, setCertifications] = useState([
     ...resumeData.certifications,
@@ -82,7 +82,7 @@ export default function ResumeCertificationsEditor() {
       cert.id === formData.id ? { ...formData } : cert
     );
     setCertifications(updatedCertifications);
-    updateResumeCertifications(updatedCertifications);
+    updateCertifications(updatedCertifications);
 
     toast({
       title: 'Certification updated',
@@ -105,7 +105,7 @@ export default function ResumeCertificationsEditor() {
       (cert) => cert.id !== id
     );
     setCertifications(updatedCertifications);
-    updateResumeCertifications(updatedCertifications);
+    updateCertifications(updatedCertifications);
 
     toast({
       title: 'Certification deleted',
@@ -154,7 +154,7 @@ export default function ResumeCertificationsEditor() {
 
     const updatedCertifications = [...certifications, newCertification];
     setCertifications(updatedCertifications);
-    updateResumeCertifications(updatedCertifications);
+    updateCertifications(updatedCertifications);
 
     toast({
       title: 'Certification added',
@@ -179,7 +179,7 @@ export default function ResumeCertificationsEditor() {
     updatedCertifications[index] = updatedCertifications[index - 1];
     updatedCertifications[index - 1] = temp;
     setCertifications(updatedCertifications);
-    updateResumeCertifications(updatedCertifications);
+    updateCertifications(updatedCertifications);
   };
 
   const handleMoveDown = (index: number) => {
@@ -189,7 +189,7 @@ export default function ResumeCertificationsEditor() {
     updatedCertifications[index] = updatedCertifications[index + 1];
     updatedCertifications[index + 1] = temp;
     setCertifications(updatedCertifications);
-    updateResumeCertifications(updatedCertifications);
+    updateCertifications(updatedCertifications);
   };
 
   const handleDragEnd = (result: {
@@ -203,7 +203,7 @@ export default function ResumeCertificationsEditor() {
     items.splice(result.destination.index, 0, reorderedItem);
 
     setCertifications(items);
-    updateResumeCertifications(items);
+    updateCertifications(items);
   };
 
   return (

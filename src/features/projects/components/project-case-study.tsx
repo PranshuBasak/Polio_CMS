@@ -11,7 +11,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { Project } from '@/lib/data-provider';
+import type { Project } from '@/lib/types';
 import { ExternalLink, Github } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';

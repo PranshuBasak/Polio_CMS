@@ -1,14 +1,20 @@
-import { getHeroData } from '@/services/portfolio-data';
+'use client';
+
+import { useHydration } from '@/lib/hooks/use-hydration';
+import { useHeroStore } from '@/lib/stores';
 import { HeroClient } from './hero-client';
 
 /**
- * Hero Section - Server Component
+ * Hero Section - Client Component
  *
- * Fetches hero data on the server and passes to client component.
- * This allows SSR while maintaining client-side interactivity.
+ * Uses Zustand store as single source of truth for hero data.
+ * Ensures consistency across admin and public pages.
  */
-export default async function HeroSection() {
-  const heroData = await getHeroData();
+export default function HeroSection() {
+  const heroData = useHeroStore((state) => state.heroData);
+  const isHydrated = useHydration();
+
+  if (!isHydrated) return null;
 
   return <HeroClient heroData={heroData} />;
 }

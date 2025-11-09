@@ -33,57 +33,57 @@ type AboutStore = {
 }
 
 const defaultAboutData: AboutData = {
-  bio: "I'm a software architect and backend developer with expertise in TypeScript, Java, Spring Boot, and Node.js. I specialize in designing and implementing scalable, maintainable, and secure backend systems.",
+  bio: "I'm Tanzim Hossain, a passionate backend developer and system design enthusiast from Bangladesh. I'm dedicated to mastering software architecture, microservices, and building scalable, efficient applications. Proficient in TypeScript & Java, currently expanding expertise in C++. Strong advocate for clean code, industry best practices, and high-performance systems.",
   focus:
-    "My focus areas include system design, microservices architecture, and DevOps practices. I'm passionate about creating efficient solutions that solve complex problems while maintaining code quality and performance.",
+    "🎯 Specializing in database design, API development, and DevOps.\n\n🤖 Enthusiastic about AI, blockchain, and system scalability.\n\n🔍 Passionate about emerging technologies and their impact on industries.\n\n🧠 Applying psychology & creative problem-solving to software engineering.\n\n🛠️ Active in open-source collaboration and tech community.\n\n⚡ Believe in working smarter, not just harder!",
   journey: [
     {
       id: "1",
-      title: "Senior Software Architect",
-      company: "TechInnovate",
-      date: "2022 - Present",
+      title: "Backend Developer",
+      company: "code-BitLabs",
+      date: "2023 - Present",
       description:
-        "Leading the architecture design for distributed systems and microservices. Implementing event-driven architecture and CQRS patterns for scalable and maintainable systems.",
+        "Actively contributing to open-source projects and collaborating on innovative solutions. Developed Aquila WordPress Theme with modern JavaScript architecture. Focused on building scalable backend systems and database optimization.",
     },
     {
       id: "2",
-      title: "Backend Team Lead",
-      company: "DataFlow Systems",
-      date: "2019 - 2022",
+      title: "Software Developer",
+      company: "Softsasi",
+      date: "2024 - Present",
       description:
-        "Led a team of 6 backend developers. Designed and implemented scalable APIs and services using Spring Boot and Node.js. Mentored junior developers and established coding standards.",
+        "Working on Next.js and TypeScript projects, building modern web applications with focus on performance and user experience. Contributing to team's technical growth and code quality standards.",
     },
     {
       id: "3",
-      title: "Software Engineer",
-      company: "CloudScale",
-      date: "2017 - 2019",
+      title: "Active Open Source Contributor",
+      company: "GitHub Community",
+      date: "2020 - Present",
       description:
-        "Developed and maintained backend services for high-traffic applications. Implemented CI/CD pipelines and DevOps practices to improve deployment efficiency and system reliability.",
+        "724 contributions in the past year. Contributed to react-hook-form and multiple repositories. GitHub PRO member with achievements including Pull Shark x2, Galaxy Brain, Quickdraw, YOLO, and Arctic Code Vault Contributor. Active in EclipseFdn community.",
     },
   ],
   values: [
     {
       id: "1",
-      title: "Passion",
-      description: "I'm deeply passionate about creating elegant solutions to complex problems.",
-      icon: "Heart",
+      title: "Clean Code Advocate",
+      description: "Strong believer in industry best practices, maintainable architecture, and writing code that speaks for itself.",
+      icon: "Code",
     },
     {
       id: "2",
-      title: "Excellence",
-      description: "I strive for excellence in every line of code and system design decision.",
-      icon: "Target",
+      title: "Work Smarter",
+      description: "⚡ I strongly believe in working smarter, not just harder! Efficiency and intelligent problem-solving over brute force.",
+      icon: "Zap",
     },
     {
       id: "3",
-      title: "Innovation",
-      description: "I believe in continuous learning and embracing innovative approaches.",
-      icon: "Lightbulb",
+      title: "Continuous Learning",
+      description: "Always exploring emerging technologies - from blockchain and AI to creative applications of psychology in software engineering.",
+      icon: "BookOpen",
     },
   ],
   mission:
-    "To create elegant, scalable, and maintainable software solutions that solve real-world problems and deliver exceptional value to users and businesses.",
+    "To master software architecture and build scalable, efficient applications that solve real-world problems. Contributing to open-source, exploring cutting-edge technologies, and continuously honing my skills to make meaningful impact in the tech community. Working smarter to innovate and learn together! 🚀",
 }
 
 export const useAboutStore = create<AboutStore>()(

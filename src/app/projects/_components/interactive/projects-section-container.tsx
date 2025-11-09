@@ -29,11 +29,7 @@ function ProjectsSectionContainerBase() {
         <ErrorBoundary>
           <ProjectsGrid
             projects={featuredProjects}
-            showCaseStudy
-            onCaseStudyClick={(project) => {
-              // Case study modal is handled by ProjectCaseStudy component
-              console.log('[v0] Opening case study for:', project.title);
-            }}
+            showCaseStudy={false}
           />
         </ErrorBoundary>
       </div>

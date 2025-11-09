@@ -2,17 +2,17 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useSkillsStore } from "../../../../lib/stores"
 import AdminHeader from "@/features/admin/components/admin-header"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useState } from "react"
+import { Button } from "../../../../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../components/ui/card"
 import { Input } from "../../../../components/ui/input"
 import { Label } from "../../../../components/ui/label"
-import { Button } from "../../../../components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../components/ui/select"
 import { Slider } from "../../../../components/ui/slider"
 import { useToast } from "../../../../hooks/use-toast"
+import { useSkillsStore } from "../../../../lib/stores"
 
 export default function NewSkillPage() {
   const router = useRouter()
@@ -61,7 +61,6 @@ export default function NewSkillPage() {
     // Simulate API call
     setTimeout(() => {
       addSkill({
-        id: Date.now().toString(),
         ...formData,
       })
 

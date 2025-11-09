@@ -1,55 +1,45 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Briefcase, Calendar, GraduationCap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-
-// Sample timeline data
-const timelineItems = [
-  {
-    id: 1,
-    title: 'Senior Software Architect',
-    company: 'TechInnovate',
-    date: '2022 - Present',
-    description:
-      'Leading the architecture design for distributed systems and microservices. Implementing event-driven architecture and CQRS patterns.',
-    skills: ['System Design', 'Microservices', 'Event Sourcing', 'Kubernetes'],
-    type: 'work',
-  },
-  {
-    id: 2,
-    title: 'Backend Team Lead',
-    company: 'DataFlow Systems',
-    date: '2019 - 2022',
-    description:
-      'Led a team of 6 backend developers. Designed and implemented scalable APIs and services using Spring Boot and Node.js.',
-    skills: ['Java', 'Spring Boot', 'Node.js', 'Team Leadership'],
-    type: 'work',
-  },
-  {
-    id: 3,
-    title: 'Software Engineer',
-    company: 'CloudScale',
-    date: '2017 - 2019',
-    description:
-      'Developed and maintained backend services for high-traffic applications. Implemented CI/CD pipelines and DevOps practices.',
-    skills: ['TypeScript', 'Docker', 'CI/CD', 'PostgreSQL'],
-    type: 'work',
-  },
-  {
-    id: 4,
-    title: "Master's in Computer Science",
-    company: 'Tech University',
-    date: '2015 - 2017',
-    description:
-      'Specialized in Distributed Systems and Cloud Computing. Thesis on Scalable Microservice Architectures.',
-    skills: ['Distributed Systems', 'Cloud Computing', 'Research'],
-    type: 'education',
-  },
-];
+import { useResumeStore } from '@/lib/stores';
+import { motion } from 'framer-motion';
+import { Briefcase, Calendar, GraduationCap } from 'lucide-react';
+import { useMemo } from 'react';
 
 export default function TimelineSection() {
+  const resumeData = useResumeStore((state) => state.resumeData);
+
+  // Combine experiences and education, sorted by date
+  const timelineItems = useMemo(() => {
+    const experiences = resumeData.experiences.map((exp) => ({
+      id: `exp-${exp.id}`, // Prefix to avoid conflicts
+      title: exp.title,
+      company: exp.company,
+      date: `${exp.startDate} - ${exp.endDate || 'Present'}`,
+      description: exp.description,
+      skills: exp.achievements || [],
+      type: 'work' as const,
+    }));
+
+    const education = resumeData.education.map((edu) => ({
+      id: `edu-${edu.id}`, // Prefix to avoid conflicts
+      title: edu.degree,
+      company: edu.institution,
+      date: `${edu.startDate} - ${edu.endDate}`,
+      description: edu.description,
+      skills: edu.courses || [],
+      type: 'education' as const,
+    }));
+
+    return [...experiences, ...education].sort((a, b) => {
+      // Sort by start date (most recent first)
+      const dateA = a.date.split(' - ')[0];
+      const dateB = b.date.split(' - ')[0];
+      return dateB.localeCompare(dateA);
+    });
+  }, [resumeData.experiences, resumeData.education]);
+
   return (
     <section className="section-container">
       <div className="container mx-auto">
@@ -95,26 +85,32 @@ export default function TimelineSection() {
                 </div>
 
                 <Card
-                  className={`relative ${
+                  className={`relative overflow-hidden ${
                     index % 2 === 0 ? 'md:mr-4' : 'md:ml-4'
                   }`}
                 >
                   <CardContent className="p-6">
-                    <div className="flex items-center text-sm text-muted-foreground mb-2">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      {item.date}
+                    <div className="flex items-center text-sm text-muted-foreground mb-2 flex-wrap gap-1">
+                      <Calendar className="h-4 w-4 flex-shrink-0" />
+                      <span className="break-words">{item.date}</span>
                     </div>
-                    <h3 className="text-xl font-bold mb-1">{item.title}</h3>
-                    <h4 className="text-primary font-medium mb-3">
+                    <h3 className="text-xl font-bold mb-1 break-words overflow-hidden">
+                      {item.title}
+                    </h3>
+                    <h4 className="text-primary font-medium mb-3 break-words overflow-hidden">
                       {item.company}
                     </h4>
-                    <p className="text-muted-foreground mb-4">
+                    <p className="text-muted-foreground mb-4 break-words whitespace-pre-line overflow-hidden">
                       {item.description}
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {item.skills.map((skill) => (
-                        <Badge key={skill} variant="secondary">
-                          {skill}
+                      {item.skills.map((skill, skillIndex) => (
+                        <Badge
+                          key={`${item.id}-skill-${skillIndex}`}
+                          variant="secondary"
+                          className="text-xs px-2 py-1 inline-block break-words whitespace-normal leading-tight max-w-full"
+                        >
+                          <span className="inline-block break-words">{skill}</span>
                         </Badge>
                       ))}
                     </div>

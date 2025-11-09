@@ -1,10 +1,12 @@
+import CustomCursorWrapper from '@/components/custom-cursor-wrapper';
 import { ThemeProvider } from '@/components/providers/theme-provider';
+import { defaultSiteSettings } from '@/lib/stores/site-settings-store';
 import Footer from '@/shared/components/layout/footer';
 import Navbar from '@/shared/components/layout/navbar';
 import BackToTop from '@/shared/components/ui-enhancements/back-to-top';
-import CustomCursor from '@/shared/components/ui-enhancements/custom-cursor';
 import { ErrorBoundary } from '@/shared/components/ui-enhancements/error-boundary';
 import ScrollProgress from '@/shared/components/ui-enhancements/scroll-progress';
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import type React from 'react';
@@ -16,40 +18,25 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Tanzim | Software Architect & Backend Developer',
-  description:
-    'Portfolio of Tanzim - Expert Software Architect & Backend Developer specializing in scalable systems, microservices, TypeScript, Java, Spring Boot, and Node.js. Building enterprise-grade solutions.',
-  keywords: [
-    'Software Architect',
-    'Backend Developer',
-    'TypeScript',
-    'Java',
-    'Spring Boot',
-    'Node.js',
-    'Microservices',
-    'System Design',
-    'Full Stack Developer',
-    'Tanzim',
-    'Portfolio',
-  ],
-  authors: [{ name: 'Tanzim', url: 'https://github.com/0xTanzim' }],
-  creator: 'Tanzim',
-  publisher: 'Tanzim',
+  title: defaultSiteSettings.seo.metaTitle,
+  description: defaultSiteSettings.seo.metaDescription,
+  keywords: defaultSiteSettings.seo.keywords,
+  authors: [{ name: defaultSiteSettings.siteName.replace(' Portfolio', ''), url: defaultSiteSettings.social.github }],
+  creator: defaultSiteSettings.siteName.replace(' Portfolio', ''),
+  publisher: defaultSiteSettings.siteName.replace(' Portfolio', ''),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://0xtanzim.dev',
-    title: 'Tanzim | Software Architect & Backend Developer',
-    description:
-      'Expert Software Architect specializing in scalable backend systems, microservices architecture, and enterprise solutions.',
-    siteName: 'Tanzim Portfolio',
+    url: defaultSiteSettings.siteUrl,
+    title: defaultSiteSettings.seo.metaTitle,
+    description: defaultSiteSettings.seo.metaDescription,
+    siteName: defaultSiteSettings.siteName,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tanzim | Software Architect & Backend Developer',
-    description:
-      'Expert Software Architect specializing in scalable backend systems and microservices architecture.',
-    creator: '@0xTanzim',
+    title: defaultSiteSettings.seo.metaTitle,
+    description: defaultSiteSettings.seo.metaDescription,
+    creator: defaultSiteSettings.social.twitter,
   },
   robots: {
     index: true,
@@ -93,14 +80,14 @@ export default function RootLayout({
               <StoreProvider>
                 <ErrorBoundary>
                   <ScrollProgress />
-                  {typeof window !== 'undefined' &&
-                    window.innerWidth >= 1024 && <CustomCursor />}
+                  <CustomCursorWrapper />
                   <div className="flex min-h-screen flex-col">
                     <Navbar />
                     <main className="flex-1">{children}</main>
                     <Footer />
                   </div>
                   <BackToTop />
+                  <Analytics />
                 </ErrorBoundary>
               </StoreProvider>
             </DirectionProvider>

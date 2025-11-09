@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import { FileQuestion } from 'lucide-react';
 import Link from 'next/link';
@@ -21,11 +21,11 @@ export default function NotFound() {
           </div>
           <CardTitle className="text-3xl">Page Not Found</CardTitle>
           <CardDescription className="text-lg">
-            The page you're looking for doesn't exist or has been moved.
+            The page you&apos;re looking for doesn&apos;t exist or has been moved.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-muted-foreground">Let's get you back on track.</p>
+          <p className="text-muted-foreground">Let&apos;s get you back on track.</p>
           <div className="flex gap-3 justify-center">
             <Button asChild>
               <Link href="/">Go Home</Link>

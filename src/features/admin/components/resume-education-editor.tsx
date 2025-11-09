@@ -2,26 +2,26 @@
 
 import type React from 'react';
 
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { useData } from '@/lib/data-provider';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { useResumeStore } from '@/lib/stores';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 export default function ResumeEducationEditor() {
-  const { resumeData, updateResumeEducation } = useData();
+  const { resumeData, updateEducation } = useResumeStore();
   const { toast } = useToast();
   const [education, setEducation] = useState([...resumeData.education]);
   const [isEditing, setIsEditing] = useState<string | null>(null);
@@ -103,7 +103,7 @@ export default function ResumeEducationEditor() {
       edu.id === formData.id ? { ...formData } : edu
     );
     setEducation(updatedEducation);
-    updateResumeEducation(updatedEducation);
+    updateEducation(updatedEducation);
 
     toast({
       title: 'Education updated',
@@ -126,7 +126,7 @@ export default function ResumeEducationEditor() {
   const handleDelete = (id: string) => {
     const updatedEducation = education.filter((edu) => edu.id !== id);
     setEducation(updatedEducation);
-    updateResumeEducation(updatedEducation);
+    updateEducation(updatedEducation);
 
     toast({
       title: 'Education deleted',
@@ -179,7 +179,7 @@ export default function ResumeEducationEditor() {
 
     const updatedEducation = [...education, newEducation];
     setEducation(updatedEducation);
-    updateResumeEducation(updatedEducation);
+    updateEducation(updatedEducation);
 
     toast({
       title: 'Education added',
@@ -206,7 +206,7 @@ export default function ResumeEducationEditor() {
     updatedEducation[index] = updatedEducation[index - 1];
     updatedEducation[index - 1] = temp;
     setEducation(updatedEducation);
-    updateResumeEducation(updatedEducation);
+    updateEducation(updatedEducation);
   };
 
   const handleMoveDown = (index: number) => {
@@ -216,7 +216,7 @@ export default function ResumeEducationEditor() {
     updatedEducation[index] = updatedEducation[index + 1];
     updatedEducation[index + 1] = temp;
     setEducation(updatedEducation);
-    updateResumeEducation(updatedEducation);
+    updateEducation(updatedEducation);
   };
 
   const handleDragEnd = (result: {
@@ -230,7 +230,7 @@ export default function ResumeEducationEditor() {
     items.splice(result.destination.index, 0, reorderedItem);
 
     setEducation(items);
-    updateResumeEducation(items);
+    updateEducation(items);
   };
 
   return (

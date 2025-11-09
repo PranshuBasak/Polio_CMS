@@ -24,7 +24,7 @@ export function useProjectForm(project?: Project) {
   const router = useRouter();
   const { toast } = useToast();
   const addProject = useProjectsStore((state) => state.addProject);
-  const removeProject = useProjectsStore((state) => state.removeProject);
+  const deleteProject = useProjectsStore((state) => state.deleteProject);
 
   const form = useForm<ProjectFormData>({
     resolver: zodResolver(projectFormSchema),
@@ -57,7 +57,7 @@ export function useProjectForm(project?: Project) {
 
       if (project) {
         // Remove old project and add updated one
-        removeProject(project.id);
+        deleteProject(project.id);
         addProject(projectData);
         toast({
           title: 'Project updated!',

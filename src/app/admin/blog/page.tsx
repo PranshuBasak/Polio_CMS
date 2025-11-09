@@ -16,8 +16,8 @@ export default function BlogPage() {
   const isHydrated = useHydration()
   const internalPosts = useBlogStore((state) => state.internalPosts ?? [])
   const externalPosts = useBlogStore((state) => state.externalPosts ?? [])
-  const deletePost = useBlogStore((state) => state.deletePost)
-  const setExternalPosts = useBlogStore((state) => state.setExternalPosts)
+  const deleteBlogPost = useBlogStore((state) => state.deleteBlogPost)
+  const refreshExternalPosts = useBlogStore((state) => state.refreshExternalPosts)
 
   const { toast } = useToast()
   const [isDeleting, setIsDeleting] = useState<string | null>(null)
@@ -26,7 +26,7 @@ export default function BlogPage() {
   const handleDelete = (id: string) => {
     setIsDeleting(id)
     setTimeout(() => {
-      deletePost(id)
+      deleteBlogPost(id)
       toast({
         title: "Blog post deleted",
         description: "The blog post has been deleted successfully.",
@@ -38,8 +38,7 @@ export default function BlogPage() {
   const handleRefreshExternalPosts = async () => {
     setIsRefreshing(true)
     try {
-      // Simulate RSS feed fetch
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await refreshExternalPosts()
       toast({
         title: "External posts refreshed",
         description: "Your external blog posts have been refreshed successfully.",

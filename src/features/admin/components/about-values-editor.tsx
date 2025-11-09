@@ -2,30 +2,30 @@
 
 import type React from 'react';
 
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { useData } from '@/lib/data-provider';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { useAboutStore } from '@/lib/stores';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 // Available icons for values
 const availableIcons = [
@@ -40,7 +40,7 @@ const availableIcons = [
 ];
 
 export default function AboutValuesEditor() {
-  const { aboutData, updateAboutValues } = useData();
+  const { aboutData, updateAboutValues } = useAboutStore();
   const { toast } = useToast();
   const [values, setValues] = useState([...aboutData.values]);
   const [isEditing, setIsEditing] = useState<string | null>(null);

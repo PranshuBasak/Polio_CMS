@@ -1,13 +1,20 @@
-import { getAboutData } from '@/services/portfolio-data';
+'use client';
+
+import { useHydration } from '@/lib/hooks/use-hydration';
+import { useAboutStore } from '@/lib/stores';
 import { AboutClient } from './about-client';
 
 /**
- * About Section - Server Component
+ * About Section - Client Component
  *
- * Fetches about data on the server and passes to client component.
+ * Uses Zustand store as single source of truth for about data.
+ * Ensures consistency across admin and public pages.
  */
-export default async function AboutSection() {
-  const aboutData = await getAboutData();
+export default function AboutSection() {
+  const aboutData = useAboutStore((state) => state.aboutData);
+  const isHydrated = useHydration();
+
+  if (!isHydrated) return null;
 
   return <AboutClient aboutData={aboutData} />;
 }

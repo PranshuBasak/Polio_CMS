@@ -1,11 +1,20 @@
-import { getTestimonials } from '@/services/portfolio-data';
+'use client';
+
+import { useHydration } from '@/lib/hooks/use-hydration';
+import { useTestimonialsStore } from '@/lib/stores';
 import { TestimonialsClient } from './testimonials-client';
 
 /**
- * Testimonials Section - Server Component
+ * Testimonials Section - Client Component
+ *
+ * Uses Zustand store as single source of truth for testimonials data.
+ * Ensures consistency across admin and public pages.
  */
-export default async function TestimonialsSection() {
-  const testimonials = await getTestimonials();
+export default function TestimonialsSection() {
+  const testimonials = useTestimonialsStore((state) => state.testimonials);
+  const isHydrated = useHydration();
+
+  if (!isHydrated) return null;
 
   return <TestimonialsClient testimonials={testimonials} />;
 }

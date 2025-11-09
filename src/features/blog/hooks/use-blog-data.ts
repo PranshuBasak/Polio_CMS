@@ -5,24 +5,24 @@ import { useMemo } from 'react';
  * Custom hook for Blog data transformation
  */
 export function useBlogData() {
-  const posts = useBlogStore((state) => state.posts || []);
+  const internalPosts = useBlogStore((state) => state.internalPosts || []);
   const externalPosts = useBlogStore((state) => state.externalPosts || []);
 
   const allPosts = useMemo(() => {
-    return [...posts, ...externalPosts].sort(
+    return [...internalPosts, ...externalPosts].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
-  }, [posts, externalPosts]);
+  }, [internalPosts, externalPosts]);
 
   const recentPosts = useMemo(() => {
     return allPosts.slice(0, 6);
   }, [allPosts]);
 
   const internalOnly = useMemo(() => {
-    return [...posts].sort(
+    return [...internalPosts].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
-  }, [posts]);
+  }, [internalPosts]);
 
   const externalOnly = useMemo(() => {
     return [...externalPosts].sort(

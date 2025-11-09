@@ -1,22 +1,24 @@
 'use client';
 
 import { useTranslations } from '@/lib/i18n/translations-context';
+import { useHeroStore, useSiteSettingsStore } from '@/lib/stores';
 import { FileText, Github, Linkedin, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { memo } from 'react';
 
 export default memo(function Footer() {
   const { t } = useTranslations();
+  const heroData = useHeroStore((state) => state.heroData);
+  const settings = useSiteSettingsStore((state) => state.settings);
 
   return (
     <footer className="border-t bg-muted/40">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-semibold mb-4">0xTanzim</h3>
+            <h3 className="text-lg font-semibold mb-4">{heroData.name}</h3>
             <p className="text-sm text-muted-foreground">
-              Software Architect & Backend Developer specializing in TypeScript,
-              Java, Spring Boot, and Node.js
+              {heroData.title}
             </p>
           </div>
 
@@ -74,7 +76,7 @@ export default memo(function Footer() {
             </h3>
             <div className="flex space-x-4">
               <Link
-                href="https://github.com/0xTanzim"
+                href={settings.social.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
@@ -83,7 +85,7 @@ export default memo(function Footer() {
                 <span className="sr-only">GitHub</span>
               </Link>
               <Link
-                href="https://linkedin.com/in/0xTanzim"
+                href={settings.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
@@ -92,14 +94,14 @@ export default memo(function Footer() {
                 <span className="sr-only">LinkedIn</span>
               </Link>
               <Link
-                href="mailto:tanzimhossain2@gmail.com"
+                href={`mailto:${settings.social.email}`}
                 className="hover:text-primary transition-colors"
               >
                 <Mail className="h-5 w-5" />
                 <span className="sr-only">Email</span>
               </Link>
               <Link
-                href="https://medium.com/@0xTanzim"
+                href={settings.social.medium}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
@@ -114,7 +116,7 @@ export default memo(function Footer() {
         <div className="mt-8 pt-6 border-t text-center text-sm text-muted-foreground">
           <p>{t('footer.copyright')}</p>
           <p className="mt-2">
-            &copy; {new Date().getFullYear()} Tanzim. {t('footer.rights')}
+            &copy; {new Date().getFullYear()} {heroData.name}. {t('footer.rights')}
           </p>
         </div>
       </div>

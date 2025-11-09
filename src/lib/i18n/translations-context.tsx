@@ -550,7 +550,6 @@ export function TranslationsProvider({
 
   // Initialize language from localStorage or browser settings
   useEffect(() => {
-    setMounted(true);
     const savedLanguage = localStorage.getItem(
       'preferred-language'
     ) as Language | null;
@@ -564,6 +563,8 @@ export function TranslationsProvider({
         setLanguage(browserLanguage);
       }
     }
+
+    setMounted(true);
   }, []);
 
   // Translation function - always return translation, never the key

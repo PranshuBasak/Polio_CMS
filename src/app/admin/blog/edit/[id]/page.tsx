@@ -1,27 +1,27 @@
 "use client"
 
-import { useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { useBlogStore } from "../../../../../lib/stores"
-import { useBlogForm } from "../../_hooks/use-blog-form"
 import AdminHeader from "@/features/admin/components/admin-header"
+import { Eye, Loader2 } from "lucide-react"
+import { useParams, useRouter } from "next/navigation"
+import { useEffect } from "react"
+import ReactMarkdown from "react-markdown"
+import { Button } from "../../../../../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../../components/ui/card"
 import { Input } from "../../../../../components/ui/input"
 import { Label } from "../../../../../components/ui/label"
-import { Textarea } from "../../../../../components/ui/textarea"
-import { Button } from "../../../../../components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../../components/ui/tabs"
-import { Eye, Loader2 } from "lucide-react"
-import ReactMarkdown from "react-markdown"
 import { Spinner } from "../../../../../components/ui/spinner"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../../components/ui/tabs"
+import { Textarea } from "../../../../../components/ui/textarea"
 import { useHydration } from "../../../../../lib/hooks"
+import { useBlogStore } from "../../../../../lib/stores"
+import { useBlogForm } from "../../_hooks/use-blog-form"
 
 export default function EditBlogPostPage() {
   const params = useParams()
   const router = useRouter()
   const isHydrated = useHydration()
-  const blogPosts = useBlogStore((state) => state.blogPosts)
-  const post = blogPosts.find((p) => p.id === params.id)
+  const internalPosts = useBlogStore((state) => state.internalPosts)
+  const post = internalPosts.find((p) => p.id === params.id)
 
   const { form, onSubmit, isSubmitting } = useBlogForm(post)
   const {
