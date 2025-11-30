@@ -178,6 +178,7 @@ CREATE INDEX idx_testimonials_order ON testimonials(order_index);
 -- =====================================================
 CREATE TABLE about (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT,
   bio TEXT NOT NULL,
   bio_short TEXT,
   tagline TEXT,
@@ -460,6 +461,30 @@ CREATE TRIGGER update_social_links_updated_at BEFORE UPDATE ON social_links
 
 CREATE TRIGGER update_contact_submissions_updated_at BEFORE UPDATE ON contact_submissions
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- =====================================================
+-- HEALTH CHECK
+-- =====================================================
+CREATE TABLE health_check (
+  id INTEGER PRIMARY KEY,
+  last_ping TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+INSERT INTO health_check (id, last_ping) VALUES (1, NOW());
+
+-- Enable RLS
+ALTER TABLE health_check ENABLE ROW LEVEL SECURITY;
+
+-- Allow public read/update for health check (or restrict as needed)
+-- For now, allowing public access as requested
+CREATE POLICY "Public can view health check"
+  ON health_check FOR SELECT
+  USING (true);
+
+CREATE POLICY "Public can update health check"
+  ON health_check FOR UPDATE
+  USING (true);
+
 
 -- =====================================================
 -- SEED DATA (Optional - Example)

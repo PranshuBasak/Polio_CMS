@@ -73,6 +73,7 @@ export function useProjectForm(project?: Project) {
 
       router.push('/admin/projects');
     } catch (error) {
+      console.error('Failed to save project:', error);
       toast({
         title: 'Error',
         description: 'Failed to save project. Please try again.',

@@ -532,7 +532,7 @@ export function TranslationsProvider({
 }) {
   // Get initial language from localStorage or browser settings
   const [language, setLanguageState] = useState<Language>('en');
-  const [mounted, setMounted] = useState(false);
+
 
   // Set the language and store it in localStorage
   const setLanguage = (lang: Language) => {
@@ -555,6 +555,7 @@ export function TranslationsProvider({
     ) as Language | null;
 
     if (savedLanguage) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLanguage(savedLanguage);
     } else {
       // Try to use browser language
@@ -564,7 +565,7 @@ export function TranslationsProvider({
       }
     }
 
-    setMounted(true);
+
   }, []);
 
   // Translation function - always return translation, never the key

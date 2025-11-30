@@ -8,12 +8,12 @@ import { ContactClient } from './contact-client';
 export default async function ContactSection() {
   // Contact info can be fetched from config/env or hardcoded
   const contactInfo = {
-    email: 'tanzimhossain2@gmail.com',
+    email: 'pranshubasak@gmail.com',
     location: 'Dhaka, Bangladesh',
     social: {
-      github: 'https://github.com/0xTanzim',
-      linkedin: 'https://linkedin.com/in/0xTanzim',
-      medium: 'https://medium.com/@0xTanzim',
+      github: 'https://github.com/PranshuBasak',
+      linkedin: 'https://linkedin.com/in/0xPranshu',
+      medium: 'https://medium.com/@0xPranshu',
     },
   };
 

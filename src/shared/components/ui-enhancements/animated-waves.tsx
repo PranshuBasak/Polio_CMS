@@ -11,7 +11,6 @@ interface AnimatedWavesProps {
 
 export default function AnimatedWaves({
   height = 40,
-  width = 1440,
   flip = false,
   position = "bottom",
 }: AnimatedWavesProps) {

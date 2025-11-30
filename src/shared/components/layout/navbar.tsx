@@ -75,7 +75,7 @@ const Navbar = memo(function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="text-xl font-bold">
               <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                0xTanzim
+                0xPranshu
               </span>
             </Link>
           </div>

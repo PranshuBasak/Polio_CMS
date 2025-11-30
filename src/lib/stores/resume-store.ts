@@ -1,5 +1,5 @@
+import { createClient } from "@/lib/supabase/client"
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
 
 export type ResumeExperience = {
   id: string
@@ -55,7 +55,10 @@ export type ResumeData = {
 
 type ResumeStore = {
   resumeData: ResumeData
-  updateResumeData: (data: Partial<ResumeData>) => void
+  isLoading: boolean
+  error: string | null
+  fetchResumeData: () => Promise<void>
+  updateResumeData: (data: Partial<ResumeData>) => Promise<void>
   updateExperiences: (experiences: ResumeExperience[]) => void
   updateEducation: (education: ResumeEducation[]) => void
   updateSkills: (skills: ResumeSkillCategory[]) => void
@@ -178,91 +181,130 @@ const defaultResumeData: ResumeData = {
       description: "Comprehensive deep dive into fundamentals of software design patterns including creational, behavioral, and structural patterns.",
       url: "https://www.linkedin.com/learning/",
     },
-    {
-      id: "3",
-      name: "Getting Started In Spring Development",
-      issuer: "LinkedIn Learning",
-      date: "2025-10",
-      description: "Introduction to Spring Framework covering Spring Boot, Spring Security, and enterprise application development.",
-      url: "https://www.linkedin.com/learning/",
-    },
-    {
-      id: "4",
-      name: "Reactive Accelerator",
-      issuer: "Learn with Sumit - LWS",
-      date: "2024-06",
-      description: "Advanced React.js and Node.js development course focusing on reactive programming patterns.",
-      url: "https://learnwithsumit.com/",
-    },
-    {
-      id: "5",
-      name: "Introduction to Back-End Development",
-      issuer: "Coursera",
-      date: "2023-08",
-      description: "Foundational course covering Object-Oriented Programming (OOP) and backend development principles.",
-      url: "https://www.coursera.org/",
-    },
-    {
-      id: "6",
-      name: "Introduction to Front-End Development",
-      issuer: "Coursera",
-      date: "2023-08",
-      description: "Introduction to modern frontend development including HTML, CSS, JavaScript, and responsive design.",
-      url: "https://www.coursera.org/",
-    },
-    {
-      id: "7",
-      name: "Back End Development and APIs",
-      issuer: "freeCodeCamp",
-      date: "2023-07",
-      description: "Certification demonstrating proficiency in REST APIs, backend architecture, and server-side development.",
-      url: "https://www.freecodecamp.org/certification/",
-    },
-    {
-      id: "8",
-      name: "Oracle Certified Professional, Java SE 11 Developer",
-      issuer: "Oracle",
-      date: "2021-03",
-      description: "Certification validating expertise in Java development and best practices.",
-      url: "https://education.oracle.com/java-se-11-developer/pexam_1Z0-819",
-    },
   ],
   languages: [
     { name: "English", proficiency: "Native" },
     { name: "Spanish", proficiency: "Intermediate" },
   ],
   interests: ["Open Source Development", "System Architecture", "Cloud Computing", "Hiking", "Photography"],
-  pdfUrl: "/Tanzim_Hossain_Resume.pdf",
+  pdfUrl: "/Pranshu_Basak_Resume.pdf",
 }
 
-export const useResumeStore = create<ResumeStore>()(
-  persist(
-    (set) => ({
-      resumeData: defaultResumeData,
-      updateResumeData: (data) =>
-        set((state) => ({
-          resumeData: { ...state.resumeData, ...data },
-        })),
-      updateExperiences: (experiences) =>
-        set((state) => ({
-          resumeData: { ...state.resumeData, experiences },
-        })),
-      updateEducation: (education) =>
-        set((state) => ({
-          resumeData: { ...state.resumeData, education },
-        })),
-      updateSkills: (skills) =>
-        set((state) => ({
-          resumeData: { ...state.resumeData, skills },
-        })),
-      updateCertifications: (certifications) =>
-        set((state) => ({
-          resumeData: { ...state.resumeData, certifications },
-        })),
-      resetResume: () => set({ resumeData: defaultResumeData }),
-    }),
-    {
-      name: "resume-storage",
-    },
-  ),
-)
+export const useResumeStore = create<ResumeStore>((set, get) => ({
+  resumeData: defaultResumeData,
+  isLoading: false,
+  error: null,
+
+  fetchResumeData: async () => {
+    set({ isLoading: true, error: null })
+    try {
+      const supabase = createClient()
+
+      // Fetch experiences
+      const { data: experiences } = await supabase
+        .from("experiences")
+        .select("*")
+        .order("start_date", { ascending: false })
+
+      // Fetch education
+      const { data: education } = await supabase
+        .from("education")
+        .select("*")
+        .order("start_date", { ascending: false })
+
+      // Fetch certifications
+      const { data: certifications } = await supabase
+        .from("certifications")
+        .select("*")
+        .order("date", { ascending: false })
+
+      // Map to ResumeData format
+      const resumeData: ResumeData = {
+        experiences: experiences?.map((exp: any) => ({
+          id: exp.id,
+          title: exp.position,
+          company: exp.company,
+          location: exp.location || "",
+          startDate: exp.start_date,
+          endDate: exp.end_date || "Present",
+          description: exp.description,
+          achievements: exp.achievements || [],
+        })) || defaultResumeData.experiences,
+        education: education?.map((edu: any) => ({
+          id: edu.id,
+          degree: edu.degree,
+          institution: edu.institution,
+          location: edu.location || "",
+          startDate: edu.start_date,
+          endDate: edu.end_date,
+          description: edu.description,
+          courses: edu.courses || [],
+        })) || defaultResumeData.education,
+        skills: defaultResumeData.skills, // Keep from local data
+        certifications: certifications?.map((cert: any) => ({
+          id: cert.id,
+          name: cert.name,
+          issuer: cert.issuer,
+          date: cert.date,
+          description: cert.description,
+          url: cert.url,
+        })) || defaultResumeData.certifications,
+        languages: defaultResumeData.languages,
+        interests: defaultResumeData.interests,
+        pdfUrl: defaultResumeData.pdfUrl,
+      }
+
+      set({ resumeData })
+    } catch (error: any) {
+      console.error("Failed to fetch resume data:", error)
+      set({ error: error?.message || "Failed to fetch resume data" })
+      set({ resumeData: defaultResumeData })
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+
+  updateResumeData: async (data) => {
+    const currentData = get().resumeData
+    // Optimistic update
+    set({
+      resumeData: { ...currentData, ...data },
+      isLoading: true,
+      error: null,
+    })
+
+    try {
+      // For now, just update local state
+      // Full Supabase update implementation would require separate endpoints for each section
+      console.log("Resume data updated locally:", data)
+    } catch (error: any) {
+      console.error("Failed to update resume data:", error)
+      set({ error: error?.message || "Failed to update resume data" })
+      set({ resumeData: currentData })
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+
+  updateExperiences: (experiences) =>
+    set((state) => ({
+      resumeData: { ...state.resumeData, experiences },
+    })),
+
+  updateEducation: (education) =>
+    set((state) => ({
+      resumeData: { ...state.resumeData, education },
+    })),
+
+  updateSkills: (skills) =>
+    set((state) => ({
+      resumeData: { ...state.resumeData, skills },
+    })),
+
+  updateCertifications: (certifications) =>
+    set((state) => ({
+      resumeData: { ...state.resumeData, certifications },
+    })),
+
+  resetResume: () => set({ resumeData: defaultResumeData }),
+}))

@@ -5,7 +5,7 @@ import type { MetadataRoute } from 'next';
  * Controls search engine crawling and sitemap location
  */
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://0xtanzim.dev';
+  const baseUrl = 'https://0xPranshu.dev';
 
   return {
     rules: [

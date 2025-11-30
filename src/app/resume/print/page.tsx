@@ -9,7 +9,7 @@ import { Briefcase, Calendar, GraduationCap, Mail, MapPin, Phone } from 'lucide-
  * Usage:
  * 1. Visit /resume/print in browser
  * 2. Press Cmd/Ctrl + P
- * 3. Save as PDF: "Tanzim_Hossain_Resume.pdf"
+ * 3. Save as PDF: "Pranshu_Basak_Resume.pdf"
  * 4. Move to /public folder
  */
 export default function ResumePrintPage() {
@@ -22,20 +22,20 @@ export default function ResumePrintPage() {
         <h3 className="font-bold mb-2">📄 Generate PDF</h3>
         <ol className="text-sm space-y-1 list-decimal list-inside">
           <li>Press <kbd className="px-1 py-0.5 bg-white/20 rounded text-xs">Cmd/Ctrl + P</kbd></li>
-          <li>Select "Save as PDF"</li>
-          <li>Save as <code className="bg-white/20 px-1 rounded text-xs">Tanzim_Hossain_Resume.pdf</code></li>
+          <li>Select &quot;Save as PDF&quot;</li>
+          <li>Save as <code className="bg-white/20 px-1 rounded text-xs">Pranshu_Basak_Resume.pdf</code></li>
           <li>Move to <code className="bg-white/20 px-1 rounded text-xs">/public</code> folder</li>
         </ol>
       </div>
 
       {/* Resume Content */}
       <header className="resume-header">
-        <h1 className="resume-name">Tanzim Hossain</h1>
+        <h1 className="resume-name">Pranshu Basak</h1>
         <p className="resume-title">Backend Developer & System Design Enthusiast</p>
         <div className="resume-contact">
           <span className="contact-item">
             <Mail className="w-3 h-3" />
-            tanzimhossain2@outlook.com
+            pranshubasak@gmail.com
           </span>
           <span className="contact-item">
             <Phone className="w-3 h-3" />
@@ -121,7 +121,7 @@ export default function ResumePrintPage() {
             <div key={`skill-${idx}`} className="skill-category">
               <div className="skill-category-name">{skillGroup.category}</div>
               <div className="skill-items">
-                {skillGroup.items.slice(0, 5).map((s, i) => s.name).join(', ')}
+                {skillGroup.items.slice(0, 5).map((s) => s.name).join(', ')}
               </div>
             </div>
           ))}

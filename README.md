@@ -84,7 +84,7 @@ A dynamic portfolio CMS built with Next.js 16 that empowers developers to manage
 
 ```bash
 # Clone the repository
-git clone https://github.com/0xTanzim/dynamicFolio_CMS
+git clone https://github.com/PranshuBasak/dynamicFolio_CMS
 cd sec
 
 # Install dependencies
@@ -346,7 +346,7 @@ MIT License - see [LICENSE](./LICENSE) file for details.
 
 For questions or issues:
 - Open an issue on GitHub
-- Contact: [tanzimhossain2@gmail.com](mailto:tanzimhossain2@gmail.com)
+- Contact: [pranshubasak@gmail.com](mailto:pranshubasak@gmail.com)
 - Documentation: [docs/](./docs/)
 
 ---

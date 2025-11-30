@@ -16,8 +16,8 @@ export function ContactInfo({ t }: ContactInfoProps) {
           icon={Mail}
           title={t("contact.info.email")}
           content={
-            <a href="mailto:tanzimhossain2@gmail.com" className="hover:text-primary transition-colors">
-              tanzimhossain2@gmail.com
+            <a href="mailto:pranshubasak@gmail.com" className="hover:text-primary transition-colors">
+              pranshubasak@gmail.com
             </a>
           }
         />
@@ -34,7 +34,7 @@ export function ContactInfo({ t }: ContactInfoProps) {
           content={
             <span>
               <a
-                href="https://github.com/0xTanzim"
+                href="https://github.com/PranshuBasak"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
@@ -43,7 +43,7 @@ export function ContactInfo({ t }: ContactInfoProps) {
               </a>
               {" • "}
               <a
-                href="https://linkedin.com/in/0xTanzim"
+                href="https://linkedin.com/in/0xPranshu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
@@ -52,7 +52,7 @@ export function ContactInfo({ t }: ContactInfoProps) {
               </a>
               {" • "}
               <a
-                href="https://medium.com/@0xTanzim"
+                href="https://medium.com/@0xPranshu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"

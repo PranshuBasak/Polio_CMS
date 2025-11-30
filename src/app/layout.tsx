@@ -13,6 +13,7 @@ import type React from 'react';
 import { StoreProvider } from '../components/providers/store-provider';
 import { DirectionProvider } from '../lib/i18n/direction-provider';
 import { TranslationsProvider } from '../lib/i18n/translations-context';
+import { InitialDataFetcher } from '@/components/initial-data-fetcher';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -78,6 +79,7 @@ export default function RootLayout({
           <TranslationsProvider>
             <DirectionProvider>
               <StoreProvider>
+                <InitialDataFetcher />
                 <ErrorBoundary>
                   <ScrollProgress />
                   <CustomCursorWrapper />

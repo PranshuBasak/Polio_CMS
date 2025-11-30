@@ -44,6 +44,7 @@ export default function BlogPage() {
         description: "Your external blog posts have been refreshed successfully.",
       })
     } catch (error) {
+      console.error('Failed to refresh external posts:', error);
       toast({
         title: "Error",
         description: "Failed to refresh external posts. Please try again.",

@@ -194,6 +194,7 @@ export default function CMSEditor({
               />
               {!!formData[name] && (
                 <div className="relative w-16 h-16 border rounded-md overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={(formData[name] as string) || '/placeholder.svg'}
                     alt={label}

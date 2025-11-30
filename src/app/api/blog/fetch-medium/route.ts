@@ -13,7 +13,7 @@ const parser = new Parser({
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const username = searchParams.get('username') || '0xTanzim';
+    const username = searchParams.get('username') || '0xPranshu';
     const limit = parseInt(searchParams.get('limit') || '5', 10);
 
     const feedUrl = `https://medium.com/feed/@${username}`;

@@ -94,7 +94,7 @@ export default function SiteSettings() {
                 onChange={(e) =>
                   updateSettings({ siteUrl: e.target.value })
                 }
-                placeholder="https://0xtanzim.dev"
+                placeholder="https://0xPranshu.dev"
               />
             </div>
 
@@ -366,7 +366,7 @@ export default function SiteSettings() {
                 onChange={(e) =>
                   updateSEO({ ogImage: e.target.value })
                 }
-                placeholder="https://0xtanzim.dev/og-image.png"
+                placeholder="https://0xPranshu.dev/og-image.png"
               />
             </div>
           </CardContent>

@@ -86,7 +86,7 @@ export function Sidebar() {
           <div className="flex items-center justify-between mb-8 mt-2">
             <Link href="/" className="flex items-center gap-2">
               <Home className="h-5 w-5" />
-              <span className="font-bold text-lg">0xTanzim</span>
+              <span className="font-bold text-lg">0xPranshu</span>
             </Link>
           </div>
 

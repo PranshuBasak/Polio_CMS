@@ -1,5 +1,5 @@
+import { createClient } from "@/lib/supabase/client"
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 export type SiteSettings = {
   // General settings
@@ -43,7 +43,10 @@ export type SiteSettings = {
 
 type SiteSettingsStore = {
   settings: SiteSettings;
-  updateSettings: (settings: Partial<SiteSettings>) => void;
+  isLoading: boolean;
+  error: string | null;
+  fetchSettings: () => Promise<void>;
+  updateSettings: (settings: Partial<SiteSettings>) => Promise<void>;
   updateSocial: (social: Partial<SiteSettings['social']>) => void;
   updateSEO: (seo: Partial<SiteSettings['seo']>) => void;
   updateAppearance: (appearance: Partial<SiteSettings['appearance']>) => void;
@@ -52,25 +55,25 @@ type SiteSettingsStore = {
 };
 
 const defaultSettings: SiteSettings = {
-  siteName: '0xTanzim Portfolio',
+  siteName: '0xPranshu Portfolio',
   siteDescription:
-    'Portfolio of Tanzim - Expert Software Architect & Backend Developer specializing in scalable systems, microservices, TypeScript, Java, Spring Boot, and Node.js. Building enterprise-grade solutions.',
-  siteUrl: 'https://0xtanzim.dev',
+    'Portfolio of Pranshu - Expert Software Architect & Backend Developer specializing in scalable systems, microservices, TypeScript, Java, Spring Boot, and Node.js. Building enterprise-grade solutions.',
+  siteUrl: 'https://0xPranshu.dev',
   timezone: 'utc',
   publicProfile: true,
 
   social: {
-    github: 'https://github.com/0xTanzim',
-    linkedin: 'https://linkedin.com/in/0xTanzim',
-    email: 'tanzimhossain2@gmail.com',
-    medium: 'https://medium.com/@0xTanzim',
-    twitter: '@0xTanzim',
+    github: 'https://github.com/PranshuBasak',
+    linkedin: 'https://linkedin.com/in/0xPranshu',
+    email: 'pranshubasak@gmail.com',
+    medium: 'https://medium.com/@0xPranshu',
+    twitter: '@0xPranshu',
   },
 
   seo: {
-    metaTitle: 'Tanzim | Software Architect & Backend Developer',
+    metaTitle: 'Pranshu | Software Architect & Backend Developer',
     metaDescription:
-      'Portfolio of Tanzim - Expert Software Architect & Backend Developer specializing in scalable systems, microservices, TypeScript, Java, Spring Boot, and Node.js. Building enterprise-grade solutions.',
+      'Portfolio of Pranshu - Expert Software Architect & Backend Developer specializing in scalable systems, microservices, TypeScript, Java, Spring Boot, and Node.js. Building enterprise-grade solutions.',
     keywords: [
       'Software Architect',
       'Backend Developer',
@@ -81,10 +84,10 @@ const defaultSettings: SiteSettings = {
       'Microservices',
       'System Design',
       'Full Stack Developer',
-      'Tanzim',
+      'Pranshu',
       'Portfolio',
     ],
-    ogImage: 'https://0xtanzim.dev/og-image.png',
+    ogImage: 'https://0xPranshu.dev/og-image.png',
   },
 
   appearance: {
@@ -100,49 +103,136 @@ const defaultSettings: SiteSettings = {
   },
 };
 
-export const useSiteSettingsStore = create<SiteSettingsStore>()(
-  persist(
-    (set) => ({
-      settings: defaultSettings,
-      updateSettings: (newSettings) =>
-        set((state) => ({
-          settings: { ...state.settings, ...newSettings },
-        })),
-      updateSocial: (social) =>
-        set((state) => ({
+export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
+  settings: defaultSettings,
+  isLoading: false,
+  error: null,
+
+  fetchSettings: async () => {
+    set({ isLoading: true, error: null })
+    try {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from("site_settings")
+        .select("*")
+        .single()
+
+      if (error && error.code !== "PGRST116") {
+        throw error
+      }
+
+      if (data) {
+        set({
           settings: {
-            ...state.settings,
-            social: { ...state.settings.social, ...social },
+            siteName: (data as any).site_name || defaultSettings.siteName,
+            siteDescription: (data as any).site_description || defaultSettings.siteDescription,
+            siteUrl: (data as any).site_url || defaultSettings.siteUrl,
+            timezone: (data as any).timezone || defaultSettings.timezone,
+            publicProfile: (data as any).public_profile ?? defaultSettings.publicProfile,
+            social: (data as any).social || defaultSettings.social,
+            seo: (data as any).seo || defaultSettings.seo,
+            appearance: (data as any).appearance || defaultSettings.appearance,
+            advanced: (data as any).advanced || defaultSettings.advanced,
           },
-        })),
-      updateSEO: (seo) =>
-        set((state) => ({
-          settings: {
-            ...state.settings,
-            seo: { ...state.settings.seo, ...seo },
-          },
-        })),
-      updateAppearance: (appearance) =>
-        set((state) => ({
-          settings: {
-            ...state.settings,
-            appearance: { ...state.settings.appearance, ...appearance },
-          },
-        })),
-      updateAdvanced: (advanced) =>
-        set((state) => ({
-          settings: {
-            ...state.settings,
-            advanced: { ...state.settings.advanced, ...advanced },
-          },
-        })),
-      resetSettings: () => set({ settings: defaultSettings }),
-    }),
-    {
-      name: 'site-settings-storage',
+        })
+      }
+    } catch (error: any) {
+      console.error("Failed to fetch site settings:", error)
+      set({ error: error?.message || "Failed to fetch site settings" })
+      set({ settings: defaultSettings })
+    } finally {
+      set({ isLoading: false })
     }
-  )
-);
+  },
+
+  updateSettings: async (newSettings) => {
+    const currentSettings = get().settings
+    // Optimistic update
+    set({
+      settings: { ...currentSettings, ...newSettings },
+      isLoading: true,
+      error: null,
+    })
+
+    try {
+      const supabase = createClient()
+      const { settings } = get()
+
+      // Check if row exists
+      const { data: existingData } = await supabase
+        .from("site_settings")
+        .select("id")
+        .single()
+
+      const updatePayload: any = {
+        site_name: settings.siteName,
+        site_description: settings.siteDescription,
+        site_url: settings.siteUrl,
+        timezone: settings.timezone,
+        public_profile: settings.publicProfile,
+        social: settings.social,
+        seo: settings.seo,
+        appearance: settings.appearance,
+        advanced: settings.advanced,
+      }
+
+      if (existingData) {
+        const { error } = await supabase
+          .from("site_settings")
+          .update(updatePayload)
+          .eq("id", (existingData as any).id)
+
+        if (error) throw error
+      } else {
+        const { error } = await supabase
+          .from("site_settings")
+          .insert(updatePayload)
+
+        if (error) throw error
+      }
+    } catch (error: any) {
+      console.error("Failed to update site settings:", error)
+      set({ error: error?.message || "Failed to update site settings" })
+      set({ settings: currentSettings })
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+
+  updateSocial: (social) =>
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        social: { ...state.settings.social, ...social },
+      },
+    })),
+
+  updateSEO: (seo) =>
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        seo: { ...state.settings.seo, ...seo },
+      },
+    })),
+
+  updateAppearance: (appearance) =>
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        appearance: { ...state.settings.appearance, ...appearance },
+      },
+    })),
+
+  updateAdvanced: (advanced) =>
+    set((state) => ({
+      settings: {
+        ...state.settings,
+        advanced: { ...state.settings.advanced, ...advanced },
+      },
+    })),
+
+  resetSettings: () => set({ settings: defaultSettings }),
+}));
 
 // Export default settings for use in server components and metadata
 export { defaultSettings as defaultSiteSettings };

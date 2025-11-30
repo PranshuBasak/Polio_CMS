@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from '@/lib/i18n/translations-context';
+// import { useTranslations } from '@/lib/i18n/translations-context';
 import type { HeroData } from '@/lib/types';
 import GlowingAvatar from '@/shared/components/ui-enhancements/glowing-avatar';
 import { motion } from 'framer-motion';
@@ -18,7 +18,7 @@ interface HeroContentProps {
 }
 
 export function HeroContent({ heroData }: HeroContentProps) {
-  const { t } = useTranslations();
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">

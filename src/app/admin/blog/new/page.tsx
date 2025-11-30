@@ -22,7 +22,6 @@ export default function NewBlogPostPage() {
   } = form
 
   // Auto-generate slug from title
-  const title = watch("title")
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     const slug = value

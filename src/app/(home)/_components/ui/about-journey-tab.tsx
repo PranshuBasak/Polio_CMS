@@ -10,7 +10,7 @@ type AboutJourneyTabProps = {
 export function AboutJourneyTab({ journey }: AboutJourneyTabProps) {
   return (
     <div className="space-y-8">
-      {journey.map((item, index) => (
+      {journey.map((item) => (
         <div key={item.id} className="relative pl-8 border-l-2 border-primary/30 pb-8 last:pb-0 last:border-0">
           <div className="absolute w-4 h-4 bg-primary rounded-full -left-[9px] top-0" />
           <h3 className="text-xl font-bold text-balance">{item.title}</h3>

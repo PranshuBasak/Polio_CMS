@@ -33,8 +33,8 @@ export function HeroContent({ data, t }: HeroContentProps) {
       </div>
 
       <div className="flex mt-8 gap-4">
-        <SocialLink href="https://github.com/0xTanzim" icon={Github} label="GitHub" />
-        <SocialLink href="https://linkedin.com/in/0xTanzim" icon={Linkedin} label="LinkedIn" />
+        <SocialLink href="https://github.com/PranshuBasak" icon={Github} label="GitHub" />
+        <SocialLink href="https://linkedin.com/in/0xPranshu" icon={Linkedin} label="LinkedIn" />
         <SocialLink href="/resume" icon={FileText} label="Resume" />
       </div>
     </motion.div>

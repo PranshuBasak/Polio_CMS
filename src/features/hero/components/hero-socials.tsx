@@ -10,12 +10,12 @@ import { FileText, Github, Linkedin } from 'lucide-react';
 export function HeroSocials() {
   const socials = [
     {
-      href: 'https://github.com/0xTanzim',
+      href: 'https://github.com/PranshuBasak',
       icon: Github,
       label: 'GitHub',
     },
     {
-      href: 'https://linkedin.com/in/0xTanzim',
+      href: 'https://linkedin.com/in/0xPranshu',
       icon: Linkedin,
       label: 'LinkedIn',
     },

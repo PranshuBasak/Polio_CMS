@@ -71,6 +71,7 @@ export function useBlogForm(post?: BlogPost) {
 
       router.push('/admin/blog');
     } catch (error) {
+      console.error('Failed to save post:', error);
       toast({
         title: 'Error',
         description: 'Failed to save post. Please try again.',

@@ -11,7 +11,7 @@ export type RssFeedItem = {
   source: string
 }
 
-export async function fetchMediumPosts(username: string = '0xTanzim', limit: number = 5): Promise<RssFeedItem[]> {
+export async function fetchMediumPosts(username: string = '0xPranshu', limit: number = 5): Promise<RssFeedItem[]> {
   try {
     const response = await fetch(`/api/blog/fetch-medium?username=${username}&limit=${limit}`)
 
@@ -37,7 +37,8 @@ export async function fetchMediumPosts(username: string = '0xTanzim', limit: num
  * Legacy function for backwards compatibility
  * @deprecated Use fetchMediumPosts instead
  */
-export async function fetchRssFeed(url: string, source: string): Promise<RssFeedItem[]> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function fetchRssFeed(url: string, _source: string): Promise<RssFeedItem[]> {
   // For Medium RSS feeds, extract username and use new API
   if (url.includes('medium.com/feed/@')) {
     const username = url.split('@')[1]

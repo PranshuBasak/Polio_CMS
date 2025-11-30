@@ -9,7 +9,7 @@ import type { MetadataRoute } from 'next';
  * For real-time updates, consider using a dynamic route handler.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://0xtanzim.dev';
+  const baseUrl = 'https://0xPranshu.dev';
   const currentDate = new Date();
 
   // Static pages with priorities

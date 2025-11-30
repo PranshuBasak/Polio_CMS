@@ -21,7 +21,7 @@ interface BlogCardProps {
   isExternal?: boolean;
 }
 
-export function BlogCard({ post, isExternal = false }: BlogCardProps) {
+export function BlogCard({ post }: BlogCardProps) {
   const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',

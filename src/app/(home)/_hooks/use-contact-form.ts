@@ -90,7 +90,7 @@ export function useContactForm() {
     setTimeout(() => {
       setIsSuccess(false)
     }, 5000)
-  }, [formData, validateForm, toast])
+  }, [validateForm, toast])
 
   const resetSuccess = useCallback(() => {
     setIsSuccess(false)

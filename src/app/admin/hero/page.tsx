@@ -3,10 +3,12 @@
 import { useHeroStore } from "../../../lib/stores"
 import AdminHeader from "@/features/admin/components/admin-header"
 import CMSEditor from "@/features/admin/components/cms-editor"
+import { DotLoader } from "@/components/ui/dot-loader"
 
 export default function HeroPage() {
   const heroData = useHeroStore((state) => state.heroData)
   const updateHeroData = useHeroStore((state) => state.updateHeroData)
+  const isLoading = useHeroStore((state) => state.isLoading)
 
   const heroFields = [
     {
@@ -38,6 +40,17 @@ export default function HeroPage() {
       description: "Leave empty to use the default placeholder image.",
     },
   ]
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <DotLoader dotClass="text-primary" />
+          <p className="mt-4 text-sm text-muted-foreground">Loading hero data...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">

@@ -7,7 +7,7 @@ import { useSkillsStore } from "../../../../lib/stores"
 import AdminHeader from "@/features/admin/components/admin-header"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../../../components/ui/card"
 import { Button } from "../../../../components/ui/button"
-import { Pencil, Trash2, ArrowLeft } from "lucide-react"
+import { Pencil, Trash2, ArrowLeft, Plus } from "lucide-react"
 import { Input } from "../../../../components/ui/input"
 import { Label } from "../../../../components/ui/label"
 import { Textarea } from "../../../../components/ui/textarea"
@@ -148,12 +148,16 @@ export default function SkillCategoriesPage() {
         }}
       />
 
-      <div className="mb-4">
+      <div className="mb-4 flex justify-between items-center">
         <Button variant="outline" size="sm" asChild>
           <Link href="/admin/skills" className="flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" />
             Back to Skills
           </Link>
+        </Button>
+        <Button onClick={handleAdd} disabled={isAdding}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Category
         </Button>
       </div>
 

@@ -20,7 +20,7 @@ import { Info } from 'lucide-react';
 
 export default function LanguageSettings() {
   const { toast } = useToast();
-  const { language, setLanguage, t } = useTranslations();
+  const { language, setLanguage } = useTranslations();
   const heroData = useHeroStore((state) => state.heroData);
   const aboutData = useAboutStore((state) => state.aboutData);
 

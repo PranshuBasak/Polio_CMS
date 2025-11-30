@@ -24,7 +24,7 @@ import { useAdminStats } from '../../_hooks/use-admin-stats';
  * Handles data aggregation and layout
  */
 export function AdminDashboardContainer() {
-  const stats = useAdminStats();
+  // const stats = useAdminStats(); // stats is unused
 
   return (
     <div className="space-y-6">

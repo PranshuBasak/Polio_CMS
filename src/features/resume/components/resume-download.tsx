@@ -55,7 +55,7 @@ export default function ResumeDownload() {
             <DialogHeader>
               <DialogTitle>Resume Preview</DialogTitle>
               <DialogDescription>
-                Tanzim&apos;s Professional Resume
+                Pranshu&apos;s Professional Resume
               </DialogDescription>
             </DialogHeader>
             <div className="flex-1 overflow-hidden rounded-md">
@@ -69,7 +69,7 @@ export default function ResumeDownload() {
         </Dialog>
 
           <Button asChild className="flex items-center gap-2 flex-1">
-            <a href={resumeUrl} download="Tanzim_Resume.pdf">
+            <a href={resumeUrl} download="Pranshu_Resume.pdf">
               <FileDown className="h-4 w-4" />
               Download PDF
             </a>

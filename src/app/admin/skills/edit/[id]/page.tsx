@@ -3,7 +3,7 @@
 import type React from 'react';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import AdminHeader from '@/features/admin/components/admin-header';
 import { Button } from '../../../../../components/ui/button';
 import {
@@ -30,7 +30,8 @@ import { useSkillsStore } from '../../../../../lib/stores';
 export default function EditSkillPage() {
   const params = useParams();
   const router = useRouter();
-  const skillsData = useSkillsStore((state) => state.skills) ?? [];
+  const rawSkillsData = useSkillsStore((state) => state.skills);
+  const skillsData = useMemo(() => rawSkillsData ?? [], [rawSkillsData]);
   const updateSkill = useSkillsStore((state) => state.updateSkill);
   const skillCategories = useSkillsStore((state) => state.categories) ?? [];
   const { toast } = useToast();

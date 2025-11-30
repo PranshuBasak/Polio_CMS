@@ -1,12 +1,21 @@
 import { AdminSidebar } from '@/features/admin/components/admin-sidebar';
 import { ErrorBoundary } from '@/shared/components/ui-enhancements/error-boundary';
 import type React from 'react';
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    redirect('/login');
+  }
+
   return (
     <ErrorBoundary>
       <div className="flex min-h-screen bg-background">
