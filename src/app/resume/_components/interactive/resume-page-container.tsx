@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ResumeDownload from '@/features/resume/components/resume-download';
 import { ErrorBoundary } from '@/shared/components/ui-enhancements/error-boundary';
 import { motion } from 'framer-motion';
-import { Award, Briefcase, Code, GraduationCap } from 'lucide-react';
+import { Award, Briefcase, Code, GraduationCap, Languages, Globe } from 'lucide-react';
 import { Card, CardContent } from '../../../../components/ui/card';
 import { useHydration } from '../../../../lib/hooks/use-hydration';
 import { useResumeData } from '../../_hooks/use-resume-data';
@@ -19,7 +19,7 @@ import { SkillsGrid } from '../ui/skills-grid';
  * Handles data fetching and layout
  */
 export function ResumePageContainer() {
-  const { experiences, education, skills, certifications } = useResumeData();
+  const { experiences, education, skills, certifications, languages, interests } = useResumeData();
   const isHydrated = useHydration();
 
   if (!isHydrated) return null;
@@ -89,7 +89,7 @@ export function ResumePageContainer() {
 
           <div className="lg:col-span-3">
             <Tabs defaultValue="experience" className="w-full">
-              <TabsList className="grid grid-cols-4 mb-8">
+              <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-8 h-auto">
                 <TabsTrigger
                   value="experience"
                   className="flex items-center gap-2"
@@ -114,6 +114,20 @@ export function ResumePageContainer() {
                 >
                   <Award className="h-4 w-4" />
                   <span className="hidden sm:inline">Certifications</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="languages"
+                  className="flex items-center gap-2"
+                >
+                  <Languages className="h-4 w-4" />
+                  <span className="hidden sm:inline">Languages</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="interests"
+                  className="flex items-center gap-2"
+                >
+                  <Globe className="h-4 w-4" />
+                  <span className="hidden sm:inline">Interests</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -162,6 +176,37 @@ export function ResumePageContainer() {
                       />
                     ))}
                   </div>
+                </ErrorBoundary>
+              </TabsContent>
+
+              <TabsContent value="languages" id="languages">
+                <ErrorBoundary>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {languages.map((lang) => (
+                      <Card key={lang.id || lang.name}>
+                        <CardContent className="p-4 flex justify-between items-center">
+                          <span className="font-medium">{lang.name}</span>
+                          <span className="text-muted-foreground">{lang.proficiency}</span>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </ErrorBoundary>
+              </TabsContent>
+
+              <TabsContent value="interests" id="interests">
+                <ErrorBoundary>
+                  <Card>
+                    <CardContent className="p-6">
+                      <div className="flex flex-wrap gap-2">
+                        {interests.map((interest, idx) => (
+                          <div key={idx} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm">
+                            {interest}
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
                 </ErrorBoundary>
               </TabsContent>
             </Tabs>

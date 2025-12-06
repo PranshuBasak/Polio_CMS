@@ -1,16 +1,16 @@
 "use client"
 
 import type React from "react"
-
-import AdminHeader from "@/features/admin/components/admin-header"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
+import AdminHeader from "@/features/admin/components/admin-header"
 import { Button } from "../../../../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../components/ui/card"
 import { Input } from "../../../../components/ui/input"
 import { Label } from "../../../../components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../components/ui/select"
-import { Slider } from "../../../../components/ui/slider"
+import { DualRangeSlider } from "../../../../components/ui/dual-range-slider"
+import { DotLoader } from "../../../../components/ui/dot-loader"
 import { useToast } from "../../../../hooks/use-toast"
 import { useSkillsStore } from "../../../../lib/stores"
 
@@ -29,6 +29,8 @@ export default function NewSkillPage() {
     name: "",
     level: 50,
     category: searchParams.get("category") || sortedCategories[0]?.id || "core",
+    icon: "",
+    year: "",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +63,11 @@ export default function NewSkillPage() {
     // Simulate API call
     setTimeout(() => {
       addSkill({
-        ...formData,
+        name: formData.name,
+        level: formData.level,
+        category: formData.category,
+        icon: formData.icon || undefined,
+        year: formData.year ? parseInt(formData.year) : undefined,
       })
 
       toast({
@@ -113,18 +119,42 @@ export default function NewSkillPage() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="icon">Icon URL (Optional)</Label>
+              <Input
+                id="icon"
+                name="icon"
+                value={formData.icon}
+                onChange={handleChange}
+                placeholder="e.g. https://example.com/icon.png"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="year">Years of Experience (Optional)</Label>
+              <Input
+                id="year"
+                name="year"
+                type="number"
+                value={formData.year}
+                onChange={handleChange}
+                placeholder="e.g. 3"
+              />
+            </div>
+
+            <div className="space-y-8 pt-4">
               <div className="flex justify-between">
-                <Label htmlFor="level">Proficiency Level: {formData.level}%</Label>
+                <Label htmlFor="level">Proficiency Level</Label>
               </div>
-              <Slider
-                id="level"
-                min={0}
-                max={100}
-                step={5}
+              <DualRangeSlider
                 value={[formData.level]}
                 onValueChange={handleLevelChange}
+                min={0}
+                max={100}
+                step={1}
+                label={(value) => `${value}%`}
+                labelPosition="top"
               />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="flex justify-between text-xs text-muted-foreground pt-2">
                 <span>Beginner</span>
                 <span>Intermediate</span>
                 <span>Expert</span>
@@ -136,7 +166,16 @@ export default function NewSkillPage() {
                 Cancel
               </Button>
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Adding..." : "Add Skill"}
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 flex items-center justify-center">
+                      <DotLoader dotClass="bg-primary-foreground h-1 w-1" />
+                    </div>
+                    <span>Adding...</span>
+                  </div>
+                ) : (
+                  "Add Skill"
+                )}
               </Button>
             </div>
           </CardContent>

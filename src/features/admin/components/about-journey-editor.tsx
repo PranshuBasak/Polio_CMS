@@ -9,7 +9,7 @@ import {
   DropResult,
 } from '@hello-pangea/dnd';
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useAboutStore } from '@/lib/stores';
 import { Button } from '@/components/ui/button';
@@ -40,7 +40,13 @@ export default function AboutJourneyEditor() {
     company: '',
     date: '',
     description: '',
+    icon: '',
   });
+
+  // Sync local state with data fetched from Supabase
+  useEffect(() => {
+    setJourneys([...(aboutData.journey || [])]);
+  }, [aboutData.journey]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -57,12 +63,13 @@ export default function AboutJourneyEditor() {
       company: journey.company,
       date: journey.date,
       description: journey.description,
+      icon: journey.icon || '',
     });
   };
 
   const handleCancelEdit = () => {
     setIsEditing(null);
-    setFormData({ id: '', title: '', company: '', date: '', description: '' });
+    setFormData({ id: '', title: '', company: '', date: '', description: '', icon: '' });
   };
 
   const handleSaveEdit = () => {
@@ -87,7 +94,7 @@ export default function AboutJourneyEditor() {
     });
 
     setIsEditing(null);
-    setFormData({ id: '', title: '', company: '', date: '', description: '' });
+    setFormData({ id: '', title: '', company: '', date: '', description: '', icon: '' });
   };
 
   const handleDelete = (id: string) => {
@@ -109,12 +116,13 @@ export default function AboutJourneyEditor() {
       company: '',
       date: '',
       description: '',
+      icon: '',
     });
   };
 
   const handleCancelAdd = () => {
     setIsAdding(false);
-    setFormData({ id: '', title: '', company: '', date: '', description: '' });
+    setFormData({ id: '', title: '', company: '', date: '', description: '', icon: '' });
   };
 
   const handleSaveAdd = () => {
@@ -142,7 +150,7 @@ export default function AboutJourneyEditor() {
     });
 
     setIsAdding(false);
-    setFormData({ id: '', title: '', company: '', date: '', description: '' });
+    setFormData({ id: '', title: '', company: '', date: '', description: '', icon: '' });
   };
 
   const handleMoveUp = (index: number) => {
@@ -224,6 +232,17 @@ export default function AboutJourneyEditor() {
                   onChange={handleChange}
                   placeholder="e.g. 2022 - Present"
                   required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="icon">Icon URL (Optional)</Label>
+                <Input
+                  id="icon"
+                  name="icon"
+                  value={formData.icon}
+                  onChange={handleChange}
+                  placeholder="e.g. https://example.com/icon.png"
                 />
               </div>
 
@@ -317,6 +336,19 @@ export default function AboutJourneyEditor() {
                                     value={formData.date}
                                     onChange={handleChange}
                                     required
+                                  />
+                                </div>
+
+                                <div className="space-y-2">
+                                  <Label htmlFor={`edit-icon-${journey.id}`}>
+                                    Icon URL (Optional)
+                                  </Label>
+                                  <Input
+                                    id={`edit-icon-${journey.id}`}
+                                    name="icon"
+                                    value={formData.icon}
+                                    onChange={handleChange}
+                                    placeholder="e.g. https://example.com/icon.png"
                                   />
                                 </div>
 

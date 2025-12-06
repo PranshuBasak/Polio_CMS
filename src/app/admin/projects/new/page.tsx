@@ -83,6 +83,51 @@ export default function NewProjectPage() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="image">Image URL</Label>
+              <Input
+                id="image"
+                placeholder="https://example.com/project-image.png"
+                {...register("image")}
+                disabled={isSubmitting}
+              />
+              {errors.image && <p className="text-sm text-destructive">{errors.image.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="icon">Icon URL</Label>
+              <Input
+                id="icon"
+                placeholder="https://example.com/project-icon.png"
+                {...register("icon")}
+                disabled={isSubmitting}
+              />
+              {errors.icon && <p className="text-sm text-destructive">{errors.icon.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="youtubeUrl">YouTube Demo URL</Label>
+              <Input
+                id="youtubeUrl"
+                placeholder="https://youtube.com/watch?v=..."
+                {...register("youtubeUrl")}
+                disabled={isSubmitting}
+              />
+              {errors.youtubeUrl && <p className="text-sm text-destructive">{errors.youtubeUrl.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="screenshots">Screenshots (one URL per line)</Label>
+              <Textarea
+                id="screenshots"
+                placeholder="https://example.com/screenshot1.png&#10;https://example.com/screenshot2.png"
+                rows={4}
+                {...register("screenshots")}
+                disabled={isSubmitting}
+              />
+              {errors.screenshots && <p className="text-sm text-destructive">{errors.screenshots.message}</p>}
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
               <Input
                 id="category"

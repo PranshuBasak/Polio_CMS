@@ -17,6 +17,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useResumeStore } from '@/lib/stores';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import { DatePicker } from '@/components/ui/date-picker';
+import { format } from 'date-fns';
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -284,30 +286,35 @@ export default function ResumeEducationEditor() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="startDate">Start Date *</Label>
-                    <Input
-                      id="startDate"
-                      name="startDate"
-                      value={formData.startDate}
-                      onChange={handleChange}
-                      placeholder="YYYY-MM"
-                      required
-                    />
-                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-2">
+                      <Label>Start Date *</Label>
+                      <DatePicker
+                        date={formData.startDate ? new Date(formData.startDate) : undefined}
+                        setDate={(date) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            startDate: date ? format(date, "yyyy-MM-dd") : "",
+                          }))
+                        }
+                        placeholder="Pick a date"
+                      />
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="endDate">End Date</Label>
-                    <Input
-                      id="endDate"
-                      name="endDate"
-                      value={formData.endDate}
-                      onChange={handleChange}
-                      placeholder="YYYY-MM"
-                    />
+                    <div className="space-y-2">
+                      <Label>End Date</Label>
+                      <DatePicker
+                        date={formData.endDate ? new Date(formData.endDate) : undefined}
+                        setDate={(date) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            endDate: date ? format(date, "yyyy-MM-dd") : "",
+                          }))
+                        }
+                        placeholder="Pick a date"
+                      />
+                    </div>
                   </div>
-                </div>
               </div>
 
               <div className="space-y-2">
@@ -445,29 +452,30 @@ export default function ResumeEducationEditor() {
 
                                   <div className="grid grid-cols-2 gap-2">
                                     <div className="space-y-2">
-                                      <Label
-                                        htmlFor={`edit-startDate-${edu.id}`}
-                                      >
-                                        Start Date *
-                                      </Label>
-                                      <Input
-                                        id={`edit-startDate-${edu.id}`}
-                                        name="startDate"
-                                        value={formData.startDate}
-                                        onChange={handleChange}
-                                        required
+                                      <Label>Start Date *</Label>
+                                      <DatePicker
+                                        date={formData.startDate ? new Date(formData.startDate) : undefined}
+                                        setDate={(date) =>
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            startDate: date ? format(date, "yyyy-MM-dd") : "",
+                                          }))
+                                        }
+                                        placeholder="Pick a date"
                                       />
                                     </div>
 
                                     <div className="space-y-2">
-                                      <Label htmlFor={`edit-endDate-${edu.id}`}>
-                                        End Date
-                                      </Label>
-                                      <Input
-                                        id={`edit-endDate-${edu.id}`}
-                                        name="endDate"
-                                        value={formData.endDate}
-                                        onChange={handleChange}
+                                      <Label>End Date</Label>
+                                      <DatePicker
+                                        date={formData.endDate ? new Date(formData.endDate) : undefined}
+                                        setDate={(date) =>
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            endDate: date ? format(date, "yyyy-MM-dd") : "",
+                                          }))
+                                        }
+                                        placeholder="Pick a date"
                                       />
                                     </div>
                                   </div>

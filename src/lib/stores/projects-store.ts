@@ -11,6 +11,9 @@ export type Project = {
   githubUrl?: string
   liveUrl?: string
   image?: string
+  icon?: string
+  youtubeUrl?: string
+  screenshots?: string[]
   caseStudy?: {
     challenge: string
     solution: string
@@ -80,6 +83,9 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
             githubUrl: p.github_url || undefined,
             liveUrl: p.live_url || undefined,
             image: p.image_url || undefined,
+            icon: p.icon || undefined,
+            youtubeUrl: p.youtube_url || undefined,
+            screenshots: p.screenshots || [],
             caseStudy: caseStudy || (p.screenshots ? {
               challenge: "",
               solution: "",
@@ -113,8 +119,10 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
         github_url: project.githubUrl,
         live_url: project.liveUrl,
         image_url: project.image,
+        icon: project.icon,
+        youtube_url: project.youtubeUrl,
         content: project.caseStudy ? JSON.stringify(project.caseStudy) : null,
-        screenshots: project.caseStudy?.screenshots || [],
+        screenshots: project.screenshots || project.caseStudy?.screenshots || [],
         published: true,
       }
 
@@ -148,9 +156,13 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
       if (project.githubUrl !== undefined) updates.github_url = project.githubUrl
       if (project.liveUrl !== undefined) updates.live_url = project.liveUrl
       if (project.image !== undefined) updates.image_url = project.image
+      if (project.icon !== undefined) updates.icon = project.icon
+      if (project.youtubeUrl !== undefined) updates.youtube_url = project.youtubeUrl
+      if (project.screenshots !== undefined) updates.screenshots = project.screenshots
       if (project.caseStudy) {
         updates.content = JSON.stringify(project.caseStudy)
-        updates.screenshots = project.caseStudy.screenshots
+        // Sync screenshots if updated via caseStudy (legacy support)
+        if (project.caseStudy.screenshots) updates.screenshots = project.caseStudy.screenshots
       }
 
       const { error } = await supabase

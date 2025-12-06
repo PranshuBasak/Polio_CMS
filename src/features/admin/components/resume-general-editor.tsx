@@ -18,11 +18,21 @@ import { useResumeStore } from '@/lib/stores';
 import { FileUp } from 'lucide-react';
 import { useState } from 'react';
 
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+
 export default function ResumeGeneralEditor() {
   const resumeData = useResumeStore((state) => state.resumeData) ?? {
     pdfUrl: '',
     languages: [],
     interests: [],
+    name: '',
+    email: '',
+    phone: '',
+    location: '',
+    bio: '',
+    availableForWork: false,
+    yearsExperience: 0,
   };
   const updateResumeData = useResumeStore((state) => state.updateResumeData);
   const { toast } = useToast();
@@ -31,6 +41,13 @@ export default function ResumeGeneralEditor() {
     pdfUrl: resumeData.pdfUrl || '',
     languages: [...(resumeData.languages || [])],
     interests: [...(resumeData.interests || [])],
+    name: resumeData.name || '',
+    email: resumeData.email || '',
+    phone: resumeData.phone || '',
+    location: resumeData.location || '',
+    bio: resumeData.bio || '',
+    availableForWork: resumeData.availableForWork || false,
+    yearsExperience: resumeData.yearsExperience || 0,
   });
   const [newLanguage, setNewLanguage] = useState({ name: '', proficiency: '' });
   const [newInterest, setNewInterest] = useState('');
@@ -108,6 +125,86 @@ export default function ResumeGeneralEditor() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Personal Information</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="e.g. John Doe"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="e.g. john@example.com"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone</Label>
+              <Input
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="e.g. +1 234 567 890"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="location">Location</Label>
+              <Input
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                placeholder="e.g. San Francisco, CA"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="yearsExperience">Years of Experience</Label>
+              <Input
+                id="yearsExperience"
+                name="yearsExperience"
+                type="number"
+                value={formData.yearsExperience}
+                onChange={handleChange}
+                placeholder="e.g. 5"
+              />
+            </div>
+            <div className="flex items-center space-x-2 pt-8">
+              <Switch
+                id="availableForWork"
+                checked={formData.availableForWork}
+                onCheckedChange={(checked) =>
+                  setFormData((prev) => ({ ...prev, availableForWork: checked }))
+                }
+              />
+              <Label htmlFor="availableForWork">Available for Work</Label>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="bio">Bio</Label>
+            <Textarea
+              id="bio"
+              name="bio"
+              value={formData.bio}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, bio: e.target.value }))
+              }
+              placeholder="Brief bio..."
+              rows={3}
+            />
+          </div>
+        </div>
+
         <div className="space-y-2">
           <Label htmlFor="pdfUrl">Resume PDF URL</Label>
           <div className="flex gap-2">

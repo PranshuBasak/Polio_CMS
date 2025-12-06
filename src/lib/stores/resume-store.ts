@@ -46,11 +46,20 @@ export type ResumeData = {
   skills: ResumeSkillCategory[]
   certifications: ResumeCertification[]
   languages: {
+    id?: string
     name: string
     proficiency: string
   }[]
   interests: string[]
   pdfUrl: string
+  // About fields
+  name: string
+  email: string
+  phone: string
+  location: string
+  bio: string
+  availableForWork: boolean
+  yearsExperience: number
 }
 
 type ResumeStore = {
@@ -67,127 +76,20 @@ type ResumeStore = {
 }
 
 const defaultResumeData: ResumeData = {
-  experiences: [
-    {
-      id: "1",
-      title: "Backend Developer",
-      company: "Softsasi",
-      location: "Remote",
-      startDate: "2025-01",
-      endDate: "Present",
-      description:
-        "Developing scalable backend systems and APIs using modern technologies. Building full-stack applications with focus on performance and maintainability.",
-      achievements: [
-        "Designed and implemented RESTful APIs serving production traffic",
-        "Built scalable microservices architecture with TypeScript and Node.js",
-        "Implemented CI/CD pipelines for automated deployment",
-        "Contributed to system design and architectural decisions",
-      ],
-    },
-    {
-      id: "2",
-      title: "Software Developer",
-      company: "code-BitLabs",
-      location: "Remote",
-      startDate: "2023-01",
-      endDate: "Present",
-      description:
-        "Working on backend development and system design. Building enterprise-grade solutions with focus on scalability and clean code.",
-      achievements: [
-        "Developed backend services using Spring Boot and Node.js",
-        "Implemented database optimization strategies that improved query performance",
-        "Contributed to open-source projects with 724+ GitHub contributions",
-        "Mentored junior developers on best practices and design patterns",
-      ],
-    },
-  ],
-  education: [
-    {
-      id: "1",
-      degree: "Bachelor of Science in Computer Science & Engineering",
-      institution: "United International University",
-      location: "Dhaka, Bangladesh",
-      startDate: "2020-09",
-      endDate: "2026-12",
-      description:
-        "Focused on software development, system design, data structures, and algorithms. Active participation in competitive programming and open-source contributions.",
-      courses: [
-        "Data Structures & Algorithms",
-        "Database Management Systems",
-        "Software Engineering",
-        "Operating Systems",
-        "Computer Networks",
-        "Object-Oriented Programming",
-        "Web Technologies",
-        "System Design",
-      ],
-    },
-  ],
-  skills: [
-    {
-      category: "Programming Languages",
-      items: [
-        { name: "TypeScript/JavaScript", level: 90 },
-        { name: "Java", level: 85 },
-        { name: "Python", level: 75 },
-        { name: "Go", level: 60 },
-        { name: "Rust", level: 50 },
-      ],
-    },
-    {
-      category: "Frameworks & Libraries",
-      items: [
-        { name: "Spring Boot", level: 85 },
-        { name: "Node.js", level: 90 },
-        { name: "Express", level: 85 },
-        { name: "React", level: 70 },
-        { name: "Next.js", level: 65 },
-      ],
-    },
-    {
-      category: "DevOps & Cloud",
-      items: [
-        { name: "Docker", level: 80 },
-        { name: "Kubernetes", level: 75 },
-        { name: "AWS", level: 70 },
-        { name: "GitHub Actions", level: 85 },
-        { name: "Terraform", level: 65 },
-      ],
-    },
-    {
-      category: "Databases",
-      items: [
-        { name: "PostgreSQL", level: 85 },
-        { name: "MongoDB", level: 80 },
-        { name: "Redis", level: 75 },
-        { name: "Elasticsearch", level: 70 },
-      ],
-    },
-  ],
-  certifications: [
-    {
-      id: "1",
-      name: "Hands-On AI: Building Agents with the Google Agent Development Toolkit (ADK)",
-      issuer: "LinkedIn Learning",
-      date: "2025-11",
-      description: "Practical course on building AI agents using Google's Agent Development Toolkit with hands-on projects.",
-      url: "https://www.linkedin.com/learning/",
-    },
-    {
-      id: "2",
-      name: "Complete Guide to Java Design Patterns: Creational, Behavioral, and Structural",
-      issuer: "LinkedIn Learning",
-      date: "2025-10",
-      description: "Comprehensive deep dive into fundamentals of software design patterns including creational, behavioral, and structural patterns.",
-      url: "https://www.linkedin.com/learning/",
-    },
-  ],
-  languages: [
-    { name: "English", proficiency: "Native" },
-    { name: "Spanish", proficiency: "Intermediate" },
-  ],
-  interests: ["Open Source Development", "System Architecture", "Cloud Computing", "Hiking", "Photography"],
-  pdfUrl: "/Pranshu_Basak_Resume.pdf",
+  experiences: [],
+  education: [],
+  skills: [],
+  certifications: [],
+  languages: [],
+  interests: [],
+  pdfUrl: "",
+  name: "",
+  email: "",
+  phone: "",
+  location: "",
+  bio: "",
+  availableForWork: false,
+  yearsExperience: 0,
 }
 
 export const useResumeStore = create<ResumeStore>((set, get) => ({
@@ -218,6 +120,47 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
         .select("*")
         .order("date", { ascending: false })
 
+      // Fetch skills
+      const { data: skillsData } = await supabase
+        .from("skills")
+        .select("*")
+        .order("order_index", { ascending: true })
+
+      // Group skills by category
+      const skills: ResumeSkillCategory[] = []
+      if (skillsData) {
+        const categories = Array.from(new Set(skillsData.map((s: any) => s.category)))
+        categories.forEach((category) => {
+          skills.push({
+            category: category as string,
+            items: skillsData
+              .filter((s: any) => s.category === category)
+              .map((s: any) => ({
+                name: s.name,
+                level: s.proficiency,
+              })),
+          })
+        })
+      }
+
+      // Fetch languages
+      const { data: languages } = await supabase
+        .from("languages")
+        .select("*")
+        .order("created_at", { ascending: true })
+
+      // Fetch interests
+      const { data: interests } = await supabase
+        .from("interests")
+        .select("*")
+        .order("created_at", { ascending: true })
+
+      // Fetch about data
+      const { data: about } = await supabase
+        .from("about")
+        .select("*")
+        .single()
+
       // Map to ResumeData format
       const resumeData: ResumeData = {
         experiences: experiences?.map((exp: any) => ({
@@ -240,7 +183,7 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
           description: edu.description,
           courses: edu.courses || [],
         })) || defaultResumeData.education,
-        skills: defaultResumeData.skills, // Keep from local data
+        skills: skills.length > 0 ? skills : defaultResumeData.skills,
         certifications: certifications?.map((cert: any) => ({
           id: cert.id,
           name: cert.name,
@@ -249,9 +192,20 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
           description: cert.description,
           url: cert.url,
         })) || defaultResumeData.certifications,
-        languages: defaultResumeData.languages,
-        interests: defaultResumeData.interests,
-        pdfUrl: defaultResumeData.pdfUrl,
+        languages: languages?.map((lang: any) => ({
+          id: lang.id,
+          name: lang.name,
+          proficiency: lang.proficiency,
+        })) || [],
+        interests: interests?.map((int: any) => int.name) || [],
+        pdfUrl: about?.resume_url || defaultResumeData.pdfUrl,
+        name: about?.name || "",
+        email: about?.email || "",
+        phone: about?.phone || "",
+        location: about?.location || "",
+        bio: about?.bio || "",
+        availableForWork: about?.available_for_work || false,
+        yearsExperience: about?.years_experience || 0,
       }
 
       set({ resumeData })
@@ -274,37 +228,201 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
     })
 
     try {
-      // For now, just update local state
-      // Full Supabase update implementation would require separate endpoints for each section
-      console.log("Resume data updated locally:", data)
+      const supabase = createClient()
+      
+      // Update About table (General Info)
+      const aboutUpdates: any = {}
+      if (data.pdfUrl !== undefined) aboutUpdates.resume_url = data.pdfUrl
+      if (data.name !== undefined) aboutUpdates.name = data.name
+      if (data.email !== undefined) aboutUpdates.email = data.email
+      if (data.phone !== undefined) aboutUpdates.phone = data.phone
+      if (data.location !== undefined) aboutUpdates.location = data.location
+      if (data.bio !== undefined) aboutUpdates.bio = data.bio
+      if (data.availableForWork !== undefined) aboutUpdates.available_for_work = data.availableForWork
+      if (data.yearsExperience !== undefined) aboutUpdates.years_experience = data.yearsExperience
+
+      if (Object.keys(aboutUpdates).length > 0) {
+        const { data: aboutData } = await supabase.from("about").select("id").limit(1).single()
+        
+        if (aboutData) {
+           const { error } = await supabase
+            .from("about")
+            .update(aboutUpdates)
+            .eq("id", aboutData.id)
+            
+           if (error) throw error
+        }
+      }
+
+      // Update Languages
+      if (data.languages) {
+        const { error: deleteError } = await supabase
+          .from("languages")
+          .delete()
+          .neq("id", "00000000-0000-0000-0000-000000000000")
+        
+        if (deleteError) throw deleteError
+
+        if (data.languages.length > 0) {
+          const { error: insertError } = await supabase
+            .from("languages")
+            .insert(
+              data.languages.map((l) => ({
+                name: l.name,
+                proficiency: l.proficiency,
+              }))
+            )
+          if (insertError) throw insertError
+        }
+      }
+
+      // Update Interests
+      if (data.interests) {
+        const { error: deleteError } = await supabase
+          .from("interests")
+          .delete()
+          .neq("id", "00000000-0000-0000-0000-000000000000")
+          
+        if (deleteError) throw deleteError
+
+        if (data.interests.length > 0) {
+          const { error: insertError } = await supabase
+            .from("interests")
+            .insert(
+              data.interests.map((interest) => ({
+                name: interest,
+              }))
+            )
+          if (insertError) throw insertError
+        }
+      }
+
+      // Update Experiences
+      if (data.experiences) {
+        const { error: deleteError } = await supabase
+          .from("experiences")
+          .delete()
+          .neq("id", "00000000-0000-0000-0000-000000000000")
+          
+        if (deleteError) throw deleteError
+
+        if (data.experiences.length > 0) {
+          const { error: insertError } = await supabase
+            .from("experiences")
+            .insert(
+              data.experiences.map((exp, index) => ({
+                position: exp.title,
+                company: exp.company,
+                location: exp.location,
+                start_date: exp.startDate,
+                end_date: exp.endDate === "Present" ? null : exp.endDate, // Handle "Present"
+                description: exp.description,
+                achievements: exp.achievements,
+                order_index: index,
+              }))
+            )
+          if (insertError) throw insertError
+        }
+      }
+
+      // Update Education
+      if (data.education) {
+        const { error: deleteError } = await supabase
+          .from("education")
+          .delete()
+          .neq("id", "00000000-0000-0000-0000-000000000000")
+          
+        if (deleteError) throw deleteError
+
+        if (data.education.length > 0) {
+          const { error: insertError } = await supabase
+            .from("education")
+            .insert(
+              data.education.map((edu, index) => ({
+                degree: edu.degree,
+                institution: edu.institution,
+                location: edu.location,
+                start_date: edu.startDate,
+                end_date: edu.endDate,
+                description: edu.description,
+                courses: edu.courses,
+                order_index: index,
+              }))
+            )
+          if (insertError) throw insertError
+        }
+      }
+
+      // Update Certifications
+      if (data.certifications) {
+        const { error: deleteError } = await supabase
+          .from("certifications")
+          .delete()
+          .neq("id", "00000000-0000-0000-0000-000000000000")
+          
+        if (deleteError) throw deleteError
+
+        if (data.certifications.length > 0) {
+          const { error: insertError } = await supabase
+            .from("certifications")
+            .insert(
+              data.certifications.map((cert, index) => ({
+                name: cert.name,
+                issuer: cert.issuer,
+                issue_date: cert.date, // Mapped from date
+                description: cert.description,
+                credential_url: cert.url, // Mapped from url
+                order_index: index,
+              }))
+            )
+          if (insertError) throw insertError
+        }
+      }
+
+      // Update Skills
+      if (data.skills) {
+        const { error: deleteError } = await supabase
+          .from("skills")
+          .delete()
+          .neq("id", "00000000-0000-0000-0000-000000000000")
+          
+        if (deleteError) throw deleteError
+
+        const flatSkills = data.skills.flatMap((cat, catIndex) => 
+          cat.items.map((item, itemIndex) => ({
+            category: cat.category,
+            name: item.name,
+            proficiency: item.level,
+            order_index: catIndex * 100 + itemIndex, // Simple ordering strategy
+          }))
+        )
+
+        if (flatSkills.length > 0) {
+          const { error: insertError } = await supabase
+            .from("skills")
+            .insert(flatSkills)
+          if (insertError) throw insertError
+        }
+      }
+
+      console.log("Resume data updated in Supabase:", data)
     } catch (error: any) {
       console.error("Failed to update resume data:", error)
       set({ error: error?.message || "Failed to update resume data" })
+      // Revert optimistic update
       set({ resumeData: currentData })
     } finally {
       set({ isLoading: false })
     }
   },
 
-  updateExperiences: (experiences) =>
-    set((state) => ({
-      resumeData: { ...state.resumeData, experiences },
-    })),
+  updateExperiences: (experiences) => get().updateResumeData({ experiences }),
 
-  updateEducation: (education) =>
-    set((state) => ({
-      resumeData: { ...state.resumeData, education },
-    })),
+  updateEducation: (education) => get().updateResumeData({ education }),
 
-  updateSkills: (skills) =>
-    set((state) => ({
-      resumeData: { ...state.resumeData, skills },
-    })),
+  updateSkills: (skills) => get().updateResumeData({ skills }),
 
-  updateCertifications: (certifications) =>
-    set((state) => ({
-      resumeData: { ...state.resumeData, certifications },
-    })),
+  updateCertifications: (certifications) => get().updateResumeData({ certifications }),
 
   resetResume: () => set({ resumeData: defaultResumeData }),
 }))

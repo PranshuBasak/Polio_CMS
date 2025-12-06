@@ -9,7 +9,7 @@ export default async function ContactSection() {
   // Contact info can be fetched from config/env or hardcoded
   const contactInfo = {
     email: 'pranshubasak@gmail.com',
-    location: 'Dhaka, Bangladesh',
+    location: 'C.G. , India',
     social: {
       github: 'https://github.com/PranshuBasak',
       linkedin: 'https://linkedin.com/in/0xPranshu',

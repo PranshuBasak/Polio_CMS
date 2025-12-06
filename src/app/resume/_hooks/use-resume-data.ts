@@ -1,7 +1,7 @@
 "use client"
 
 import { useResumeStore } from "../../../lib/stores"
-import { useMemo } from "react"
+import { useMemo, useEffect } from "react"
 
 /**
  * Custom hook for resume data
@@ -9,6 +9,13 @@ import { useMemo } from "react"
  */
 export function useResumeData() {
   const resumeData = useResumeStore((state) => state.resumeData)
+  const fetchResumeData = useResumeStore((state) => state.fetchResumeData)
+  const isLoading = useResumeStore((state) => state.isLoading)
+
+  // Fetch data on mount
+  useEffect(() => {
+    fetchResumeData()
+  }, [fetchResumeData])
 
   // Memoized sorted experiences (newest first)
   const sortedExperiences = useMemo(
@@ -27,6 +34,8 @@ export function useResumeData() {
     education: sortedEducation,
     skills: resumeData.skills,
     certifications: resumeData.certifications,
-    isLoading: false,
+    languages: resumeData.languages,
+    interests: resumeData.interests,
+    isLoading,
   }
 }

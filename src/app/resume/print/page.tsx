@@ -1,7 +1,7 @@
 'use client';
 
-import { useResumeStore } from '@/lib/stores';
-import { Briefcase, Calendar, GraduationCap, Mail, MapPin, Phone } from 'lucide-react';
+import { useResumeData } from '../_hooks/use-resume-data';
+import { Briefcase, Calendar, GraduationCap, Mail, MapPin, Phone, Languages, Globe } from 'lucide-react';
 
 /**
  * Print-Optimized Resume Page
@@ -13,7 +13,7 @@ import { Briefcase, Calendar, GraduationCap, Mail, MapPin, Phone } from 'lucide-
  * 4. Move to /public folder
  */
 export default function ResumePrintPage() {
-  const resumeData = useResumeStore((state) => state.resumeData);
+  const resumeData = useResumeData();
 
   return (
     <div className="print-resume">
@@ -39,11 +39,11 @@ export default function ResumePrintPage() {
           </span>
           <span className="contact-item">
             <Phone className="w-3 h-3" />
-            +880 1521-459459
+            +91 9589366643
           </span>
           <span className="contact-item">
             <MapPin className="w-3 h-3" />
-            Dhaka, Bangladesh
+            Chhattisgarh, India
           </span>
         </div>
       </header>
@@ -127,6 +127,41 @@ export default function ResumePrintPage() {
           ))}
         </div>
       </section>
+
+      {/* Languages */}
+      {resumeData.languages && resumeData.languages.length > 0 && (
+        <section className="section">
+          <h2 className="section-title">
+            <Languages className="w-4 h-4" />
+            Languages
+          </h2>
+          <div className="grid grid-cols-2 gap-4">
+            {resumeData.languages.map((lang, idx) => (
+              <div key={idx} className="flex justify-between">
+                <span className="font-medium">{lang.name}</span>
+                <span className="text-gray-600">{lang.proficiency}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Interests */}
+      {resumeData.interests && resumeData.interests.length > 0 && (
+        <section className="section">
+          <h2 className="section-title">
+            <Globe className="w-4 h-4" />
+            Interests
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {resumeData.interests.map((interest, idx) => (
+              <span key={idx} className="bg-gray-100 px-2 py-1 rounded text-sm">
+                {interest}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Certifications */}
       {resumeData.certifications && resumeData.certifications.length > 0 && (

@@ -90,6 +90,51 @@ export type Database = {
         }
         Relationships: []
       }
+      languages: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          proficiency: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          proficiency: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          proficiency?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      interests: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           category: string | null
@@ -392,8 +437,9 @@ export type Database = {
           id: string
           order_index: number | null
           title: string
+          company: string | null
           updated_at: string | null
-          year: number
+          year: string
         }
         Insert: {
           created_at?: string | null
@@ -402,8 +448,9 @@ export type Database = {
           id?: string
           order_index?: number | null
           title: string
+          company?: string | null
           updated_at?: string | null
-          year: number
+          year: string
         }
         Update: {
           created_at?: string | null
@@ -412,8 +459,9 @@ export type Database = {
           id?: string
           order_index?: number | null
           title?: string
+          company?: string | null
           updated_at?: string | null
-          year?: number
+          year?: string
         }
         Relationships: []
       }
@@ -475,6 +523,8 @@ export type Database = {
           title: string
           updated_at: string | null
           views: number | null
+          icon: string | null
+          youtube_url: string | null
         }
         Insert: {
           content?: string | null
@@ -494,6 +544,8 @@ export type Database = {
           title: string
           updated_at?: string | null
           views?: number | null
+          icon?: string | null
+          youtube_url?: string | null
         }
         Update: {
           content?: string | null
@@ -513,6 +565,35 @@ export type Database = {
           title?: string
           updated_at?: string | null
           views?: number | null
+          icon?: string | null
+          youtube_url?: string | null
+        }
+        Relationships: []
+      }
+      skill_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          order: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id: string
+          name: string
+          order?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          order?: number | null
+          updated_at?: string | null
         }
         Relationships: []
       }

@@ -20,8 +20,10 @@ import {
     X,
 } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 export function AdminSidebar() {
   const pathname = usePathname();
@@ -31,6 +33,30 @@ export function AdminSidebar() {
   const toggleSidebar = useUIStore((state) => state.toggleSidebar);
   const closeSidebar = useUIStore((state) => state.closeSidebar);
   const [isMobile, setIsMobile] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+  const supabase = createClient();
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      toast({
+        title: 'Logged out',
+        description: 'You have been successfully logged out.',
+      });
+
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to log out. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   useEffect(() => {
     // Mounted check happens once
@@ -183,7 +209,7 @@ export function AdminSidebar() {
 
             <button
               className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-              onClick={() => console.log('Logout clicked')}
+              onClick={handleLogout}
             >
               <LogOut className="h-5 w-5" />
               <span>Logout</span>

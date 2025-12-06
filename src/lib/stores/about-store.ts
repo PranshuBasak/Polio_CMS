@@ -87,7 +87,7 @@ export const useAboutStore = create<AboutStore>((set, get) => ({
         ? journeyData.map((item: any) => ({
             id: item.id,
             title: item.title,
-            company: item.title,
+            company: item.company || item.title, // Fallback to title if company is empty
             date: item.year?.toString() || "",
             description: item.description,
             icon: item.icon,
@@ -197,7 +197,8 @@ export const useAboutStore = create<AboutStore>((set, get) => ({
         const journeyPayload = journeys.map((item, index) => ({
           title: item.title,
           description: item.description,
-          year: parseInt(item.date) || new Date().getFullYear(),
+          year: item.date, // Now saving as string directly
+          company: item.company,
           order_index: index,
           icon: item.icon || null,
         }))

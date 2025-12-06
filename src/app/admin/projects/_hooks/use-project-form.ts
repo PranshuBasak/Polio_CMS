@@ -14,6 +14,10 @@ const projectFormSchema = z.object({
   technologies: z.string().min(1, 'At least one technology is required'),
   githubUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
   liveUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
+  image: z.string().url('Invalid URL').optional().or(z.literal('')),
+  icon: z.string().url('Invalid URL').optional().or(z.literal('')),
+  youtubeUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
+  screenshots: z.string().optional(),
   category: z.string().optional(),
   featured: z.boolean().optional(),
 });
@@ -24,6 +28,7 @@ export function useProjectForm(project?: Project) {
   const router = useRouter();
   const { toast } = useToast();
   const addProject = useProjectsStore((state) => state.addProject);
+  const updateProject = useProjectsStore((state) => state.updateProject);
   const deleteProject = useProjectsStore((state) => state.deleteProject);
 
   const form = useForm<ProjectFormData>({
@@ -34,6 +39,10 @@ export function useProjectForm(project?: Project) {
       technologies: project?.technologies?.join(', ') || '',
       githubUrl: project?.githubUrl || '',
       liveUrl: project?.liveUrl || '',
+      image: project?.image || '',
+      icon: project?.icon || '',
+      youtubeUrl: project?.youtubeUrl || '',
+      screenshots: project?.screenshots?.join('\n') || '',
       category: '',
       featured: false,
     },
@@ -51,20 +60,25 @@ export function useProjectForm(project?: Project) {
           .filter(Boolean),
         githubUrl: data.githubUrl || undefined,
         liveUrl: data.liveUrl || undefined,
-        image: project?.image,
+        image: data.image || undefined,
+        icon: data.icon || undefined,
+        youtubeUrl: data.youtubeUrl || undefined,
+        screenshots: data.screenshots
+          ? data.screenshots.split('\n').map((s) => s.trim()).filter(Boolean)
+          : [],
         caseStudy: project?.caseStudy,
       };
 
       if (project) {
-        // Remove old project and add updated one
-        deleteProject(project.id);
-        addProject(projectData);
+        // Update existing project
+        await updateProject(project.id, projectData);
         toast({
           title: 'Project updated!',
           description: 'Your project has been updated successfully.',
         });
       } else {
-        addProject(projectData);
+        // Add new project
+        await addProject(projectData);
         toast({
           title: 'Project created!',
           description: 'Your project has been created successfully.',

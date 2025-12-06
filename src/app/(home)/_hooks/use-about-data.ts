@@ -18,7 +18,7 @@ export function useAboutData() {
 
   return {
     bio: aboutData.bio,
-    focus: aboutData.focus,
+
     journey: sortedJourney,
     values: aboutData.values,
     mission: aboutData.mission,

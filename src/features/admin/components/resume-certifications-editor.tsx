@@ -19,6 +19,8 @@ import { useResumeStore } from '@/lib/stores';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { DatePicker } from '@/components/ui/date-picker';
+import { format } from 'date-fns';
 
 export default function ResumeCertificationsEditor() {
   const { resumeData, updateCertifications } = useResumeStore();
@@ -249,14 +251,16 @@ export default function ResumeCertificationsEditor() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="date">Date Issued *</Label>
-                  <Input
-                    id="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleChange}
-                    placeholder="YYYY-MM"
-                    required
+                  <Label>Date Issued *</Label>
+                  <DatePicker
+                    date={formData.date ? new Date(formData.date) : undefined}
+                    setDate={(date) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        date: date ? format(date, "yyyy-MM-dd") : "",
+                      }))
+                    }
+                    placeholder="Pick a date"
                   />
                 </div>
 
@@ -352,15 +356,16 @@ export default function ResumeCertificationsEditor() {
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   <div className="space-y-2">
-                                    <Label htmlFor={`edit-date-${cert.id}`}>
-                                      Date Issued *
-                                    </Label>
-                                    <Input
-                                      id={`edit-date-${cert.id}`}
-                                      name="date"
-                                      value={formData.date}
-                                      onChange={handleChange}
-                                      required
+                                    <Label>Date Issued *</Label>
+                                    <DatePicker
+                                      date={formData.date ? new Date(formData.date) : undefined}
+                                      setDate={(date) =>
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          date: date ? format(date, "yyyy-MM-dd") : "",
+                                        }))
+                                      }
+                                      placeholder="Pick a date"
                                     />
                                   </div>
 

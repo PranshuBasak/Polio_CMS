@@ -23,7 +23,8 @@ import {
   SelectValue,
 } from '../../../../../components/ui/select';
 import { Skeleton } from '../../../../../components/ui/skeleton';
-import { Slider } from '../../../../../components/ui/slider';
+import { DualRangeSlider } from '../../../../../components/ui/dual-range-slider';
+import { DotLoader } from '../../../../../components/ui/dot-loader';
 import { useToast } from '../../../../../hooks/use-toast';
 import { useSkillsStore } from '../../../../../lib/stores';
 
@@ -47,6 +48,8 @@ export default function EditSkillPage() {
     name: '',
     level: 50,
     category: '',
+    icon: '',
+    year: '',
   });
 
   useEffect(() => {
@@ -59,6 +62,8 @@ export default function EditSkillPage() {
             name: skill.name,
             level: skill.level,
             category: skill.category,
+            icon: skill.icon || '',
+            year: skill.year ? skill.year.toString() : '',
           });
           setIsFetching(false);
         });
@@ -98,7 +103,13 @@ export default function EditSkillPage() {
 
     // Simulate API call
     setTimeout(() => {
-      updateSkill(params.id as string, formData);
+      updateSkill(params.id as string, {
+        name: formData.name,
+        level: formData.level,
+        category: formData.category,
+        icon: formData.icon || undefined,
+        year: formData.year ? parseInt(formData.year) : undefined,
+      });
 
       toast({
         title: 'Skill updated',
@@ -174,20 +185,42 @@ export default function EditSkillPage() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="icon">Icon URL (Optional)</Label>
+              <Input
+                id="icon"
+                name="icon"
+                value={formData.icon}
+                onChange={handleChange}
+                placeholder="e.g. https://example.com/icon.png"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="year">Years of Experience (Optional)</Label>
+              <Input
+                id="year"
+                name="year"
+                type="number"
+                value={formData.year}
+                onChange={handleChange}
+                placeholder="e.g. 3"
+              />
+            </div>
+
+            <div className="space-y-8 pt-4">
               <div className="flex justify-between">
-                <Label htmlFor="level">
-                  Proficiency Level: {formData.level}%
-                </Label>
+                <Label htmlFor="level">Proficiency Level</Label>
               </div>
-              <Slider
-                id="level"
-                min={0}
-                max={100}
-                step={5}
+              <DualRangeSlider
                 value={[formData.level]}
                 onValueChange={handleLevelChange}
+                min={0}
+                max={100}
+                step={1}
+                label
+                labelPosition="top"
               />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="flex justify-between text-xs text-muted-foreground pt-2">
                 <span>Beginner</span>
                 <span>Intermediate</span>
                 <span>Expert</span>
@@ -203,7 +236,16 @@ export default function EditSkillPage() {
                 Cancel
               </Button>
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Updating...' : 'Update Skill'}
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 flex items-center justify-center">
+                      <DotLoader dotClass="bg-primary-foreground h-1 w-1" />
+                    </div>
+                    <span>Updating...</span>
+                  </div>
+                ) : (
+                  'Update Skill'
+                )}
               </Button>
             </div>
           </CardContent>

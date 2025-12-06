@@ -5,6 +5,9 @@ import type React from 'react';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { DatePicker } from '@/components/ui/date-picker';
+import { Switch } from '@/components/ui/switch';
+import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { useResumeStore } from '@/lib/stores';
 import { Button } from '@/components/ui/button';
@@ -291,26 +294,45 @@ export default function ResumeExperienceEditor() {
 
                 <div className="grid grid-cols-2 gap-2">
                   <div className="space-y-2">
-                    <Label htmlFor="startDate">Start Date *</Label>
-                    <Input
-                      id="startDate"
-                      name="startDate"
-                      value={formData.startDate}
-                      onChange={handleChange}
-                      placeholder="YYYY-MM"
-                      required
+                    <Label>Start Date *</Label>
+                    <DatePicker
+                      date={formData.startDate ? new Date(formData.startDate) : undefined}
+                      setDate={(date) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          startDate: date ? format(date, "yyyy-MM-dd") : "",
+                        }))
+                      }
+                      placeholder="Pick a date"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="endDate">End Date</Label>
-                    <Input
-                      id="endDate"
-                      name="endDate"
-                      value={formData.endDate}
-                      onChange={handleChange}
-                      placeholder="YYYY-MM or Present"
-                    />
+                    <Label>End Date</Label>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Switch
+                        checked={formData.endDate === 'Present'}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            endDate: checked ? 'Present' : '',
+                          }))
+                        }
+                      />
+                      <span className="text-sm text-muted-foreground">Current</span>
+                    </div>
+                    {formData.endDate !== 'Present' && (
+                      <DatePicker
+                        date={formData.endDate ? new Date(formData.endDate) : undefined}
+                        setDate={(date) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            endDate: date ? format(date, "yyyy-MM-dd") : "",
+                          }))
+                        }
+                        placeholder="Pick a date"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -459,32 +481,45 @@ export default function ResumeExperienceEditor() {
 
                                   <div className="grid grid-cols-2 gap-2">
                                     <div className="space-y-2">
-                                      <Label
-                                        htmlFor={`edit-startDate-${experience.id}`}
-                                      >
-                                        Start Date *
-                                      </Label>
-                                      <Input
-                                        id={`edit-startDate-${experience.id}`}
-                                        name="startDate"
-                                        value={formData.startDate}
-                                        onChange={handleChange}
-                                        required
+                                      <Label>Start Date *</Label>
+                                      <DatePicker
+                                        date={formData.startDate ? new Date(formData.startDate) : undefined}
+                                        setDate={(date) =>
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            startDate: date ? format(date, "yyyy-MM-dd") : "",
+                                          }))
+                                        }
+                                        placeholder="Pick a date"
                                       />
                                     </div>
 
                                     <div className="space-y-2">
-                                      <Label
-                                        htmlFor={`edit-endDate-${experience.id}`}
-                                      >
-                                        End Date
-                                      </Label>
-                                      <Input
-                                        id={`edit-endDate-${experience.id}`}
-                                        name="endDate"
-                                        value={formData.endDate}
-                                        onChange={handleChange}
-                                      />
+                                      <Label>End Date</Label>
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <Switch
+                                          checked={formData.endDate === 'Present'}
+                                          onCheckedChange={(checked) =>
+                                            setFormData((prev) => ({
+                                              ...prev,
+                                              endDate: checked ? 'Present' : '',
+                                            }))
+                                          }
+                                        />
+                                        <span className="text-sm text-muted-foreground">Current</span>
+                                      </div>
+                                      {formData.endDate !== 'Present' && (
+                                        <DatePicker
+                                          date={formData.endDate ? new Date(formData.endDate) : undefined}
+                                          setDate={(date) =>
+                                            setFormData((prev) => ({
+                                              ...prev,
+                                              endDate: date ? format(date, "yyyy-MM-dd") : "",
+                                            }))
+                                          }
+                                          placeholder="Pick a date"
+                                        />
+                                      )}
                                     </div>
                                   </div>
                                 </div>
