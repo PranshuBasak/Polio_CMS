@@ -5,7 +5,16 @@ import SiteSettings from "@/features/admin/components/site-settings"
 import LanguageSettings from "@/features/admin/components/language-settings"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
 
+import { useEffect } from "react"
+import { useSiteSettingsStore } from "@/lib/stores/site-settings-store"
+
 export default function SettingsPage() {
+  const fetchSettings = useSiteSettingsStore((state) => state.fetchSettings)
+
+  useEffect(() => {
+    fetchSettings()
+  }, [fetchSettings])
+
   return (
     <div className="space-y-6">
       <AdminHeader title="Settings" description="Manage your portfolio settings and preferences" />

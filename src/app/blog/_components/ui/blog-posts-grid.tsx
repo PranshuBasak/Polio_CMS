@@ -3,10 +3,10 @@
 import { motion } from "framer-motion"
 import { BlogPostCard } from "./blog-post-card"
 import { ExternalPostCard } from "./external-post-card"
-import type { BlogPost, ExternalBlogPost } from "../../../../lib/types"
+import type { BlogPost } from "../../../../lib/types"
 
 type BlogPostsGridProps = {
-  posts: BlogPost[] | ExternalBlogPost[]
+  posts: BlogPost[]
   type: "internal" | "external"
   formatDate?: (date: string) => string
   emptyMessage?: string
@@ -40,9 +40,9 @@ export function BlogPostsGrid({
           transition={{ duration: 0.5, delay: index * 0.1 }}
         >
           {type === "internal" ? (
-            <BlogPostCard post={post as BlogPost} formatDate={formatDate} />
+            <BlogPostCard post={post} formatDate={formatDate} />
           ) : (
-            <ExternalPostCard post={post as ExternalBlogPost} formatDate={formatDate} />
+            <ExternalPostCard post={post} formatDate={formatDate} />
           )}
         </motion.div>
       ))}

@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useMemo, useCallback } from "react"
-import type { BlogPost, ExternalBlogPost } from "../../../lib/types"
+import type { BlogPost } from "../../../lib/types"
 
 /**
  * Custom hook for blog search functionality
  * Handles search logic for both internal and external posts
  */
-export function useBlogSearch(internalPosts: BlogPost[], externalPosts: ExternalBlogPost[]) {
+export function useBlogSearch(internalPosts: BlogPost[], externalPosts: BlogPost[]) {
   const [searchTerm, setSearchTerm] = useState("")
 
   // Memoized filtered internal posts
@@ -19,7 +19,7 @@ export function useBlogSearch(internalPosts: BlogPost[], externalPosts: External
       (post) =>
         post.title.toLowerCase().includes(term) ||
         post.excerpt.toLowerCase().includes(term) ||
-        post.content.toLowerCase().includes(term),
+        (post.content && post.content.toLowerCase().includes(term)),
     )
   }, [internalPosts, searchTerm])
 

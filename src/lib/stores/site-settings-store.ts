@@ -55,46 +55,32 @@ type SiteSettingsStore = {
 };
 
 const defaultSettings: SiteSettings = {
-  siteName: '0xPranshu Portfolio',
-  siteDescription:
-    'Portfolio of Pranshu - Expert Software Architect & Backend Developer specializing in scalable systems, microservices, TypeScript, Java, Spring Boot, and Node.js. Building enterprise-grade solutions.',
-  siteUrl: 'https://0xPranshu.dev',
+  siteName: '',
+  siteDescription: '',
+  siteUrl: '',
   timezone: 'utc',
-  publicProfile: true,
+  publicProfile: false,
 
   social: {
-    github: 'https://github.com/PranshuBasak',
-    linkedin: 'https://linkedin.com/in/0xPranshu',
-    email: 'pranshubasak@gmail.com',
-    medium: 'https://medium.com/@0xPranshu',
-    twitter: '@0xPranshu',
+    github: '',
+    linkedin: '',
+    email: '',
+    medium: '',
+    twitter: '',
   },
 
   seo: {
-    metaTitle: 'Pranshu | Software Architect & Backend Developer',
-    metaDescription:
-      'Portfolio of Pranshu - Expert Software Architect & Backend Developer specializing in scalable systems, microservices, TypeScript, Java, Spring Boot, and Node.js. Building enterprise-grade solutions.',
-    keywords: [
-      'Software Architect',
-      'Backend Developer',
-      'TypeScript',
-      'Java',
-      'Spring Boot',
-      'Node.js',
-      'Microservices',
-      'System Design',
-      'Full Stack Developer',
-      'Pranshu',
-      'Portfolio',
-    ],
-    ogImage: 'https://0xPranshu.dev/og-image.png',
+    metaTitle: '',
+    metaDescription: '',
+    keywords: [],
+    ogImage: '',
   },
 
   appearance: {
     theme: 'system',
     primaryColor: '#3b82f6',
     animations: true,
-    reducedMotion: true,
+    reducedMotion: false,
   },
 
   advanced: {

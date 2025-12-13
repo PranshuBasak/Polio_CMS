@@ -1,39 +1,25 @@
-import { fetchMediumPosts } from "@/lib/rss-fetcher"
 import { createClient } from "@/lib/supabase/client"
-// import { Database } from "@/lib/types/supabase"
-// import { SupabaseClient } from "@supabase/supabase-js"
-// import { nanoid } from "nanoid"
 import { create } from "zustand"
 
 export type BlogPost = {
   id: string
   title: string
   slug: string
-  content: string
+  content: string | null
   excerpt: string
   date: string
-}
-
-export type ExternalBlogPost = {
-  id: string
-  title: string
-  excerpt: string
-  url: string
-  date: string
-  source: string
+  externalUrl?: string | null
 }
 
 type BlogStore = {
-  internalPosts: BlogPost[]
-  externalPosts: ExternalBlogPost[]
+  posts: BlogPost[]
   isLoading: boolean
   error: string | null
-  fetchInternalPosts: () => Promise<void>
+  fetchPosts: () => Promise<void>
   addBlogPost: (post: Omit<BlogPost, "id" | "slug">) => Promise<void>
   updateBlogPost: (id: string, post: Partial<BlogPost>) => Promise<void>
   deleteBlogPost: (id: string) => Promise<void>
   getBlogPostBySlug: (slug: string) => BlogPost | undefined
-  refreshExternalPosts: () => Promise<void>
   resetBlog: () => void
 }
 
@@ -44,16 +30,14 @@ const generateSlug = (title: string): string => {
     .replace(/\s+/g, "-")
 }
 
-const defaultInternalPosts: BlogPost[] = []
-const defaultExternalPosts: ExternalBlogPost[] = []
+const defaultPosts: BlogPost[] = []
 
 export const useBlogStore = create<BlogStore>((set, get) => ({
-  internalPosts: defaultInternalPosts,
-  externalPosts: defaultExternalPosts,
+  posts: defaultPosts,
   isLoading: false,
   error: null,
 
-  fetchInternalPosts: async () => {
+  fetchPosts: async () => {
     set({ isLoading: true, error: null })
     try {
       const supabase = createClient()
@@ -72,12 +56,13 @@ export const useBlogStore = create<BlogStore>((set, get) => ({
           content: p.content,
           excerpt: p.excerpt || "",
           date: p.published_at ? new Date(p.published_at).toISOString().split('T')[0] : (p.created_at ? new Date(p.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
+          externalUrl: p.external_url,
         }))
-        set({ internalPosts: mappedPosts })
+        set({ posts: mappedPosts })
       }
     } catch (error: any) {
-      console.error("Failed to fetch internal posts:", error)
-      set({ error: error?.message || "Failed to fetch internal posts" })
+      console.error("Failed to fetch posts:", error)
+      set({ error: error?.message || "Failed to fetch posts" })
     } finally {
       set({ isLoading: false })
     }
@@ -94,6 +79,7 @@ export const useBlogStore = create<BlogStore>((set, get) => ({
         slug: slug,
         content: post.content,
         excerpt: post.excerpt,
+        external_url: post.externalUrl,
         published_at: new Date().toISOString(),
         published: true,
       }
@@ -104,7 +90,7 @@ export const useBlogStore = create<BlogStore>((set, get) => ({
 
       if (error) throw error
 
-      await get().fetchInternalPosts()
+      await get().fetchPosts()
     } catch (error: any) {
       console.error("Failed to add blog post:", error)
       set({ error: error?.message || "Failed to add blog post" })
@@ -123,8 +109,9 @@ export const useBlogStore = create<BlogStore>((set, get) => ({
         updates.title = post.title
         updates.slug = generateSlug(post.title)
       }
-      if (post.content) updates.content = post.content
-      if (post.excerpt) updates.excerpt = post.excerpt
+      if (post.content !== undefined) updates.content = post.content
+      if (post.excerpt !== undefined) updates.excerpt = post.excerpt
+      if (post.externalUrl !== undefined) updates.external_url = post.externalUrl
       if (post.date) updates.published_at = new Date(post.date).toISOString()
 
       const { error } = await supabase
@@ -134,7 +121,7 @@ export const useBlogStore = create<BlogStore>((set, get) => ({
 
       if (error) throw error
 
-      await get().fetchInternalPosts()
+      await get().fetchPosts()
     } catch (error: any) {
       console.error("Failed to update blog post:", error)
       set({ error: error?.message || "Failed to update blog post" })
@@ -155,7 +142,7 @@ export const useBlogStore = create<BlogStore>((set, get) => ({
       if (error) throw error
 
       set((state) => ({
-        internalPosts: state.internalPosts.filter((p) => p.id !== id),
+        posts: state.posts.filter((p) => p.id !== id),
       }))
     } catch (error: any) {
       console.error("Failed to delete blog post:", error)
@@ -165,30 +152,10 @@ export const useBlogStore = create<BlogStore>((set, get) => ({
     }
   },
 
-  getBlogPostBySlug: (slug) => get().internalPosts.find((p) => p.slug === slug),
-
-  refreshExternalPosts: async () => {
-    try {
-      // Fetch real Medium posts
-      const mediumPosts = await fetchMediumPosts("0xPranshu", 10)
-
-      if (mediumPosts.length > 0) {
-        set({
-          externalPosts: mediumPosts,
-        })
-      } else {
-        // Keep existing posts if fetch fails
-        console.warn("No Medium posts fetched, keeping existing posts")
-      }
-    } catch (error) {
-      console.error("Failed to refresh external posts:", error)
-      // Don't throw - keep existing posts on error
-    }
-  },
+  getBlogPostBySlug: (slug) => get().posts.find((p) => p.slug === slug),
 
   resetBlog: () =>
     set({
-      internalPosts: defaultInternalPosts,
-      externalPosts: defaultExternalPosts,
+      posts: defaultPosts,
     }),
 }))

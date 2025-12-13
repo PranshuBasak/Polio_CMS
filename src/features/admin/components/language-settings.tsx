@@ -130,8 +130,8 @@ export default function LanguageSettings() {
                 <p className="text-sm text-muted-foreground">{aboutData.bio}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium">Focus:</p>
-                <p className="text-sm text-muted-foreground">{aboutData.focus}</p>
+                <p className="text-sm font-medium">Tagline:</p>
+                <p className="text-sm text-muted-foreground">{aboutData.tagline}</p>
               </div>
               <div className="space-y-2">
                 <p className="text-sm font-medium">Mission:</p>

@@ -18,7 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useResumeStore } from '@/lib/stores';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ResumeSkillsEditor() {
   const { resumeData, updateSkills } = useResumeStore();
@@ -38,6 +38,12 @@ export default function ResumeSkillsEditor() {
     name: '',
     level: 50,
   });
+
+  useEffect(() => {
+    if (resumeData?.skills) {
+      setSkillGroups([...resumeData.skills]);
+    }
+  }, [resumeData.skills]);
 
   const handleGroupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

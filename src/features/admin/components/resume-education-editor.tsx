@@ -20,7 +20,7 @@ import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ResumeEducationEditor() {
   const { resumeData, updateEducation } = useResumeStore();
@@ -39,6 +39,12 @@ export default function ResumeEducationEditor() {
     courses: [] as string[],
   });
   const [newCourse, setNewCourse] = useState('');
+
+  useEffect(() => {
+    if (resumeData?.education) {
+      setEducation([...resumeData.education]);
+    }
+  }, [resumeData.education]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

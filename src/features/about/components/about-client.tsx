@@ -44,7 +44,7 @@ export function AboutClient({ aboutData }: AboutClientProps) {
           </TabsList>
 
           <TabsContent value="bio" className="space-y-6 animate-fade-in">
-            <AboutBio bio={aboutData.bio} focus={aboutData.focus} />
+            <AboutBio bio={aboutData.bio} tagline={aboutData.tagline} />
           </TabsContent>
 
           <TabsContent value="journey" className="space-y-6 animate-fade-in">

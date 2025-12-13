@@ -21,6 +21,7 @@ export type Project = {
     process: string[]
     screenshots: string[]
   }
+  createdAt: string
 }
 
 type ProjectsStore = {
@@ -28,7 +29,7 @@ type ProjectsStore = {
   isLoading: boolean
   error: string | null
   fetchProjects: () => Promise<void>
-  addProject: (project: Omit<Project, "id">) => Promise<void>
+  addProject: (project: Omit<Project, "id" | "createdAt">) => Promise<void>
   updateProject: (id: string, project: Partial<Project>) => Promise<void>
   deleteProject: (id: string) => Promise<void>
   getProjectById: (id: string) => Project | undefined
@@ -86,6 +87,7 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
             icon: p.icon || undefined,
             youtubeUrl: p.youtube_url || undefined,
             screenshots: p.screenshots || [],
+            createdAt: p.created_at || new Date().toISOString(),
             caseStudy: caseStudy || (p.screenshots ? {
               challenge: "",
               solution: "",

@@ -5,8 +5,9 @@ import { useMemo } from 'react';
  * Custom hook for Blog data transformation
  */
 export function useBlogData() {
-  const internalPosts = useBlogStore((state) => state.internalPosts || []);
-  const externalPosts = useBlogStore((state) => state.externalPosts || []);
+  const posts = useBlogStore((state) => state.posts || []);
+  const internalPosts = posts.filter(p => !p.externalUrl);
+  const externalPosts = posts.filter(p => p.externalUrl);
 
   const allPosts = useMemo(() => {
     return [...internalPosts, ...externalPosts].sort(

@@ -49,6 +49,7 @@ export type Database = {
           email: string | null
           id: string
           location: string | null
+          mission: string | null
           name: string | null
           phone: string | null
           resume_url: string | null
@@ -65,6 +66,7 @@ export type Database = {
           email?: string | null
           id?: string
           location?: string | null
+          mission?: string | null
           name?: string | null
           phone?: string | null
           resume_url?: string | null
@@ -81,6 +83,7 @@ export type Database = {
           email?: string | null
           id?: string
           location?: string | null
+          mission?: string | null
           name?: string | null
           phone?: string | null
           resume_url?: string | null
@@ -90,58 +93,14 @@ export type Database = {
         }
         Relationships: []
       }
-      languages: {
-        Row: {
-          created_at: string
-          id: string
-          name: string
-          proficiency: string
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          name: string
-          proficiency: string
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          name?: string
-          proficiency?: string
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      interests: {
-        Row: {
-          created_at: string
-          id: string
-          name: string
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          name: string
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          name?: string
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
       blog_posts: {
         Row: {
           category: string | null
-          content: string
+          content: string | null
           cover_image: string | null
           created_at: string | null
           excerpt: string | null
+          external_url: string | null
           featured: boolean | null
           id: string
           published: boolean | null
@@ -155,10 +114,11 @@ export type Database = {
         }
         Insert: {
           category?: string | null
-          content: string
+          content?: string | null
           cover_image?: string | null
           created_at?: string | null
           excerpt?: string | null
+          external_url?: string | null
           featured?: boolean | null
           id?: string
           published?: boolean | null
@@ -172,10 +132,11 @@ export type Database = {
         }
         Update: {
           category?: string | null
-          content?: string
+          content?: string | null
           cover_image?: string | null
           created_at?: string | null
           excerpt?: string | null
+          external_url?: string | null
           featured?: boolean | null
           id?: string
           published?: boolean | null
@@ -194,6 +155,7 @@ export type Database = {
           created_at: string | null
           credential_id: string | null
           credential_url: string | null
+          description: string | null
           expiry_date: string | null
           id: string
           image_url: string | null
@@ -207,6 +169,7 @@ export type Database = {
           created_at?: string | null
           credential_id?: string | null
           credential_url?: string | null
+          description?: string | null
           expiry_date?: string | null
           id?: string
           image_url?: string | null
@@ -220,6 +183,7 @@ export type Database = {
           created_at?: string | null
           credential_id?: string | null
           credential_url?: string | null
+          description?: string | null
           expiry_date?: string | null
           id?: string
           image_url?: string | null
@@ -308,6 +272,7 @@ export type Database = {
       }
       education: {
         Row: {
+          courses: string[] | null
           created_at: string | null
           current: boolean | null
           degree: string
@@ -324,6 +289,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          courses?: string[] | null
           created_at?: string | null
           current?: boolean | null
           degree: string
@@ -340,6 +306,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          courses?: string[] | null
           created_at?: string | null
           current?: boolean | null
           degree?: string
@@ -429,39 +396,84 @@ export type Database = {
         }
         Relationships: []
       }
+      interests: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       journey: {
         Row: {
+          company: string | null
           created_at: string | null
           description: string
           icon: string | null
           id: string
           order_index: number | null
           title: string
-          company: string | null
           updated_at: string | null
           year: string
         }
         Insert: {
+          company?: string | null
           created_at?: string | null
           description: string
           icon?: string | null
           id?: string
           order_index?: number | null
           title: string
-          company?: string | null
           updated_at?: string | null
           year: string
         }
         Update: {
+          company?: string | null
           created_at?: string | null
           description?: string
           icon?: string | null
           id?: string
           order_index?: number | null
           title?: string
-          company?: string | null
           updated_at?: string | null
           year?: string
+        }
+        Relationships: []
+      }
+      languages: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          proficiency: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          proficiency: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          proficiency?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -511,6 +523,7 @@ export type Database = {
           description: string
           featured: boolean | null
           github_url: string | null
+          icon: string | null
           id: string
           image_url: string | null
           likes: number | null
@@ -523,7 +536,6 @@ export type Database = {
           title: string
           updated_at: string | null
           views: number | null
-          icon: string | null
           youtube_url: string | null
         }
         Insert: {
@@ -532,6 +544,7 @@ export type Database = {
           description: string
           featured?: boolean | null
           github_url?: string | null
+          icon?: string | null
           id?: string
           image_url?: string | null
           likes?: number | null
@@ -544,7 +557,6 @@ export type Database = {
           title: string
           updated_at?: string | null
           views?: number | null
-          icon?: string | null
           youtube_url?: string | null
         }
         Update: {
@@ -553,6 +565,7 @@ export type Database = {
           description?: string
           featured?: boolean | null
           github_url?: string | null
+          icon?: string | null
           id?: string
           image_url?: string | null
           likes?: number | null
@@ -565,8 +578,52 @@ export type Database = {
           title?: string
           updated_at?: string | null
           views?: number | null
-          icon?: string | null
           youtube_url?: string | null
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          advanced: Json | null
+          appearance: Json | null
+          created_at: string | null
+          id: string
+          public_profile: boolean | null
+          seo: Json | null
+          site_description: string | null
+          site_name: string | null
+          site_url: string | null
+          social: Json | null
+          timezone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          advanced?: Json | null
+          appearance?: Json | null
+          created_at?: string | null
+          id?: string
+          public_profile?: boolean | null
+          seo?: Json | null
+          site_description?: string | null
+          site_name?: string | null
+          site_url?: string | null
+          social?: Json | null
+          timezone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          advanced?: Json | null
+          appearance?: Json | null
+          created_at?: string | null
+          id?: string
+          public_profile?: boolean | null
+          seo?: Json | null
+          site_description?: string | null
+          site_name?: string | null
+          site_url?: string | null
+          social?: Json | null
+          timezone?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }

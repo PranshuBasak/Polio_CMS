@@ -1,60 +1,56 @@
-import type { MetadataRoute } from 'next';
+import { createClient } from '@/lib/supabase/client';
+import { MetadataRoute } from 'next';
 
-/**
- * Dynamic Sitemap Generation
- * Automatically includes all static pages and dynamic content
- *
- * Note: For dynamic content (blog posts), we use static data here
- * since sitemap generation happens at build time.
- * For real-time updates, consider using a dynamic route handler.
- */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://0xPranshu.dev';
-  const currentDate = new Date();
+  const supabase = createClient();
 
-  // Static pages with priorities
-  const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: baseUrl,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/projects`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/skills`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/resume`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-  ];
+  // Fetch site settings for base URL
+  const { data: settings } = await supabase
+    .from('site_settings')
+    .select('site_url')
+    .single();
 
-  // For blog posts, sitemap will be regenerated on build
-  // Dynamic blog post URLs would need to be added via build-time data fetching
-  // or by using a dynamic route handler approach
+  const baseUrl = settings?.site_url || 'https://pranshubasak.com'; // Fallback
 
-  return staticPages;
+  // Static routes
+  const routes = [
+    '',
+    '/about',
+    '/projects',
+    '/blog',
+    '/contact',
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: 'daily' as const,
+    priority: route === '' ? 1 : 0.8,
+  }));
+
+  // Fetch blog posts
+  const { data: posts } = await supabase
+    .from('blog_posts')
+    .select('slug, updated_at')
+    .eq('published', true);
+
+  const blogRoutes = (posts || []).map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: post.updated_at || new Date().toISOString(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }));
+
+  // Fetch projects
+  const { data: projects } = await supabase
+    .from('projects')
+    .select('slug, updated_at')
+    .eq('published', true);
+
+  const projectRoutes = (projects || []).map((project) => ({
+    url: `${baseUrl}/projects/${project.slug}`,
+    lastModified: project.updated_at || new Date().toISOString(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }));
+
+  return [...routes, ...blogRoutes, ...projectRoutes];
 }

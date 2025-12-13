@@ -8,10 +8,10 @@ import { Code2, Cpu, Database, GitBranch, Server } from 'lucide-react';
  */
 interface AboutBioProps {
   bio: string;
-  focus: string;
+  tagline: string;
 }
 
-export function AboutBio({ bio, focus }: AboutBioProps) {
+export function AboutBio({ bio, tagline }: AboutBioProps) {
   const stackIcons = [
     { name: 'TypeScript', icon: Code2 },
     { name: 'Java', icon: Cpu },
@@ -25,7 +25,7 @@ export function AboutBio({ bio, focus }: AboutBioProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
       <div>
         <p className="text-lg mb-6">{bio}</p>
-        <div className="text-lg mb-6 whitespace-pre-line">{focus}</div>
+        <div className="text-lg mb-6 whitespace-pre-line">{tagline}</div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">

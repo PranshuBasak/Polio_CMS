@@ -4,7 +4,7 @@ import type React from 'react';
 
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Switch } from '@/components/ui/switch';
 import { format } from 'date-fns';
@@ -45,6 +45,12 @@ export default function ResumeExperienceEditor() {
     achievements: [] as string[],
   });
   const [newAchievement, setNewAchievement] = useState('');
+
+  useEffect(() => {
+    if (resumeData?.experiences) {
+      setExperiences([...resumeData.experiences]);
+    }
+  }, [resumeData.experiences]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

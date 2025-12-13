@@ -1,9 +1,9 @@
 "use client"
 
 import AdminHeader from "@/features/admin/components/admin-header"
-import { Pencil, Plus, RefreshCw, Trash2 } from "lucide-react"
+import { Pencil, Plus, Trash2, ExternalLink } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "../../../components/ui/button"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card"
 import { Spinner } from "../../../components/ui/spinner"
@@ -11,17 +11,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui
 import { useToast } from "../../../hooks/use-toast"
 import { useHydration } from "../../../lib/hooks"
 import { useBlogStore } from "../../../lib/stores"
+import { RssImportDialog } from "@/features/admin/components/rss-import-dialog"
 
 export default function BlogPage() {
   const isHydrated = useHydration()
-  const internalPosts = useBlogStore((state) => state.internalPosts ?? [])
-  const externalPosts = useBlogStore((state) => state.externalPosts ?? [])
+  const posts = useBlogStore((state) => state.posts ?? [])
+  const fetchPosts = useBlogStore((state) => state.fetchPosts)
   const deleteBlogPost = useBlogStore((state) => state.deleteBlogPost)
-  const refreshExternalPosts = useBlogStore((state) => state.refreshExternalPosts)
 
   const { toast } = useToast()
   const [isDeleting, setIsDeleting] = useState<string | null>(null)
-  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  useEffect(() => {
+    fetchPosts()
+  }, [fetchPosts])
+
+  const internalPosts = posts.filter(p => !p.externalUrl)
+  const externalPosts = posts.filter(p => !!p.externalUrl)
 
   const handleDelete = (id: string) => {
     setIsDeleting(id)
@@ -33,26 +39,6 @@ export default function BlogPage() {
       })
       setIsDeleting(null)
     }, 500)
-  }
-
-  const handleRefreshExternalPosts = async () => {
-    setIsRefreshing(true)
-    try {
-      await refreshExternalPosts()
-      toast({
-        title: "External posts refreshed",
-        description: "Your external blog posts have been refreshed successfully.",
-      })
-    } catch (error) {
-      console.error('Failed to refresh external posts:', error);
-      toast({
-        title: "Error",
-        description: "Failed to refresh external posts. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsRefreshing(false)
-    }
   }
 
   if (!isHydrated) {
@@ -76,13 +62,13 @@ export default function BlogPage() {
 
       <Tabs defaultValue="internal" className="w-full">
         <TabsList className="grid grid-cols-2 mb-8">
-          <TabsTrigger value="internal">My Posts ({internalPosts?.length ?? 0})</TabsTrigger>
-          <TabsTrigger value="external">External Posts ({externalPosts?.length ?? 0})</TabsTrigger>
+          <TabsTrigger value="internal">My Posts ({internalPosts.length})</TabsTrigger>
+          <TabsTrigger value="external">External Posts ({externalPosts.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="internal">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {internalPosts && internalPosts.length > 0 ? (
+            {internalPosts.length > 0 ? (
               internalPosts.map((post) => (
                 <Card key={post.id}>
                   <CardHeader>
@@ -129,7 +115,7 @@ export default function BlogPage() {
               </Card>
             )}
 
-            {internalPosts && internalPosts.length > 0 && (
+            {internalPosts.length > 0 && (
               <Card className="flex flex-col items-center justify-center p-6 border-dashed">
                 <Link href="/admin/blog/new">
                   <Button variant="outline" className="mb-2 bg-transparent">
@@ -145,30 +131,46 @@ export default function BlogPage() {
 
         <TabsContent value="external">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-medium">RSS Feed Posts</h3>
-            <Button variant="outline" size="sm" onClick={handleRefreshExternalPosts} disabled={isRefreshing}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
-              {isRefreshing ? "Refreshing..." : "Refresh Feeds"}
-            </Button>
+            <h3 className="text-lg font-medium">External / RSS Posts</h3>
+            <RssImportDialog onImportSuccess={() => fetchPosts()} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {externalPosts && externalPosts.length > 0 ? (
-              externalPosts.map((post, index) => (
-                <Card key={`${post.url}-${index}`}>
+            {externalPosts.length > 0 ? (
+              externalPosts.map((post) => (
+                <Card key={post.id}>
                   <CardHeader>
                     <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
                       <span>{new Date(post.date).toLocaleDateString()}</span>
-                      <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs">{post.source}</span>
+                      <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs flex items-center">
+                        <ExternalLink className="h-3 w-3 mr-1" />
+                        External
+                      </span>
                     </div>
                     <CardTitle className="line-clamp-1">{post.title}</CardTitle>
                     <CardDescription className="line-clamp-2">{post.excerpt}</CardDescription>
                   </CardHeader>
-                  <CardFooter className="flex justify-end border-t pt-4">
-                    <Button asChild size="sm">
-                      <a href={post.url} target="_blank" rel="noopener noreferrer">
-                        View Post
+                  <CardFooter className="flex justify-between border-t pt-4">
+                    <Button asChild variant="outline" size="sm">
+                      <a href={post.externalUrl || '#'} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        View
                       </a>
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleDelete(post.id)}
+                      disabled={isDeleting === post.id}
+                    >
+                       {isDeleting === post.id ? (
+                        "Deleting..."
+                      ) : (
+                        <>
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Delete
+                        </>
+                      )}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -176,10 +178,7 @@ export default function BlogPage() {
             ) : (
               <Card className="col-span-full flex flex-col items-center justify-center p-12 border-dashed">
                 <p className="text-muted-foreground text-center mb-4">No external posts found</p>
-                <Button variant="outline" onClick={handleRefreshExternalPosts} disabled={isRefreshing}>
-                  <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
-                  Refresh Feeds
-                </Button>
+                <RssImportDialog onImportSuccess={() => fetchPosts()} />
               </Card>
             )}
           </div>

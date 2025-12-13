@@ -30,18 +30,26 @@ export default function SiteSettings() {
   const { settings, updateSettings, updateSocial, updateSEO, updateAppearance, updateAdvanced } =
     useSiteSettingsStore();
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsLoading(true);
+    console.log("Saving settings...", settings);
 
-    // Data is automatically persisted via Zustand middleware
-    setTimeout(() => {
+    try {
+      await updateSettings(settings);
       toast({
         title: 'Settings saved',
         description: 'Your settings have been saved successfully.',
       });
-
+    } catch (error) {
+      console.error("Failed to save settings:", error);
+      toast({
+        title: 'Error',
+        description: 'Failed to save settings. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
 
   return (

@@ -15,7 +15,6 @@ export type {
 } from "../stores/skills-store"
 export type {
   BlogPost,
-  ExternalBlogPost,
 } from "../stores/blog-store"
 export type {
   ResumeData,

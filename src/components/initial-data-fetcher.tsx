@@ -6,17 +6,17 @@ import { useHeroStore, useProjectsStore, useBlogStore, useSkillsStore, useAboutS
 export function InitialDataFetcher() {
   const fetchHeroData = useHeroStore((state) => state.fetchHeroData)
   const fetchProjects = useProjectsStore((state) => state.fetchProjects)
-  const fetchInternalPosts = useBlogStore((state) => state.fetchInternalPosts)
+  const fetchPosts = useBlogStore((state) => state.fetchPosts)
   const fetchSkills = useSkillsStore((state) => state.fetchSkills)
   const fetchAboutData = useAboutStore((state) => state.fetchAboutData)
 
   useEffect(() => {
     fetchHeroData()
     fetchProjects()
-    fetchInternalPosts()
+    fetchPosts()
     fetchSkills()
     fetchAboutData()
-  }, [fetchHeroData, fetchProjects, fetchInternalPosts, fetchSkills, fetchAboutData])
+  }, [fetchHeroData, fetchProjects, fetchPosts, fetchSkills, fetchAboutData])
 
   return null
 }

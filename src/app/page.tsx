@@ -1,8 +1,3 @@
-import {
-    JsonLd,
-    generatePersonSchema,
-    generateWebsiteSchema,
-} from '@/lib/seo/structured-data';
 import AnimatedWaves from '@/shared/components/ui-enhancements/animated-waves';
 import { Suspense } from 'react';
 import {
@@ -24,12 +19,11 @@ import SkillsSection from '@/features/skills/components/skills-section';
 // Keep client-only components
 import TechStackLogos from '@/shared/components/ui-enhancements/tech-stack-logos';
 import TimelineSection from '@/shared/components/ui-enhancements/timeline-section';
+import HomeClient from './home-client';
 
 export default function Home() {
   return (
-    <>
-      <JsonLd data={generatePersonSchema()} />
-      <JsonLd data={generateWebsiteSchema()} />
+    <HomeClient>
       <div className="container mx-auto px-4">
       {/* Hero Section - Server Component */}
       <ErrorBoundary>
@@ -92,6 +86,6 @@ export default function Home() {
         </Suspense>
       </ErrorBoundary>
     </div>
-    </>
+    </HomeClient>
   );
 }

@@ -12,6 +12,7 @@ export type Skill = {
   icon?: string
   year?: number
   orderIndex: number
+  createdAt: string
 }
 
 export type SkillCategory = {
@@ -27,7 +28,7 @@ type SkillsStore = {
   isLoading: boolean
   error: string | null
   fetchSkills: () => Promise<void>
-  addSkill: (skill: Omit<Skill, "id" | "orderIndex">) => Promise<void>
+  addSkill: (skill: Omit<Skill, "id" | "orderIndex" | "createdAt">) => Promise<void>
   updateSkill: (id: string, skill: Partial<Skill>) => Promise<void>
   deleteSkill: (id: string) => Promise<void>
   reorderSkills: (skills: Skill[]) => Promise<void>
@@ -87,6 +88,7 @@ export const useSkillsStore = create<SkillsStore>((set, get) => ({
           icon: s.icon || undefined,
           year: s.years_experience || undefined,
           orderIndex: s.order_index || 0,
+          createdAt: s.created_at || new Date().toISOString(),
         }))
         set({ skills: mappedSkills })
       }

@@ -12,11 +12,14 @@ import { BlogClient } from './blog-client';
  * Ensures consistency across admin and public pages.
  */
 export default function BlogSection() {
-  const internalPosts = useBlogStore((state) => state.internalPosts);
+  const allPosts = useBlogStore((state) => state.posts);
   const isHydrated = useHydration();
 
   // Get latest 6 internal blog posts for homepage
-  const posts = useMemo(() => internalPosts.slice(0, 6), [internalPosts]);
+  const posts = useMemo(() => {
+    const internal = allPosts?.filter(p => !p.externalUrl) || [];
+    return internal.slice(0, 6);
+  }, [allPosts]);
 
   if (!isHydrated) return null;
 

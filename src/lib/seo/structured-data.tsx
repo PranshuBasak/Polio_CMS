@@ -2,20 +2,21 @@
  * JSON-LD Structured Data
  * Provides rich snippets for search engines
  */
-import { defaultSiteSettings } from '@/lib/stores/site-settings-store';
+import { SiteSettings } from '@/lib/stores/site-settings-store';
 
-export function generatePersonSchema() {
+export function generatePersonSchema(settings: SiteSettings) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    name: defaultSiteSettings.siteName.replace(' Portfolio', ''),
-    url: defaultSiteSettings.siteUrl,
-    image: defaultSiteSettings.seo.ogImage,
+    name: settings.siteName.replace(' Portfolio', ''),
+    url: settings.siteUrl,
+    image: settings.seo.ogImage,
     sameAs: [
-      defaultSiteSettings.social.github,
-      defaultSiteSettings.social.linkedin,
-      defaultSiteSettings.social.medium,
-    ],
+      settings.social.github,
+      settings.social.linkedin,
+      settings.social.medium,
+      settings.social.twitter,
+    ].filter(Boolean),
     jobTitle: 'Software Architect & Backend Developer',
     worksFor: {
       '@type': 'Organization',
@@ -31,25 +32,25 @@ export function generatePersonSchema() {
       'Microservices',
       'System Design',
     ],
-    email: defaultSiteSettings.social.email,
+    email: settings.social.email,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Dhaka',
-      addressCountry: 'Bangladesh',
+      addressLocality: 'Chhattisgarh',
+      addressCountry: 'India',
     },
   };
 }
 
-export function generateWebsiteSchema() {
+export function generateWebsiteSchema(settings: SiteSettings) {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: defaultSiteSettings.siteName,
-    url: defaultSiteSettings.siteUrl,
-    description: defaultSiteSettings.siteDescription,
+    name: settings.siteName,
+    url: settings.siteUrl,
+    description: settings.siteDescription,
     author: {
       '@type': 'Person',
-      name: defaultSiteSettings.siteName.replace(' Portfolio', ''),
+      name: settings.siteName.replace(' Portfolio', ''),
     },
     inLanguage: ['en', 'es', 'fr', 'zh', 'ar', 'bn'],
   };
@@ -61,31 +62,31 @@ export function generateBlogPostSchema(post: {
   excerpt: string;
   date: string;
   content: string;
-}) {
+}, settings: SiteSettings) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
-    url: `${defaultSiteSettings.siteUrl}/blog/${post.slug}`,
+    url: `${settings.siteUrl}/blog/${post.slug}`,
     description: post.excerpt,
     datePublished: post.date,
     dateModified: post.date,
     author: {
       '@type': 'Person',
-      name: defaultSiteSettings.siteName.replace(' Portfolio', ''),
-      url: defaultSiteSettings.siteUrl,
+      name: settings.siteName.replace(' Portfolio', ''),
+      url: settings.siteUrl,
     },
     publisher: {
       '@type': 'Organization',
-      name: defaultSiteSettings.siteName.replace(' Portfolio', ''),
+      name: settings.siteName.replace(' Portfolio', ''),
       logo: {
         '@type': 'ImageObject',
-        url: `${defaultSiteSettings.siteUrl}/favicon.svg`,
+        url: `${settings.siteUrl}/favicon.svg`,
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${defaultSiteSettings.siteUrl}/blog/${post.slug}`,
+      '@id': `${settings.siteUrl}/blog/${post.slug}`,
     },
   };
 }

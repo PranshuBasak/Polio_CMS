@@ -1,4 +1,7 @@
 "use client"
+
+import { useEffect } from "react"
+import { useResumeStore } from "@/lib/stores/resume-store"
 import AdminHeader from "@/features/admin/components/admin-header"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
 import ResumeExperienceEditor from "@/features/admin/components/resume-experience-editor"
@@ -8,6 +11,12 @@ import ResumeCertificationsEditor from "@/features/admin/components/resume-certi
 import ResumeGeneralEditor from "@/features/admin/components/resume-general-editor"
 
 export default function ResumePage() {
+  const { fetchResumeData } = useResumeStore()
+
+  useEffect(() => {
+    fetchResumeData()
+  }, [fetchResumeData])
+
   return (
     <div className="space-y-6">
       <AdminHeader title="Resume Management" description="Manage your resume content and downloadable PDF" />

@@ -118,7 +118,7 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
       const { data: certifications } = await supabase
         .from("certifications")
         .select("*")
-        .order("date", { ascending: false })
+        .order("issue_date", { ascending: false })
 
       // Fetch skills
       const { data: skillsData } = await supabase
@@ -188,9 +188,9 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
           id: cert.id,
           name: cert.name,
           issuer: cert.issuer,
-          date: cert.date,
+          date: cert.issue_date,
           description: cert.description,
-          url: cert.url,
+          url: cert.credential_url,
         })) || defaultResumeData.certifications,
         languages: languages?.map((lang: any) => ({
           id: lang.id,

@@ -18,7 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useResumeStore } from '@/lib/stores';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DatePicker } from '@/components/ui/date-picker';
 import { format } from 'date-fns';
 
@@ -38,6 +38,12 @@ export default function ResumeCertificationsEditor() {
     description: '',
     url: '',
   });
+
+  useEffect(() => {
+    if (resumeData?.certifications) {
+      setCertifications([...resumeData.certifications]);
+    }
+  }, [resumeData.certifications]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

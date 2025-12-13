@@ -3,7 +3,6 @@
 import type React from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useBlogStore, useProjectsStore, useSkillsStore } from '@/lib/stores';
 import {
     ArrowDown,
     ArrowUp,
@@ -12,6 +11,7 @@ import {
     FileText,
     FolderKanban,
 } from 'lucide-react';
+import { useAdminStats } from '@/app/admin/_hooks/use-admin-stats';
 
 type StatChangeType = 'increase' | 'decrease';
 
@@ -25,42 +25,47 @@ type Stat = {
 };
 
 export default function AdminStats() {
-  const projects = useProjectsStore((state) => state.projects);
-  const internalPosts = useBlogStore((state) => state.internalPosts);
-  const skills = useSkillsStore((state) => state.skills);
+  const { 
+    totalProjects, 
+    totalBlogPosts, 
+    totalSkills, 
+    totalPageViews, 
+    pageViewsGrowth,
+    statsGrowth 
+  } = useAdminStats();
 
   const stats: Stat[] = [
     {
       title: 'Total Projects',
-      value: projects?.length ?? 0,
+      value: totalProjects,
       icon: FolderKanban,
-      change: '+2',
-      changeType: 'increase',
+      change: `${statsGrowth.projects >= 0 ? '+' : ''}${statsGrowth.projects}%`,
+      changeType: statsGrowth.projects >= 0 ? 'increase' : 'decrease',
       changeText: 'from last month',
     },
     {
       title: 'Blog Posts',
-      value: internalPosts?.length ?? 0,
+      value: totalBlogPosts,
       icon: FileText,
-      change: '+1',
-      changeType: 'increase',
+      change: `${statsGrowth.blog >= 0 ? '+' : ''}${statsGrowth.blog}%`,
+      changeType: statsGrowth.blog >= 0 ? 'increase' : 'decrease',
       changeText: 'from last month',
     },
     {
       title: 'Skills',
-      value: skills?.length ?? 0,
+      value: totalSkills,
       icon: BarChart3,
-      change: '+3',
-      changeType: 'increase',
+      change: `${statsGrowth.skills >= 0 ? '+' : ''}${statsGrowth.skills}%`,
+      changeType: statsGrowth.skills >= 0 ? 'increase' : 'decrease',
       changeText: 'from last month',
     },
     {
       title: 'Page Views',
-      value: '1,234',
+      value: totalPageViews.toLocaleString(),
       icon: Eye,
-      change: '-5%',
-      changeType: 'decrease',
-      changeText: 'from last week',
+      change: `${pageViewsGrowth >= 0 ? '+' : ''}${pageViewsGrowth}%`,
+      changeType: pageViewsGrowth >= 0 ? 'increase' : 'decrease',
+      changeText: 'from last month',
     },
   ];
 

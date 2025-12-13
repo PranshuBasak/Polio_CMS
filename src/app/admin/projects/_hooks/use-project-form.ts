@@ -66,6 +66,7 @@ export function useProjectForm(project?: Project) {
         screenshots: data.screenshots
           ? data.screenshots.split('\n').map((s) => s.trim()).filter(Boolean)
           : [],
+        createdAt: project?.createdAt || new Date().toISOString(),
         caseStudy: project?.caseStudy,
       };
 

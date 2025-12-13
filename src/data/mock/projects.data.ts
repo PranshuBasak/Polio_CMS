@@ -9,6 +9,7 @@ export const mockProjects: Project[] = [
     githubUrl: "https://github.com/example/ecommerce",
     liveUrl: "https://ecommerce-demo.example.com",
     image: "/ecommerce-platform-concept.png",
+    createdAt: "2024-01-01",
     caseStudy: {
       challenge: "Build a scalable platform handling 10k+ concurrent users",
       solution: "Implemented microservices with event-driven architecture",
@@ -24,5 +25,6 @@ export const mockProjects: Project[] = [
     technologies: ["Node.js", "TypeScript", "MongoDB", "Socket.io", "D3.js"],
     githubUrl: "https://github.com/example/analytics",
     image: "/analytics-dashboard.png",
+    createdAt: "2024-02-01",
   },
 ]

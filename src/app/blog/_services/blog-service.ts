@@ -34,7 +34,7 @@ export const blogService = {
       (post) =>
         post.title.toLowerCase().includes(searchTerm) ||
         post.excerpt.toLowerCase().includes(searchTerm) ||
-        post.content.toLowerCase().includes(searchTerm),
+        (post.content?.toLowerCase() || "").includes(searchTerm),
     )
   },
 

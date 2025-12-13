@@ -1,4 +1,4 @@
-import type { BlogPost, ExternalBlogPost } from "../../lib/stores"
+import type { BlogPost } from "../../lib/stores"
 
 export const mockBlogPosts: BlogPost[] = [
   {
@@ -59,21 +59,23 @@ CQRS separates read and write operations for better scalability...
   },
 ]
 
-export const mockExternalBlogPosts: ExternalBlogPost[] = [
+export const mockExternalBlogPosts: BlogPost[] = [
   {
     id: "ext-1",
     title: "The Future of Backend Development",
+    slug: "the-future-of-backend-development",
     excerpt: "Exploring emerging trends and technologies shaping the future of backend development.",
-    url: "https://example.com/future-backend-dev",
+    content: null,
+    externalUrl: "https://example.com/future-backend-dev",
     date: "2024-01-20",
-    source: "Medium",
   },
   {
     id: "ext-2",
     title: "Optimizing Database Performance at Scale",
+    slug: "optimizing-database-performance-at-scale",
     excerpt: "Best practices for optimizing database performance in high-traffic applications.",
-    url: "https://example.com/database-optimization",
+    content: null,
+    externalUrl: "https://example.com/database-optimization",
     date: "2024-01-18",
-    source: "Dev.to",
   },
 ]

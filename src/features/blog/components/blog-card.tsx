@@ -28,10 +28,19 @@ export function BlogCard({ post }: BlogCardProps) {
     day: 'numeric',
   });
 
+  const isExternal = !!post.externalUrl;
+
   return (
     <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
       <CardHeader>
-        <CardTitle className="text-balance">{post.title}</CardTitle>
+        <div className="flex justify-between items-start gap-2">
+          <CardTitle className="text-balance">{post.title}</CardTitle>
+          {isExternal && (
+            <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs whitespace-nowrap">
+              External
+            </span>
+          )}
+        </div>
         <CardDescription className="flex items-center gap-2">
           <Calendar className="h-4 w-4" />
           <time dateTime={post.date}>{formattedDate}</time>
@@ -44,7 +53,13 @@ export function BlogCard({ post }: BlogCardProps) {
 
       <CardFooter>
         <Button asChild className="w-full">
-          <Link href={`/blog/${post.slug}`}>Read More</Link>
+          {isExternal ? (
+            <a href={post.externalUrl || '#'} target="_blank" rel="noopener noreferrer">
+              Read on External Site
+            </a>
+          ) : (
+            <Link href={`/blog/${post.slug}`}>Read More</Link>
+          )}
         </Button>
       </CardFooter>
     </Card>

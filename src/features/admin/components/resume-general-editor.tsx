@@ -16,7 +16,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useResumeStore } from '@/lib/stores';
 import { FileUp } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
@@ -51,6 +51,23 @@ export default function ResumeGeneralEditor() {
   });
   const [newLanguage, setNewLanguage] = useState({ name: '', proficiency: '' });
   const [newInterest, setNewInterest] = useState('');
+
+  useEffect(() => {
+    if (resumeData) {
+      setFormData({
+        pdfUrl: resumeData.pdfUrl || '',
+        languages: [...(resumeData.languages || [])],
+        interests: [...(resumeData.interests || [])],
+        name: resumeData.name || '',
+        email: resumeData.email || '',
+        phone: resumeData.phone || '',
+        location: resumeData.location || '',
+        bio: resumeData.bio || '',
+        availableForWork: resumeData.availableForWork || false,
+        yearsExperience: resumeData.yearsExperience || 0,
+      });
+    }
+  }, [resumeData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -99,21 +116,27 @@ export default function ResumeGeneralEditor() {
     setFormData((prev) => ({ ...prev, interests: updatedInterests }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      updateResumeData(formData);
+    try {
+      await updateResumeData(formData);
 
       toast({
         title: 'Resume updated',
         description:
           'Your resume general information has been updated successfully.',
       });
-
+    } catch (error) {
+      console.error("Error updating resume:", error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update resume. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (

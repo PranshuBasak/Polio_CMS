@@ -5,7 +5,7 @@
 
 // Re-export all stores
 export { useAboutStore, type AboutData, type AboutJourneyItem, type AboutValue } from './about-store';
-export { useBlogStore, type BlogPost, type ExternalBlogPost } from './blog-store';
+export { useBlogStore, type BlogPost } from './blog-store';
 export { useHeroStore, type HeroData } from './hero-store';
 export { useProjectsStore, type Project } from './projects-store';
 export { useResumeStore, type ResumeCertification, type ResumeData, type ResumeEducation, type ResumeExperience, type ResumeSkillCategory } from './resume-store';

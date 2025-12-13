@@ -20,8 +20,8 @@ export default function EditBlogPostPage() {
   const params = useParams()
   const router = useRouter()
   const isHydrated = useHydration()
-  const internalPosts = useBlogStore((state) => state.internalPosts)
-  const post = internalPosts.find((p) => p.id === params.id)
+  const posts = useBlogStore((state) => state.posts)
+  const post = posts.find((p) => p.id === params.id)
 
   const { form, onSubmit, isSubmitting } = useBlogForm(post)
   const {
