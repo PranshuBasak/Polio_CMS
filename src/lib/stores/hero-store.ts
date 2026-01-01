@@ -5,7 +5,8 @@ export type HeroData = {
   name: string
   title: string
   description: string
-  image: string
+  avatarUrl: string
+  status: string
 }
 
 type HeroStore = {
@@ -22,7 +23,8 @@ const defaultHeroData: HeroData = {
   title: "Backend Developer & System Design Enthusiast",
   description:
     "Passionate backend developer specializing in scalable systems, microservices, and database design. Proficient in TypeScript & Java, mastering C++. Strong advocate for clean code and building high-performance applications. Exploring AI, blockchain, and system scalability.",
-  image: "https://media.licdn.com/dms/image/v2/D4D03AQHQrREy7e6Rtg/profile-displayphoto-scale_200_200/B4DZnJTBmyIgAY-/0/1760018833625?e=1764201600&v=beta&t=vyCLeSdMBoBRggqkBS6sLubEG0q6IUZIcbowwpyQ_Joi",
+  avatarUrl: "https://media.licdn.com/dms/image/v2/D4D03AQHQrREy7e6Rtg/profile-displayphoto-scale_200_200/B4DZnJTBmyIgAY-/0/1760018833625?e=1764201600&v=beta&t=vyCLeSdMBoBRggqkBS6sLubEG0q6IUZIcbowwpyQ_Joi",
+  status: "AVAILABLE FOR HIRE"
 }
 
 export const useHeroStore = create<HeroStore>((set, get) => ({
@@ -36,7 +38,7 @@ export const useHeroStore = create<HeroStore>((set, get) => ({
       const supabase = createClient()
       const { data, error } = await supabase
         .from("about")
-        .select("name, tagline, bio, avatar_url")
+        .select("*")
         .single()
 
       if (error) {
@@ -56,7 +58,8 @@ export const useHeroStore = create<HeroStore>((set, get) => ({
             name: (data as any).name || defaultHeroData.name,
             title: (data as any).tagline || defaultHeroData.title,
             description: (data as any).bio || defaultHeroData.description,
-            image: (data as any).avatar_url || defaultHeroData.image,
+            avatarUrl: (data as any).avatar_url || defaultHeroData.avatarUrl,
+            status: (data as any).status || defaultHeroData.status,
           },
         })
         console.log("✅ Hero data loaded from Supabase:", data)
@@ -98,7 +101,8 @@ export const useHeroStore = create<HeroStore>((set, get) => ({
         name: heroData.name,
         tagline: heroData.title,
         bio: heroData.description,
-        avatar_url: heroData.image,
+        avatar_url: heroData.avatarUrl,
+        status: heroData.status,
       }
 
       if (existingData) {

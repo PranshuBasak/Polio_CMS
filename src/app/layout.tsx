@@ -1,5 +1,6 @@
 import CustomCursorWrapper from '@/components/custom-cursor-wrapper';
 import { ThemeProvider } from '@/components/providers/theme-provider';
+import { DynamicThemeProvider } from '@/components/providers/dynamic-theme-provider';
 import { defaultSiteSettings } from '@/lib/stores/site-settings-store';
 import Footer from '@/shared/components/layout/footer';
 import Navbar from '@/shared/components/layout/navbar';
@@ -113,19 +114,21 @@ export default async function RootLayout({
           <TranslationsProvider>
             <DirectionProvider>
               <StoreProvider>
-                <InitialDataFetcher />
-                <PageViewTracker />
-                <ErrorBoundary>
-                  <ScrollProgress />
-                  <CustomCursorWrapper />
-                  <div className="flex min-h-screen flex-col">
-                    <Navbar />
-                    <main className="flex-1">{children}</main>
-                    <Footer />
-                  </div>
-                  <BackToTop />
-                  <Analytics />
-                </ErrorBoundary>
+                <DynamicThemeProvider>
+                  <InitialDataFetcher />
+                  <PageViewTracker />
+                  <ErrorBoundary>
+                    <ScrollProgress />
+                    <CustomCursorWrapper />
+                    <div className="flex min-h-screen flex-col">
+                      <Navbar />
+                      <main className="flex-1">{children}</main>
+                      <Footer />
+                    </div>
+                    <BackToTop />
+                    <Analytics />
+                  </ErrorBoundary>
+                </DynamicThemeProvider>
               </StoreProvider>
             </DirectionProvider>
           </TranslationsProvider>

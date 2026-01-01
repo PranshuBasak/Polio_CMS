@@ -1,20 +1,159 @@
 'use client';
 
-import { useHydration } from '@/lib/hooks/use-hydration';
-import { useHeroStore } from '@/lib/stores';
-import { HeroClient } from './hero-client';
+import { Button } from '@/components/ui/button';
+import { useHeroStore } from '@/lib/stores/hero-store';
+import { useSiteSettingsStore } from '@/lib/stores/site-settings-store';
+import { motion } from 'framer-motion';
+import { ArrowRight, Download, Github, Linkedin, Mail, FileText } from 'lucide-react';
+import Link from 'next/link';
+import { CYBERPUNK_MESSAGES } from '@/data/cyberpunk-messages';
+import { useEffect, useState } from 'react';
+import { Waves } from '@/components/ui/wave-background';
+import Image from 'next/image';
+import { Typewriter } from '@/components/ui/typewriter';
 
-/**
- * Hero Section - Client Component
- *
- * Uses Zustand store as single source of truth for hero data.
- * Ensures consistency across admin and public pages.
- */
 export default function HeroSection() {
-  const heroData = useHeroStore((state) => state.heroData);
-  const isHydrated = useHydration();
+  const { heroData } = useHeroStore();
+  const { settings } = useSiteSettingsStore();
+  const [randomMessage, setRandomMessage] = useState('');
 
-  if (!isHydrated) return null;
+  useEffect(() => {
+    setRandomMessage(CYBERPUNK_MESSAGES.hero[Math.floor(Math.random() * CYBERPUNK_MESSAGES.hero.length)]);
+  }, []);
 
-  return <HeroClient heroData={heroData} />;
+  return (
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-16 md:pt-0">
+      {/* Background Effects */}
+      <div className="absolute inset-0 z-0 opacity-30">
+        <Waves 
+          strokeColor={settings.appearance.primaryColor || "#00ff00"} 
+          backgroundColor="transparent"
+        />
+      </div>
+      
+      <div className="container px-4 mx-auto relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
+          {/* Left Column: Info */}
+          <div className="space-y-8 text-left">
+            
+            {/* Status Badge */}
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono backdrop-blur-sm"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+              {heroData.status || "STATUS: AVAILABLE FOR HIRE"}
+            </motion.div>
+
+            {/* Name & Title */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="space-y-2"
+            >
+              <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-foreground">
+                {heroData.name}
+              </h1>
+              <h2 className="text-2xl md:text-3xl font-mono text-primary">
+                &lt;{heroData.title} /&gt;
+              </h2>
+            </motion.div>
+
+            {/* Description / About */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-lg text-muted-foreground max-w-xl leading-relaxed border-l-2 border-primary/20 pl-6 min-h-[100px]"
+            >
+              <Typewriter 
+                text={heroData.description} 
+                speed={20} 
+                delay={0.5}
+                className="text-muted-foreground"
+                cursorClassName="bg-primary"
+              />
+            </motion.div>
+
+            {/* Actions & Socials */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-6"
+            >
+              {/* Social Links */}
+              <div className="flex items-center gap-4">
+                <Link href={settings.social.github} target="_blank" className="p-2 rounded-full bg-muted/10 hover:bg-primary/20 text-muted-foreground hover:text-primary transition-all border border-transparent hover:border-primary/50">
+                  <Github className="w-5 h-5" />
+                </Link>
+                <Link href={settings.social.linkedin} target="_blank" className="p-2 rounded-full bg-muted/10 hover:bg-primary/20 text-muted-foreground hover:text-primary transition-all border border-transparent hover:border-primary/50">
+                  <Linkedin className="w-5 h-5" />
+                </Link>
+                <Link href={`mailto:${settings.social.email}`} className="p-2 rounded-full bg-muted/10 hover:bg-primary/20 text-muted-foreground hover:text-primary transition-all border border-transparent hover:border-primary/50">
+                  <Mail className="w-5 h-5" />
+                </Link>
+                <Link href={settings.social.medium} target="_blank" className="p-2 rounded-full bg-muted/10 hover:bg-primary/20 text-muted-foreground hover:text-primary transition-all border border-transparent hover:border-primary/50">
+                  <FileText className="w-5 h-5" />
+                </Link>
+              </div>
+
+              {/* Resume Button */}
+              <Link href="/resume">
+                <Button size="lg" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold shadow-[0_0_15px_rgba(var(--primary),0.4)] hover:shadow-[0_0_25px_rgba(var(--primary),0.6)] transition-all">
+                  <Download className="mr-2 h-4 w-4" />
+                  Resume
+                </Button>
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Right Column: Image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 }}
+            className="relative flex justify-center lg:justify-end"
+          >
+            <div className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px]">
+              {/* Cyberpunk Frame */}
+              <div className="absolute inset-0 border-2 border-primary/30 rounded-[2rem] z-20" />
+              <div className="absolute -inset-4 border border-primary/10 rounded-[2.5rem] z-10" />
+              
+              {/* Corner Accents */}
+              <div className="absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-primary rounded-tl-[2rem] z-30" />
+              <div className="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-primary rounded-br-[2rem] z-30" />
+              
+              {/* Image Container */}
+              <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-muted/20 grayscale hover:grayscale-0 transition-all duration-500 group">
+                 {/* Glowing Ring Effect behind image */}
+                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent opacity-50 group-hover:opacity-0 transition-opacity duration-500" />
+                 
+                 {heroData.avatarUrl ? (
+                   <Image 
+                     src={heroData.avatarUrl} 
+                     alt={heroData.name}
+                     fill
+                     className="object-cover"
+                     priority
+                   />
+                 ) : (
+                   <div className="flex items-center justify-center h-full text-primary/50 font-mono text-sm">
+                     [NO_IMAGE_DATA]
+                   </div>
+                 )}
+              </div>
+            </div>
+          </motion.div>
+
+        </div>
+      </div>
+    </section>
+  );
 }

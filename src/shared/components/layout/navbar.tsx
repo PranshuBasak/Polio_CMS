@@ -8,6 +8,7 @@ import { ModeToggle } from '@/shared/components/layout/mode-toggle';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
+import { LiquidGlass } from '@/components/ui/liquid-glass';
 import { usePathname } from 'next/navigation';
 import { memo, useCallback, useEffect, useState } from 'react';
 
@@ -48,152 +49,110 @@ const Navbar = memo(function Navbar() {
     return () => window.removeEventListener('scroll', throttledScroll);
   }, [handleScroll]);
 
-  // Close mobile menu when route changes
+  // Click outside to close
   useEffect(() => {
-    if (isOpen) {
-      setIsOpen(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+    const handleClickOutside = (event: MouseEvent) => {
+      const sidebar = document.getElementById('mobile-sidebar');
+      const toggle = document.getElementById('mobile-toggle');
+      if (isOpen && sidebar && !sidebar.contains(event.target as Node) && toggle && !toggle.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
 
-  // Hide navbar on admin pages
-  if (isAdmin) {
-    return null;
-  }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
 
+  // Right Sidebar Logic
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-50 w-full transition-all duration-300',
-        scrolled || isOpen
-          ? 'bg-background shadow-sm'
-          : 'bg-background/80 backdrop-blur-md'
-      )}
-    >
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold">
-              <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                0xPranshu
-              </span>
-            </Link>
-          </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={cn(
-                  'text-sm font-medium transition-colors hover:text-primary relative group',
-                  (pathname === link.href ||
-                    (link.href === '/projects' &&
-                      pathname.startsWith('/projects')) ||
-                    (link.href === '/blog' && pathname.startsWith('/blog')) ||
-                    (link.href === '/resume' &&
-                      pathname.startsWith('/resume'))) &&
-                    'text-primary'
-                )}
-              >
-                {link.name}
-                <span className="absolute -bottom-1 left-0 h-0.5 bg-primary w-0 group-hover:w-full transition-all duration-300" />
-              </Link>
-            ))}
-            {!isAdmin && (
-              <Link href="/admin">
-                <Button variant="outline" size="sm">
-                  {t('nav.admin')}
-                </Button>
-              </Link>
-            )}
-            <LanguageSwitcher />
-            <ModeToggle />
-          </nav>
-
-          {/* Mobile Navigation Toggle */}
-          <div className="flex items-center md:hidden space-x-4">
-            <LanguageSwitcher />
-            <ModeToggle />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle Menu"
-              className="relative z-50"
-            >
-              {isOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </Button>
-          </div>
-        </div>
+    <>
+      {/* Mobile Toggle Button - Top Right */}
+      <div className="fixed top-4 right-4 z-50 md:hidden">
+        <LiquidGlass className="p-2">
+          <Button 
+            id="mobile-toggle"
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-primary hover:text-accent hover:bg-accent/10"
+          >
+            {isOpen ? <X /> : <Menu />}
+          </Button>
+        </LiquidGlass>
       </div>
 
-      {/* Mobile Navigation Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className="fixed inset-0 z-40 md:hidden bg-background border-t shadow-lg pt-16"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="container mx-auto px-4 py-8">
-              <nav className="flex flex-col space-y-6">
-                {navLinks.map((link, index) => (
-                  <motion.div
-                    key={link.name}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <Link
-                      href={link.href}
-                      className={cn(
-                        'text-lg font-medium py-2 transition-colors hover:text-primary flex items-center',
-                        (pathname === link.href ||
-                          (link.href === '/projects' &&
-                            pathname.startsWith('/projects')) ||
-                          (link.href === '/blog' &&
-                            pathname.startsWith('/blog')) ||
-                          (link.href === '/resume' &&
-                            pathname.startsWith('/resume'))) &&
-                          'text-primary'
-                      )}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {link.name}
-                    </Link>
-                  </motion.div>
-                ))}
-                {!isAdmin && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: navLinks.length * 0.05 }}
-                  >
-                    <Link href="/admin" onClick={() => setIsOpen(false)}>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full bg-transparent"
-                      >
-                        {t('nav.admin')}
-                      </Button>
-                    </Link>
-                  </motion.div>
-                )}
-              </nav>
-            </div>
-          </motion.div>
+      {/* Sidebar Container */}
+      <header 
+        id="mobile-sidebar"
+        className={cn(
+          "fixed z-40 transition-all duration-300",
+          // Desktop: Bottom Center, Always Visible
+          "md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:right-auto md:top-auto md:translate-y-0 md:opacity-100 md:pointer-events-auto",
+          // Mobile: Top Right, Collapsible
+          "top-20 right-4 bottom-auto left-auto",
+          isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none md:opacity-100 md:translate-y-0 md:pointer-events-auto"
         )}
-      </AnimatePresence>
-    </header>
+      >
+        <LiquidGlass className="p-2">
+          <div className={cn(
+            "flex items-center justify-center gap-4 px-2 py-0",
+            "flex-col-reverse",
+            "md:flex-row md:gap-8"
+          )}>
+            
+            {/* Actions (Language/Theme) */}
+            <div className={cn(
+              "flex gap-2 shrink-0",
+              "flex-col md:flex-row"
+            )}>
+               <div className="scale-90 shrink-0 hover:text-primary">
+                  <ModeToggle />
+                </div>
+                <div className="scale-90 shrink-0 hover:text-primary">
+                  <LanguageSwitcher />
+                </div>
+                {!isAdmin && (
+                  <Link href="/admin" className="p-2 rounded-full hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors shrink-0 flex items-center justify-center">
+                    <span className="sr-only">{t('nav.admin')}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                  </Link>
+                )}
+            </div>
+
+            <div className="w-6 h-px bg-primary/20 md:w-px md:h-6 shrink-0" />
+
+            {/* Navigation Items */}
+            <nav className={cn(
+              "flex items-center gap-2",
+              "flex-col md:flex-row md:gap-6"
+            )}>
+              {navLinks.slice(1).map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={cn(
+                    'px-4 py-2 rounded-full transition-all relative group shrink-0 font-mono text-sm font-bold whitespace-nowrap',
+                    (pathname === link.href || pathname.startsWith(link.href) && link.href !== '/') 
+                      ? 'text-primary bg-primary/10' 
+                      : 'text-muted-foreground hover:text-primary hover:bg-primary/10'
+                  )}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Home / Logo */}
+            <Link href="/" className="p-2 rounded-full hover:bg-primary/10 text-primary hover:text-primary transition-colors shrink-0 md:order-first">
+              <div className="w-8 h-8 flex items-center justify-center font-bold font-mono text-lg border-2 border-current rounded-full">
+                0x
+              </div>
+            </Link>
+
+          </div>
+        </LiquidGlass>
+      </header>
+    </>
   );
 });
 

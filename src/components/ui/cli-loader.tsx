@@ -136,7 +136,7 @@ export const CliLoader: React.FC<CliLoaderProps> = ({ onComplete }) => {
   
   const { fetchSettings, settings } = useSiteSettingsStore()
   const { fetchAboutData } = useAboutStore()
-  const { fetchHeroData } = useHeroStore()
+  const { fetchHeroData, heroData } = useHeroStore()
   
   const logsEndRef = useRef<HTMLDivElement>(null)
 
@@ -181,7 +181,7 @@ export const CliLoader: React.FC<CliLoaderProps> = ({ onComplete }) => {
   const BOOT_SEQUENCE_FINAL: BootStep[] = [
     { message: "COMPILING GHOST IN THE SHELL", progress: 95, delay: 500 },
     { message: "JACKING INTO THE MAINFRAME", status: "ready", progress: 100, delay: 800 },
-    { message: "INITIALIZING USER: USERNAME", status: "ready", progress: 100, delay: 800 },
+    { message: `INITIALIZING USER: ${heroData?.name?.toUpperCase() || "USER"}`, status: "ready", progress: 100, delay: 800 },
     { message: "ACCESS GRANTED", status: "ready", progress: 100, delay: 800 },
     { message: "WELCOME TO YOUR DIGITAL CONSTRUCT", status: "ready", progress: 100, delay: 800 },
   ]
@@ -276,7 +276,7 @@ export const CliLoader: React.FC<CliLoaderProps> = ({ onComplete }) => {
     }
   }, [retryCount]) 
 
-  const primaryColor = settings?.appearance?.primaryColor || "#22c55e" 
+  const primaryColor = settings?.appearance?.primaryColor || "#3b82f6" 
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-black text-sm md:text-base font-mono p-4 overflow-hidden transition-colors duration-300">

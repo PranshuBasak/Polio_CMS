@@ -20,11 +20,12 @@ import SkillsSection from '@/features/skills/components/skills-section';
 import TechStackLogos from '@/shared/components/ui-enhancements/tech-stack-logos';
 import TimelineSection from '@/shared/components/ui-enhancements/timeline-section';
 import HomeClient from './home-client';
+import { TerminalSection } from '@/components/ui/terminal-section';
 
 export default function Home() {
   return (
     <HomeClient>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
       {/* Hero Section - Server Component */}
       <ErrorBoundary>
         <HeroSection />
@@ -84,6 +85,11 @@ export default function Home() {
         <Suspense fallback={<ContactSkeleton />}>
           <ContactSection />
         </Suspense>
+      </ErrorBoundary>
+
+      {/* Terminal Section */}
+      <ErrorBoundary>
+        <TerminalSection />
       </ErrorBoundary>
     </div>
     </HomeClient>

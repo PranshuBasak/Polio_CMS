@@ -86,28 +86,58 @@ export default function CustomCursor() {
     }
   }, [enabled])
 
+  // Effect to handle cursor visibility based on enabled state
+  useEffect(() => {
+    if (!enabled) {
+      document.body.style.cursor = 'auto';
+    }
+    return () => {
+      document.body.style.cursor = 'auto';
+    };
+  }, [enabled]);
+
   // If the custom cursor is disabled, don't render anything
   if (!enabled) return null
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 z-50 rounded-full pointer-events-none mix-blend-difference"
-      animate={{
-        x: position.x - (linkHovered ? 24 : 16),
-        y: position.y - (linkHovered ? 24 : 16),
-        height: linkHovered ? 48 : clicked ? 28 : 32,
-        width: linkHovered ? 48 : clicked ? 28 : 32,
-        opacity: visible ? 0.5 : 0,
-      }}
-      transition={{
-        type: "spring",
-        stiffness: 500,
-        damping: 28,
-        mass: 0.5, // Lower mass for faster response
-      }}
-      style={{
-        backgroundColor: "white",
-      }}
-    />
+    <>
+      <style jsx global>{`
+        body, a, button, [role='button'], input, textarea, select {
+          cursor: none !important;
+        }
+      `}</style>
+      
+      {/* Main Cursor (The "Shadow" that follows) */}
+      <motion.div
+        className="fixed top-0 left-0 z-[100] rounded-full pointer-events-none mix-blend-screen"
+        animate={{
+          x: position.x - (linkHovered ? 32 : 16),
+          y: position.y - (linkHovered ? 32 : 16),
+          height: linkHovered ? 64 : 32,
+          width: linkHovered ? 64 : 32,
+          opacity: visible ? 1 : 0,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 150, // Reduced stiffness for "lazy" follow
+          damping: 15,    // Adjusted damping
+          mass: 0.8,      // Higher mass = more inertia/delay
+        }}
+        style={{
+          backgroundColor: linkHovered ? "transparent" : "var(--primary)",
+          border: linkHovered ? "2px solid var(--primary)" : "none",
+          mixBlendMode: "normal",
+        }}
+      />
+      
+      {/* Tiny center dot for precision (optional, but good for UX) */}
+      <div 
+        className="fixed top-0 left-0 z-[101] w-1 h-1 bg-primary rounded-full pointer-events-none"
+        style={{
+          transform: `translate(${position.x - 2}px, ${position.y - 2}px)`,
+          opacity: visible ? 1 : 0,
+        }}
+      />
+    </>
   )
 }

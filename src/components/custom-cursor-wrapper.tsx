@@ -1,12 +1,7 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-
-const CustomCursor = dynamic(
-  () => import('@/shared/components/ui-enhancements/custom-cursor'),
-  { ssr: false }
-);
+import { SmoothCursor } from '@/components/ui/smooth-cursor';
 
 export default function CustomCursorWrapper() {
-  return <CustomCursor />;
+  return <SmoothCursor />;
 }
