@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { Waves } from '@/components/ui/wave-background';
 import Image from 'next/image';
 import { Typewriter } from '@/components/ui/typewriter';
+import ImageRippleEffect from '@/components/ui/image-ripple-effect';
 
 export default function HeroSection() {
   const { heroData } = useHeroStore();
@@ -130,24 +131,14 @@ export default function HeroSection() {
               <div className="absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-primary rounded-tl-[2rem] z-30" />
               <div className="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-primary rounded-br-[2rem] z-30" />
               
-              {/* Image Container */}
-              <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-muted/20 grayscale hover:grayscale-0 transition-all duration-500 group">
+              <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-muted/20 transition-all duration-500 group">
                  {/* Glowing Ring Effect behind image */}
                  <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent opacity-50 group-hover:opacity-0 transition-opacity duration-500" />
                  
-                 {heroData.avatarUrl ? (
-                   <Image 
-                     src={heroData.avatarUrl} 
-                     alt={heroData.name}
-                     fill
-                     className="object-cover"
-                     priority
-                   />
-                 ) : (
-                   <div className="flex items-center justify-center h-full text-primary/50 font-mono text-sm">
-                     [NO_IMAGE_DATA]
-                   </div>
-                 )}
+                 <ImageRippleEffect 
+                   imageUrl={heroData.avatarUrl || "https://media.licdn.com/dms/image/v2/D4D03AQHQrREy7e6Rtg/profile-displayphoto-scale_200_200/B4DZnJTBmyIgAY-/0/1760018833625?e=1764201600&v=beta&t=vyCLeSdMBoBRggqkBS6sLubEG0q6IUZIcbowwpyQ_Joi"}
+                   className="w-full h-full"
+                 />
               </div>
             </div>
           </motion.div>

@@ -1,27 +1,69 @@
 "use client"
+// Force recompile
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { CliLoader } from "@/components/ui/cli-loader"
+import { useAppStore } from "@/lib/stores/app-store"
+import { TextGif } from "@/components/ui/text-gif"
 
 interface HomeClientProps {
   children: React.ReactNode
 }
 
 export default function HomeClient({ children }: HomeClientProps) {
+  const { 
+    hasInitialLoadCompleted, 
+    setHasInitialLoadCompleted, 
+    incrementHomePageLoadCount 
+  } = useAppStore()
+  
+  // Local state to handle hydration mismatch and loading phase
+  const [isClient, setIsClient] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setIsClient(true)
+    incrementHomePageLoadCount()
+
+    if (!hasInitialLoadCompleted) {
+      // First time load in this session (or since storage cleared)
+      // Call health check
+      fetch('/api/health').catch(err => console.error("Health check failed:", err))
+    } else {
+      // Subsequent loads - show fallback briefly then content
+      // We can keep isLoading true for a short delay if we want to show the TextGif
+      // or set it to false immediately if we want instant load.
+      // Let's show it for a short duration to be visible as a "fallback loader"
+      const timer = setTimeout(() => setIsLoading(false), 1500)
+      return () => clearTimeout(timer)
+    }
+  }, [hasInitialLoadCompleted, incrementHomePageLoadCount])
+
+  const handleCliComplete = () => {
+    setHasInitialLoadCompleted(false)
+    setIsLoading(false)
+  }
+
+  if (!isClient) return null // Prevent hydration mismatch
 
   return (
     <>
-      {isLoading && <CliLoader onComplete={() => setIsLoading(false)} />}
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
+          {!hasInitialLoadCompleted ? (
+            <CliLoader onComplete={handleCliComplete} />
+          ) : (
+            <TextGif 
+                text="LOADING..." 
+                gifUrl="https://media.giphy.com/media/3zvbrvbRe7wxBofOBI/giphy.gif"
+                size="xxl"
+                weight="bold"
+                className="uppercase"
+            />
+          )}
+        </div>
+      )}
       
-      {/* 
-        We render the children but hide them while loading. 
-        This ensures they are mounted and ready (e.g., if they have their own effects),
-        but visually the user only sees the loader.
-        Alternatively, we could conditionally render { !isLoading && children } 
-        if we want to prevent them from mounting until ready.
-        Given the "boot" metaphor, mounting them after is cleaner.
-      */}
       {!isLoading && (
         <div className="animate-in fade-in duration-1000">
           {children}

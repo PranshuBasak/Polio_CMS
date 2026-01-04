@@ -238,7 +238,10 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
       if (data.phone !== undefined) aboutUpdates.phone = data.phone
       if (data.location !== undefined) aboutUpdates.location = data.location
       if (data.bio !== undefined) aboutUpdates.bio = data.bio
-      if (data.availableForWork !== undefined) aboutUpdates.available_for_work = data.availableForWork
+      if (data.availableForWork !== undefined) {
+        aboutUpdates.available_for_work = data.availableForWork
+        aboutUpdates.status = data.availableForWork ? "AVAILABLE FOR HIRE" : "CURRENTLY UNAVAILABLE"
+      }
       if (data.yearsExperience !== undefined) aboutUpdates.years_experience = data.yearsExperience
 
       if (Object.keys(aboutUpdates).length > 0) {

@@ -163,53 +163,57 @@ export const CliLoader: React.FC<CliLoaderProps> = ({ onComplete }) => {
     }])
   }
 
-  // Define the static parts of the boot sequence
-  const BOOT_SEQUENCE_START: BootStep[] = [
-    { message: "INITIALIZING NEURAL INTERFACE", delay: 800 },
-    { message: "ESTABLISHING SECURE CONNECTION TO THE GRID", status: "connecting", progress: 10, delay: 1000 },
-    { message: "SYNCING BIOMETRIC DATA IDENTITY CONFIRMED", progress: 30, delay: 800 },
-    { message: "DECRYPTING FIREWALL PROTOCOLS", progress: 45, delay: 1200 },
-    { message: "UPLOADING CONSCIOUSNESS [████████░░] 80%", status: "fetching", delay: 800 },
-  ]
-
-  const BOOT_SEQUENCE_END: BootStep[] = [
-    { message: "BYPASSING CORPORATE ICE ACCESS GRANTED", progress: 70, delay: 600 },
-    { message: "RENDERING DIGITAL CONSTRUCT", progress: 85, delay: 600 },
-    { message: "CALIBRATING AUGMENTED REALITY OVERLAY", delay: 600 },
-  ]
-
-  const BOOT_SEQUENCE_FINAL: BootStep[] = [
-    { message: "COMPILING GHOST IN THE SHELL", progress: 95, delay: 500 },
-    { message: "JACKING INTO THE MAINFRAME", status: "ready", progress: 100, delay: 800 },
-    { message: `INITIALIZING USER: ${heroData?.name?.toUpperCase() || "USER"}`, status: "ready", progress: 100, delay: 800 },
-    { message: "ACCESS GRANTED", status: "ready", progress: 100, delay: 800 },
-    { message: "WELCOME TO YOUR DIGITAL CONSTRUCT", status: "ready", progress: 100, delay: 800 },
-  ]
-
-  const runSequence = async (sequence: BootStep[]) => {
-    for (const step of sequence) {
-      if (step.message) addLog(step.message)
-      if (step.status) setStatus(step.status)
-      if (step.progress) setProgress(step.progress)
-      if (step.delay) await new Promise((r) => setTimeout(r, step.delay))
-      if (step.action) await step.action()
-    }
-  }
-
   useEffect(() => {
     let mounted = true
+    setLogs([]) // Clear logs on mount/remount to prevent Strict Mode duplication
     setShowWarning(false)
+
+    // Define sequences inside effect or use refs to avoid dependency cycles
+    const BOOT_SEQUENCE_START: BootStep[] = [
+      { message: "INITIALIZING NEURAL INTERFACE", delay: 800 },
+      { message: "ESTABLISHING SECURE CONNECTION TO THE GRID", status: "connecting", progress: 10, delay: 1000 },
+      { message: "SYNCING BIOMETRIC DATA IDENTITY CONFIRMED", progress: 30, delay: 800 },
+      { message: "DECRYPTING FIREWALL PROTOCOLS", progress: 45, delay: 1200 },
+      { message: "UPLOADING CONSCIOUSNESS [████████░░] 80%", status: "fetching", delay: 800 },
+    ]
+
+    const BOOT_SEQUENCE_END: BootStep[] = [
+      { message: "BYPASSING CORPORATE ICE ACCESS GRANTED", progress: 70, delay: 600 },
+      { message: "RENDERING DIGITAL CONSTRUCT", progress: 85, delay: 600 },
+      { message: "CALIBRATING AUGMENTED REALITY OVERLAY", delay: 600 },
+    ]
+
+    const BOOT_SEQUENCE_FINAL: BootStep[] = [
+      { message: "COMPILING GHOST IN THE SHELL", progress: 95, delay: 500 },
+      { message: "JACKING INTO THE MAINFRAME", status: "ready", progress: 100, delay: 800 },
+      { message: `INITIALIZING USER: ${heroData?.name?.toUpperCase() || "USER"}`, status: "ready", progress: 100, delay: 800 },
+      { message: "ACCESS GRANTED", status: "ready", progress: 100, delay: 800 },
+      { message: "WELCOME TO YOUR DIGITAL CONSTRUCT", status: "ready", progress: 100, delay: 800 },
+    ]
+
+    const runSequence = async (sequence: BootStep[]) => {
+      for (const step of sequence) {
+        if (!mounted) return
+        if (step.message) addLog(step.message)
+        if (step.status) setStatus(step.status)
+        if (step.progress) setProgress(step.progress)
+        if (step.delay) await new Promise((r) => setTimeout(r, step.delay))
+        if (step.action) await step.action()
+      }
+    }
 
     const bootSequence = async () => {
       try {
         if (retryCount > 0) {
             setLogs([])
+            if (!mounted) return
             addLog(`SYSTEM REBOOT INITIATED... (ATTEMPT ${retryCount}/3)`)
             await new Promise((r) => setTimeout(r, 800))
         }
 
         // Run initial sequence
         await runSequence(BOOT_SEQUENCE_START)
+        if (!mounted) return
         
         // Start Data Fetching
         const dataPromise = Promise.all([
@@ -230,6 +234,10 @@ export const CliLoader: React.FC<CliLoaderProps> = ({ onComplete }) => {
       
         // Run middle sequence (visuals while fetching)
         await runSequence(BOOT_SEQUENCE_END)
+        if (!mounted) {
+            clearTimeout(slowConnectionTimer)
+            return
+        }
 
         try {
             // Race data fetch against timeout
@@ -250,6 +258,7 @@ export const CliLoader: React.FC<CliLoaderProps> = ({ onComplete }) => {
         }
 
       } catch (error) {
+        if (!mounted) return
         setStatus("error")
         addLog("ERROR: NEURAL LINK SEVERED.", "#ef4444")
         

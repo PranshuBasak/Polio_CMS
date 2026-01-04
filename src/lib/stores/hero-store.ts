@@ -18,17 +18,16 @@ type HeroStore = {
   resetHeroData: () => void
 }
 
-const defaultHeroData: HeroData = {
-  name: "Pranshu",
-  title: "Backend Developer & System Design Enthusiast",
-  description:
-    "Passionate backend developer specializing in scalable systems, microservices, and database design. Proficient in TypeScript & Java, mastering C++. Strong advocate for clean code and building high-performance applications. Exploring AI, blockchain, and system scalability.",
-  avatarUrl: "https://media.licdn.com/dms/image/v2/D4D03AQHQrREy7e6Rtg/profile-displayphoto-scale_200_200/B4DZnJTBmyIgAY-/0/1760018833625?e=1764201600&v=beta&t=vyCLeSdMBoBRggqkBS6sLubEG0q6IUZIcbowwpyQ_Joi",
-  status: "AVAILABLE FOR HIRE"
-}
+
 
 export const useHeroStore = create<HeroStore>((set, get) => ({
-  heroData: defaultHeroData,
+  heroData: {
+    name: "",
+    title: "",
+    description: "",
+    avatarUrl: "",
+    status: "",
+  },
   isLoading: false,
   error: null,
 
@@ -42,24 +41,23 @@ export const useHeroStore = create<HeroStore>((set, get) => ({
         .single()
 
       if (error) {
-        // If no rows found, use defaults
+        // If no rows found, just return (state remains empty/default structure)
         if (error.code !== "PGRST116") {
           console.error("Supabase error fetching hero data:", error)
           throw error
         }
-        console.log("No hero data found in database, using defaults")
-        set({ heroData: defaultHeroData })
+        console.log("No hero data found in database")
         return
       }
 
       if (data) {
         set({
           heroData: {
-            name: (data as any).name || defaultHeroData.name,
-            title: (data as any).tagline || defaultHeroData.title,
-            description: (data as any).bio || defaultHeroData.description,
-            avatarUrl: (data as any).avatar_url || defaultHeroData.avatarUrl,
-            status: (data as any).status || defaultHeroData.status,
+            name: (data as any).name || "",
+            title: (data as any).tagline || "",
+            description: (data as any).bio || "",
+            avatarUrl: (data as any).avatar_url || "",
+            status: (data as any).status || "AVAILABLE FOR HIRE",
           },
         })
         console.log("✅ Hero data loaded from Supabase:", data)
@@ -67,7 +65,6 @@ export const useHeroStore = create<HeroStore>((set, get) => ({
     } catch (error: any) {
       console.error("Failed to fetch hero data:", error)
       set({ error: error?.message || "Failed to fetch hero data" })
-      set({ heroData: defaultHeroData })
     } finally {
       set({ isLoading: false })
     }
@@ -105,6 +102,10 @@ export const useHeroStore = create<HeroStore>((set, get) => ({
         status: heroData.status,
       }
 
+      console.log("Debug: Existing Data:", existingData)
+      console.log("Debug: Hero Data:", heroData)
+      console.log("Debug: Update Payload:", updatePayload)
+
       if (existingData) {
         // Update existing row
         const { error } = await supabase
@@ -131,6 +132,11 @@ export const useHeroStore = create<HeroStore>((set, get) => ({
       console.log("✅ Hero data updated successfully in Supabase")
     } catch (error: any) {
       console.error("Failed to update hero data:", error)
+      console.error("Error details:", JSON.stringify(error, null, 2))
+      if (error instanceof Error) {
+        console.error("Error message:", error.message)
+        console.error("Error stack:", error.stack)
+      }
       set({ error: error?.message || "Failed to update hero data" })
       // Revert to previous data on error
       set({ heroData: currentData })
@@ -139,5 +145,13 @@ export const useHeroStore = create<HeroStore>((set, get) => ({
     }
   },
 
-  resetHeroData: () => set({ heroData: defaultHeroData }),
+  resetHeroData: () => set({ 
+    heroData: {
+      name: "",
+      title: "",
+      description: "",
+      avatarUrl: "",
+      status: "",
+    } 
+  }),
 }))

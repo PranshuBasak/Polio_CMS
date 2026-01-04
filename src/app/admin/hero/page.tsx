@@ -33,7 +33,7 @@ export default function HeroPage() {
       required: true,
     },
     {
-      name: "image",
+      name: "avatarUrl",
       label: "Profile Image URL",
       type: "image" as const,
       placeholder: "URL to your profile image",

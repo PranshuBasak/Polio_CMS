@@ -22,13 +22,14 @@ A dynamic portfolio CMS built with Next.js 16 that empowers developers to manage
 ## ✨ Features
 
 ### 🎨 Portfolio Sections
-- **Hero Section** - Animated introduction with glowing avatar and call-to-action buttons
+- **Hero Section** - Animated introduction with interactive image ripple effect, glowing avatar, and call-to-action buttons
 - **About Page** - Personal bio, journey timeline, and core values
 - **Projects** - Showcase portfolio projects with images, tech stack, and live/GitHub links
 - **Skills** - Categorized skill display with proficiency levels and visual progress bars
 - **Blog** - Internal blog posts + external RSS feed integration (DEV.to, Medium, Hashnode)
 - **Resume** - Complete work experience, education, and certifications
 - **Testimonials** - Client testimonials with ratings and photos
+- **UI/UX Enhancements** - Smooth physics-based cursor, dynamic theming, and custom CLI loader
 
 ### �️ Admin Dashboard
 - **Content Management** - Edit all portfolio content through intuitive admin UI
@@ -72,7 +73,7 @@ A dynamic portfolio CMS built with Next.js 16 that empowers developers to manage
 | **Animations** | Framer Motion, CSS animations |
 | **Analytics** | Vercel Analytics |
 | **Logging** | Pino (server), custom client logger |
-| **Data Storage** | localStorage (development), Supabase-ready (production) |
+| **Data Storage** | Supabase (PostgreSQL), localStorage (fallback) |
 
 ## 🚀 Quick Start
 
@@ -149,12 +150,12 @@ sec/
 
 ## 🗄️ Current Architecture
 
-### State Management
-This project uses **Zustand** with **localStorage persistence** for client-side state management. All portfolio data is stored in the browser's localStorage, making it perfect for:
-- ✅ Single-user portfolios
-- ✅ Static site deployment
-- ✅ No backend required
-- ✅ Fast performance
+### State Management & Database
+This project uses **Zustand** for state management, integrated with **Supabase** for robust data persistence. While it supports localStorage as a fallback, the primary data source is now the PostgreSQL database.
+- ✅ Real-time data updates
+- ✅ Persistent content across sessions
+- ✅ Centralized admin management
+- ✅ Hybrid storage approach
 
 **Available Stores:**
 - `useHeroStore` - Hero section content
@@ -259,9 +260,11 @@ See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) for detailed deployment guide inc
 - Performance optimization
 - Docker deployment
 
-## 🗄️ Adding Database (Production)
+## 🗄️ Database Setup (Supabase)
 
-The current architecture uses localStorage for simplicity. For production with multi-user support:
+The project is fully integrated with Supabase for backend data storage.
+
+To set up your own instance:
 
 1. **Read the migration guide**: [docs/DATABASE.md](./docs/DATABASE.md)
 2. **Choose a database**: Supabase (recommended), Vercel Postgres, MongoDB

@@ -188,6 +188,7 @@ CREATE TABLE about (
   email TEXT,
   phone TEXT,
   available_for_work BOOLEAN DEFAULT true,
+  status TEXT DEFAULT 'AVAILABLE FOR HIRE',
   years_experience INTEGER,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -411,6 +412,107 @@ CREATE POLICY "Anyone can submit contact form"
 CREATE POLICY "Anyone can track page views"
   ON page_views FOR INSERT
   WITH CHECK (true);
+
+-- =====================================================
+-- SKILL CATEGORIES
+-- =====================================================
+CREATE TABLE skill_categories (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  color TEXT,
+  icon TEXT,
+  order_index INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_skill_categories_order ON skill_categories(order_index);
+
+-- Default categories
+INSERT INTO skill_categories (id, name, description, order_index) VALUES
+  ('core', 'Core Languages', 'Primary programming languages', 1),
+  ('backend', 'Backend Development', 'Server-side frameworks and APIs', 2),
+  ('frontend', 'Frontend Development', 'Client-side technologies and frameworks', 3),
+  ('databases', 'Databases', 'Database systems and design', 4),
+  ('devops', 'DevOps & Tools', 'Development operations and tooling', 5),
+  ('architecture', 'Architecture & Design', 'System design and software architecture', 6),
+  ('emerging', 'Emerging Tech', 'Blockchain, AI, and cutting-edge technologies', 7),
+  ('cms', 'CMS & Platforms', 'Content management and platform development', 8),
+  ('learning', 'Currently Learning', 'Technologies actively being mastered', 9)
+ON CONFLICT (id) DO NOTHING;
+
+-- =====================================================
+-- HERO SECTION
+-- =====================================================
+CREATE TABLE hero (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  avatar_url TEXT,
+  primary_button_text TEXT,
+  primary_button_url TEXT,
+  secondary_button_text TEXT,
+  secondary_button_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- =====================================================
+-- SITE SETTINGS
+-- =====================================================
+CREATE TABLE site_settings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  site_name TEXT NOT NULL DEFAULT 'DynamicFolio CMS',
+  site_description TEXT,
+  primary_color TEXT DEFAULT '#3b82f6',
+  logo_url TEXT,
+  favicon_url TEXT,
+  email TEXT,
+  phone TEXT,
+  address TEXT,
+  analytics_enabled BOOLEAN DEFAULT true,
+  maintenance_mode BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Insert default settings
+INSERT INTO site_settings (site_name, site_description) 
+VALUES ('DynamicFolio CMS', 'A dynamic portfolio CMS built with Next.js')
+ON CONFLICT DO NOTHING;
+
+-- =====================================================
+-- LANGUAGES (User spoken languages)
+-- =====================================================
+CREATE TABLE languages (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  proficiency TEXT NOT NULL,
+  order_index INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_languages_order ON languages(order_index);
+
+-- =====================================================
+-- INTERESTS
+-- =====================================================
+CREATE TABLE interests (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  icon TEXT,
+  order_index INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_interests_order ON interests(order_index);
 
 -- =====================================================
 -- FUNCTIONS

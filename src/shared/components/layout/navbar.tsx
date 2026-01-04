@@ -64,6 +64,9 @@ const Navbar = memo(function Navbar() {
   }, [isOpen]);
 
   // Right Sidebar Logic
+  if (isAdmin) return null;
+
+
   return (
     <>
       {/* Mobile Toggle Button - Top Right */}

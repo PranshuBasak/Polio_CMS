@@ -25,72 +25,78 @@ import { TerminalSection } from '@/components/ui/terminal-section';
 export default function Home() {
   return (
     <HomeClient>
-      <div className="container mx-auto">
-      {/* Hero Section - Server Component */}
-      <ErrorBoundary>
-        <HeroSection />
-      </ErrorBoundary>
+      <div className="w-full">
+        {/* Hero Section - Server Component */}
+        <ErrorBoundary>
+          <HeroSection />
+        </ErrorBoundary>
 
-      {/* About Section with Animation Waves */}
-      <div className="relative">
-        <AnimatedWaves position="top" />
+        {/* Terminal Section */}  
+        <div className="relative">
+          <ErrorBoundary>
+            <Suspense fallback={<div className="py-20" />}>
+            <TerminalSection />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
+
+        {/* About Section with Animation Waves */}
+        <div className="relative">
+          <AnimatedWaves position="top" />
+          <ErrorBoundary>
+            <Suspense fallback={<div className="py-20" />}>
+              <AboutSection />
+            </Suspense>
+          </ErrorBoundary>
+          <Suspense fallback={<div className="py-8" />}>
+            <TechStackLogos />
+          </Suspense>
+          <AnimatedWaves position="bottom" />
+        </div>
+
+        {/* Projects Section - Server Component */}
+        <ErrorBoundary>
+          <Suspense fallback={<ProjectsSkeleton />}>
+            <ProjectsSection />
+          </Suspense>
+        </ErrorBoundary>
+
+        {/* Skills Section - Server Component */}
+        <div className="relative">
+          <AnimatedWaves position="top" flip={true} />
+          <ErrorBoundary>
+            <Suspense fallback={<SkillsSkeleton />}>
+              <SkillsSection />
+            </Suspense>
+          </ErrorBoundary>
+          <AnimatedWaves
+            position="bottom"
+            flip={true}
+          />
+        </div>
+
+        {/* Timeline Section - Client Component (keep as is) */}
         <ErrorBoundary>
           <Suspense fallback={<div className="py-20" />}>
-            <AboutSection />
+            <TimelineSection />
           </Suspense>
         </ErrorBoundary>
-        <Suspense fallback={<div className="py-8" />}>
-          <TechStackLogos />
-        </Suspense>
-        <AnimatedWaves position="bottom" />
-      </div>
 
-      {/* Projects Section - Server Component */}
-      <ErrorBoundary>
-        <Suspense fallback={<ProjectsSkeleton />}>
-          <ProjectsSection />
-        </Suspense>
-      </ErrorBoundary>
-
-      {/* Skills Section - Server Component */}
-      <div className="relative">
-        <AnimatedWaves position="top" flip={true} />
+        {/* Blog Section - Server Component */}
         <ErrorBoundary>
-          <Suspense fallback={<SkillsSkeleton />}>
-            <SkillsSection />
+          <Suspense fallback={<BlogSkeleton />}>
+            <BlogSection />
           </Suspense>
         </ErrorBoundary>
-        <AnimatedWaves
-          position="bottom"
-          flip={true}
-        />
-      </div>
 
-      {/* Timeline Section - Client Component (keep as is) */}
-      <ErrorBoundary>
-        <Suspense fallback={<div className="py-20" />}>
-          <TimelineSection />
-        </Suspense>
-      </ErrorBoundary>
+        {/* Contact Section - Server Component */}
+        <ErrorBoundary>
+          <Suspense fallback={<ContactSkeleton />}>
+            <ContactSection />
+          </Suspense>
+        </ErrorBoundary>
 
-      {/* Blog Section - Server Component */}
-      <ErrorBoundary>
-        <Suspense fallback={<BlogSkeleton />}>
-          <BlogSection />
-        </Suspense>
-      </ErrorBoundary>
 
-      {/* Contact Section - Server Component */}
-      <ErrorBoundary>
-        <Suspense fallback={<ContactSkeleton />}>
-          <ContactSection />
-        </Suspense>
-      </ErrorBoundary>
-
-      {/* Terminal Section */}
-      <ErrorBoundary>
-        <TerminalSection />
-      </ErrorBoundary>
     </div>
     </HomeClient>
   );

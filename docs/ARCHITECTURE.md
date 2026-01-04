@@ -74,20 +74,6 @@ Comprehensive overview of the Portfolio CMS architecture, design patterns, and t
 - **Multi-User**: Shared data across devices and users
 
 ---
-
-## Technology Stack
-
-### Core Framework
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **Next.js** | 16.0.1 | React framework with App Router |
-| **React** | 19.0.0 | UI library with Server Components |
-| **TypeScript** | 5.7.3 | Type safety and developer experience |
-
-### State Management
-| Technology | Purpose |
-|------------|---------|
-| **Zustand** | Lightweight state management (~1KB) |
 | **localStorage** | Client-side persistence (current) |
 | **React Server Components** | Server-side state (no client JS) |
 
@@ -165,7 +151,10 @@ Comprehensive overview of the Portfolio CMS architecture, design patterns, and t
 - `blog-store.ts` - Internal and external blog posts
 - `resume-store.ts` - Work experience, education, certifications
 - `testimonials-store.ts` - Client testimonials
+- `site-settings-store.ts` - Site configuration (name, colors, social links)
 - `ui-store.ts` - UI state (sidebar open, theme)
+
+See [STORES.md](./STORES.md) for detailed store documentation.
 
 **Persistence**:
 Each store uses Zustand's `persist` middleware:

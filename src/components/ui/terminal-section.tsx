@@ -133,7 +133,6 @@ export function TerminalSection() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 className="bg-transparent border-none outline-none text-white flex-1 focus:ring-0 p-0"
-                autoFocus
                 spellCheck={false}
                 autoComplete="off"
               />
