@@ -1,0 +1,15 @@
+# DynamicFolio CMS
+> A dynamic portfolio CMS built with Next.js 16, Supabase, and Tailwind CSS.
+
+## Core Files
+- [src/app/page.tsx](file:///c:/Others/proj/New_Portfolio/src/app/page.tsx): Main entry point (Home).
+- [src/app/admin/page.tsx](file:///c:/Others/proj/New_Portfolio/src/app/admin/page.tsx): Admin dashboard entry.
+- [src/lib/stores/](file:///c:/Others/proj/New_Portfolio/src/lib/stores/): Zustand state stores.
+- [docs/](file:///c:/Others/proj/New_Portfolio/docs/): Project documentation.
+- [supabase_schema.sql](file:///c:/Others/proj/New_Portfolio/supabase_schema.sql): Database schema.
+
+## Key Concepts
+- **CMS**: Content Management System for portfolio data.
+- **No-Backend (Optional)**: Can run with localStorage, but Supabase is recommended for persistence.
+- **Admin Dashboard**: secure area to manage content.
+- **Internationalization**: Support for multiple languages.

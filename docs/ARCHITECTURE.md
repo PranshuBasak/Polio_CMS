@@ -615,7 +615,8 @@ pnpm build
 
 ---
 
-## Architecture Decisions
+### Architecture Decision Records
+See [ADR.md](./ADR.md) for detailed decision records.
 
 ### Why Next.js 16 App Router?
 

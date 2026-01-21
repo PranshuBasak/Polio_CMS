@@ -193,6 +193,32 @@ import { cn } from '@/lib/utils';
 )} />
 ```
 
+### Code Comment Guidelines
+
+**JSDoc/TSDoc Template**:
+
+```typescript
+/**
+ * Brief description of what the function does.
+ * 
+ * @param paramName - Description of parameter
+ * @returns Description of return value
+ * @throws ErrorType - When this error occurs
+ * 
+ * @example
+ * const result = functionName(input);
+ */
+```
+
+**When to Comment**:
+
+| ✅ Comment | ❌ Don't Comment |
+|-----------|-----------------|
+| Why (business logic) | What (obvious) |
+| Complex algorithms | Every line |
+| Non-obvious behavior | Self-explanatory code |
+| API contracts | Implementation details |
+
 ---
 
 ## Commit Guidelines

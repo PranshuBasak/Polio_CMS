@@ -113,85 +113,38 @@ async function checkHealth() {
 
 ---
 
-## Blog - Fetch Medium
+## GET /api/blog/fetch-medium
 
 Fetch blog posts from a Medium RSS feed.
 
-### Endpoint
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| username | string | No | Medium username (default: `0xPranshu`) |
+| limit | number | No | Max posts (default: `5`) |
 
-```
-GET /api/blog/fetch-medium
-```
+**Response:**
+- `200`: Success with posts array
+- `500`: Failed to fetch
 
-### Query Parameters
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `username` | string | `0xPranshu` | Medium username (without @) |
-| `limit` | number | `5` | Maximum posts to fetch |
-
-### Example Request
-
-```
-GET /api/blog/fetch-medium?username=yourusername&limit=10
-```
-
-### Response
-
-**Success (200)**:
+**Example:**
 ```json
+// GET /api/blog/fetch-medium?username=0xPranshu&limit=2
 {
   "success": true,
   "posts": [
     {
-      "id": "medium-abc123",
-      "title": "My Blog Post Title",
-      "excerpt": "First 200 characters of the post content...",
-      "url": "https://medium.com/@username/post-slug",
-      "date": "2024-01-15T10:00:00.000Z",
-      "source": "Medium"
+      "id": "...",
+      "title": "Post Title",
+      "url": "..."
     }
-  ],
-  "feedTitle": "Stories by Username on Medium",
-  "feedDescription": "Medium feed description"
+  ]
 }
-```
-
-**Error (500)**:
-```json
-{
-  "success": false,
-  "error": "Failed to fetch Medium posts",
-  "message": "Network request failed"
-}
-```
-
-### Usage
-
-```typescript
-// Fetch Medium posts
-async function fetchMediumPosts(username: string, limit = 5) {
-  const response = await fetch(
-    `/api/blog/fetch-medium?username=${username}&limit=${limit}`
-  );
-  const data = await response.json();
-  
-  if (data.success) {
-    return data.posts;
-  }
-  throw new Error(data.error);
-}
-
-// Usage in component
-const posts = await fetchMediumPosts('yourusername', 10);
 ```
 
 ### Notes
-
-- Uses `rss-parser` to parse Medium's RSS feed
-- Extracts clean text excerpt from HTML content
-- Automatically strips HTML tags and decodes entities
-- Maximum excerpt length is 200 characters
+- Uses `rss-parser` to parse Medium's RSS feed.
+- Extracts clean text excerpt (max 200 chars).
 
 ---
 

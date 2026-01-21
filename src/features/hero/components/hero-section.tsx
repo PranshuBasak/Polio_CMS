@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { Waves } from '@/components/ui/wave-background';
 import Image from 'next/image';
 import { Typewriter } from '@/components/ui/typewriter';
-import ImageRippleEffect from '@/components/ui/image-ripple-effect';
+import ParallaxProfileImage from './parallax-profile-image';
 
 export default function HeroSection() {
   const { heroData } = useHeroStore();
@@ -123,23 +123,9 @@ export default function HeroSection() {
             className="relative flex justify-center lg:justify-end"
           >
             <div className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px]">
-              {/* Cyberpunk Frame */}
-              <div className="absolute inset-0 border-2 border-primary/30 rounded-[2rem] z-20" />
-              <div className="absolute -inset-4 border border-primary/10 rounded-[2.5rem] z-10" />
-              
-              {/* Corner Accents */}
-              <div className="absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-primary rounded-tl-[2rem] z-30" />
-              <div className="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-primary rounded-br-[2rem] z-30" />
-              
-              <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-muted/20 transition-all duration-500 group">
-                 {/* Glowing Ring Effect behind image */}
-                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent opacity-50 group-hover:opacity-0 transition-opacity duration-500" />
-                 
-                 <ImageRippleEffect 
-                   imageUrl={heroData.avatarUrl || "https://media.licdn.com/dms/image/v2/D4D03AQHQrREy7e6Rtg/profile-displayphoto-scale_200_200/B4DZnJTBmyIgAY-/0/1760018833625?e=1764201600&v=beta&t=vyCLeSdMBoBRggqkBS6sLubEG0q6IUZIcbowwpyQ_Joi"}
-                   className="w-full h-full"
-                 />
-              </div>
+               <ParallaxProfileImage 
+                 imageUrl={heroData.avatarUrl || "https://media.licdn.com/dms/image/v2/D4D03AQHQrREy7e6Rtg/profile-displayphoto-scale_200_200/B4DZnJTBmyIgAY-/0/1760018833625?e=1764201600&v=beta&t=vyCLeSdMBoBRggqkBS6sLubEG0q6IUZIcbowwpyQ_Joi"}
+               />
             </div>
           </motion.div>
 
