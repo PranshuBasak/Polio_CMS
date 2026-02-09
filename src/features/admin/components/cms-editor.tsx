@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Code, Eye, Save, Undo } from 'lucide-react';
+import CloudinaryUpload from '@/components/ui/cloudinary-upload';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -184,28 +185,12 @@ export default function CMSEditor({
               {label}
               {required && <span className="text-red-500 ml-1">*</span>}
             </Label>
-            <div className="flex items-center gap-4">
-              <Input
-                id={name}
-                value={(formData[name] as string) || ''}
-                onChange={(e) => handleChange(name, e.target.value)}
-                placeholder={placeholder || 'Image URL'}
-                required={required}
-              />
-              {!!formData[name] && (
-                <div className="relative w-16 h-16 border rounded-md overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={(formData[name] as string) || '/placeholder.svg'}
-                    alt={label}
-                    className="object-cover w-full h-full"
-                    onError={(e) => {
-                      e.currentTarget.src = '/avatar-placeholder.svg';
-                    }}
-                  />
-                </div>
-              )}
-            </div>
+            <CloudinaryUpload
+              value={(formData[name] as string) || ''}
+              onChange={(value) => handleChange(name, value)}
+              disabled={isLoading}
+              multiple={false}
+            />
             {description && (
               <p className="text-sm text-muted-foreground">{description}</p>
             )}

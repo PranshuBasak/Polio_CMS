@@ -16,6 +16,7 @@ export { default as RecentActivity } from './recent-activity';
 // Content Editors
 export { default as AboutJourneyEditor } from './about-journey-editor';
 export { default as AboutValuesEditor } from './about-values-editor';
+export { default as AiChatSettings } from './ai-chat-settings';
 export { default as CMSEditor } from './cms-editor';
 export { default as ResumeCertificationsEditor } from './resume-certifications-editor';
 export { default as ResumeEducationEditor } from './resume-education-editor';

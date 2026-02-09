@@ -41,7 +41,7 @@ export function SkillsClient({ skills, categories }: SkillsClientProps) {
         >
           <TabsList className="flex flex-wrap justify-center gap-2 mb-8 h-auto p-2">
             {sortedCategories.map((category) => (
-              <TabsTrigger key={category.id} value={category.id} className="flex-shrink-0 text-xs sm:text-sm px-3 py-2">
+              <TabsTrigger key={category.id} value={category.id} className="shrink-0 text-xs sm:text-sm px-3 py-2">
                 {category.name}
               </TabsTrigger>
             ))}

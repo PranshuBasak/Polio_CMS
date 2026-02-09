@@ -20,6 +20,7 @@ import { useState, useEffect } from 'react';
 
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
+import CloudinaryUpload from '@/components/ui/cloudinary-upload';
 
 export default function ResumeGeneralEditor() {
   const resumeData = useResumeStore((state) => state.resumeData) ?? {
@@ -229,23 +230,16 @@ export default function ResumeGeneralEditor() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="pdfUrl">Resume PDF URL</Label>
-          <div className="flex gap-2">
-            <Input
-              id="pdfUrl"
-              name="pdfUrl"
-              value={formData.pdfUrl}
-              onChange={handleChange}
-              placeholder="URL to your resume PDF"
-              className="flex-1"
-            />
-            <Button variant="outline" type="button">
-              <FileUp className="h-4 w-4 mr-2" />
-              Upload
-            </Button>
+          <Label htmlFor="pdfUrl">Resume PDF</Label>
+          <div className="flex flex-col gap-2">
+             <CloudinaryUpload
+                value={formData.pdfUrl}
+                onChange={(value) => setFormData((prev) => ({ ...prev, pdfUrl: value as string }))}
+                resourceType="auto"
+              />
           </div>
           <p className="text-xs text-muted-foreground">
-            Enter a URL to your resume PDF or upload a new one
+            Upload your resume PDF.
           </p>
         </div>
 

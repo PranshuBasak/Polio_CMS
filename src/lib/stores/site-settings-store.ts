@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/client"
+import type { Database } from "@/lib/types/supabase"
+import { setClientLoggerDebugMode } from "@/lib/logger/client-logger"
 import { create } from 'zustand';
 
 export type SiteSettings = {
@@ -24,6 +26,9 @@ export type SiteSettings = {
     metaDescription: string;
     keywords: string[];
     ogImage: string;
+    twitterImage?: string;
+    iconUrl?: string;
+    appleIconUrl?: string;
   };
 
   // Appearance settings
@@ -74,6 +79,9 @@ const defaultSettings: SiteSettings = {
     metaDescription: '',
     keywords: [],
     ogImage: '',
+    twitterImage: '',
+    iconUrl: '',
+    appleIconUrl: '',
   },
 
   appearance: {
@@ -87,6 +95,143 @@ const defaultSettings: SiteSettings = {
     cacheDuration: 60,
     debugMode: false,
   },
+};
+
+type SiteSettingsRow = Database['public']['Tables']['site_settings']['Row'];
+type SiteSettingsUpsert = Database['public']['Tables']['site_settings']['Insert'];
+
+const getErrorMessage = (error: unknown, fallback: string) => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return fallback;
+};
+
+const normalizeSocialSettings = (
+  social: SiteSettingsRow['social']
+): SiteSettings['social'] => {
+  if (!social || typeof social !== 'object' || Array.isArray(social)) {
+    return defaultSettings.social;
+  }
+
+  const socialRecord = social as Record<string, unknown>;
+
+  return {
+    github:
+      typeof socialRecord.github === 'string'
+        ? socialRecord.github
+        : defaultSettings.social.github,
+    linkedin:
+      typeof socialRecord.linkedin === 'string'
+        ? socialRecord.linkedin
+        : defaultSettings.social.linkedin,
+    email:
+      typeof socialRecord.email === 'string'
+        ? socialRecord.email
+        : defaultSettings.social.email,
+    medium:
+      typeof socialRecord.medium === 'string'
+        ? socialRecord.medium
+        : defaultSettings.social.medium,
+    twitter:
+      typeof socialRecord.twitter === 'string'
+        ? socialRecord.twitter
+        : defaultSettings.social.twitter,
+  };
+};
+
+const normalizeSeoSettings = (
+  seo: SiteSettingsRow['seo']
+): SiteSettings['seo'] => {
+  if (!seo || typeof seo !== 'object' || Array.isArray(seo)) {
+    return defaultSettings.seo;
+  }
+
+  const seoRecord = seo as Record<string, unknown>;
+
+  return {
+    metaTitle:
+      typeof seoRecord.metaTitle === 'string'
+        ? seoRecord.metaTitle
+        : defaultSettings.seo.metaTitle,
+    metaDescription:
+      typeof seoRecord.metaDescription === 'string'
+        ? seoRecord.metaDescription
+        : defaultSettings.seo.metaDescription,
+    keywords: Array.isArray(seoRecord.keywords)
+      ? seoRecord.keywords.filter(
+          (keyword): keyword is string => typeof keyword === 'string'
+        )
+      : defaultSettings.seo.keywords,
+    ogImage:
+      typeof seoRecord.ogImage === 'string'
+        ? seoRecord.ogImage
+        : defaultSettings.seo.ogImage,
+    twitterImage:
+      typeof seoRecord.twitterImage === 'string'
+        ? seoRecord.twitterImage
+        : defaultSettings.seo.twitterImage,
+    iconUrl:
+      typeof seoRecord.iconUrl === 'string'
+        ? seoRecord.iconUrl
+        : defaultSettings.seo.iconUrl,
+    appleIconUrl:
+      typeof seoRecord.appleIconUrl === 'string'
+        ? seoRecord.appleIconUrl
+        : defaultSettings.seo.appleIconUrl,
+  };
+};
+
+const normalizeAppearanceSettings = (
+  appearance: SiteSettingsRow['appearance']
+): SiteSettings['appearance'] => {
+  if (!appearance || typeof appearance !== 'object' || Array.isArray(appearance)) {
+    return defaultSettings.appearance;
+  }
+
+  const appearanceRecord = appearance as Record<string, unknown>;
+  const themeValue = appearanceRecord.theme;
+
+  return {
+    theme:
+      themeValue === 'light' || themeValue === 'dark' || themeValue === 'system'
+        ? themeValue
+        : defaultSettings.appearance.theme,
+    primaryColor:
+      typeof appearanceRecord.primaryColor === 'string'
+        ? appearanceRecord.primaryColor
+        : defaultSettings.appearance.primaryColor,
+    animations:
+      typeof appearanceRecord.animations === 'boolean'
+        ? appearanceRecord.animations
+        : defaultSettings.appearance.animations,
+    reducedMotion:
+      typeof appearanceRecord.reducedMotion === 'boolean'
+        ? appearanceRecord.reducedMotion
+        : defaultSettings.appearance.reducedMotion,
+  };
+};
+
+const normalizeAdvancedSettings = (
+  advanced: unknown
+): SiteSettings['advanced'] => {
+  if (!advanced || typeof advanced !== 'object') {
+    return defaultSettings.advanced;
+  }
+
+  const advancedRecord = advanced as Partial<SiteSettings['advanced']>;
+
+  return {
+    cacheDuration:
+      typeof advancedRecord.cacheDuration === 'number'
+        ? advancedRecord.cacheDuration
+        : defaultSettings.advanced.cacheDuration,
+    debugMode:
+      typeof advancedRecord.debugMode === 'boolean'
+        ? advancedRecord.debugMode
+        : defaultSettings.advanced.debugMode,
+  };
 };
 
 export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
@@ -108,24 +253,32 @@ export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
       }
 
       if (data) {
+        const normalizedAdvanced = normalizeAdvancedSettings(data.advanced);
+        setClientLoggerDebugMode(normalizedAdvanced.debugMode);
+
         set({
           settings: {
-            siteName: (data as any).site_name || defaultSettings.siteName,
-            siteDescription: (data as any).site_description || defaultSettings.siteDescription,
-            siteUrl: (data as any).site_url || defaultSettings.siteUrl,
-            timezone: (data as any).timezone || defaultSettings.timezone,
-            publicProfile: (data as any).public_profile ?? defaultSettings.publicProfile,
-            social: (data as any).social || defaultSettings.social,
-            seo: (data as any).seo || defaultSettings.seo,
-            appearance: (data as any).appearance || defaultSettings.appearance,
-            advanced: (data as any).advanced || defaultSettings.advanced,
+            siteName: data.site_name || defaultSettings.siteName,
+            siteDescription: data.site_description || defaultSettings.siteDescription,
+            siteUrl: data.site_url || defaultSettings.siteUrl,
+            timezone: data.timezone || defaultSettings.timezone,
+            publicProfile: data.public_profile ?? defaultSettings.publicProfile,
+            social: normalizeSocialSettings(data.social),
+            seo: normalizeSeoSettings(data.seo),
+            appearance: normalizeAppearanceSettings(data.appearance),
+            advanced: normalizedAdvanced,
           },
         })
+      } else {
+        setClientLoggerDebugMode(defaultSettings.advanced.debugMode);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to fetch site settings:", error)
-      set({ error: error?.message || "Failed to fetch site settings" })
+      set({
+        error: getErrorMessage(error, "Failed to fetch site settings"),
+      })
       set({ settings: defaultSettings })
+      setClientLoggerDebugMode(defaultSettings.advanced.debugMode);
     } finally {
       set({ isLoading: false })
     }
@@ -150,7 +303,7 @@ export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
         .select("id")
         .single()
 
-      const updatePayload: any = {
+      const updatePayload: SiteSettingsUpsert = {
         site_name: settings.siteName,
         site_description: settings.siteDescription,
         site_url: settings.siteUrl,
@@ -166,7 +319,7 @@ export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
         const { error } = await supabase
           .from("site_settings")
           .update(updatePayload)
-          .eq("id", (existingData as any).id)
+          .eq("id", existingData.id)
 
         if (error) throw error
       } else {
@@ -176,9 +329,13 @@ export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
 
         if (error) throw error
       }
-    } catch (error: any) {
+
+      setClientLoggerDebugMode(settings.advanced.debugMode);
+    } catch (error: unknown) {
       console.error("Failed to update site settings:", error)
-      set({ error: error?.message || "Failed to update site settings" })
+      set({
+        error: getErrorMessage(error, "Failed to update site settings"),
+      })
       set({ settings: currentSettings })
     } finally {
       set({ isLoading: false })
@@ -210,12 +367,17 @@ export const useSiteSettingsStore = create<SiteSettingsStore>((set, get) => ({
     })),
 
   updateAdvanced: (advanced) =>
-    set((state) => ({
-      settings: {
-        ...state.settings,
-        advanced: { ...state.settings.advanced, ...advanced },
-      },
-    })),
+    set((state) => {
+      const nextAdvanced = { ...state.settings.advanced, ...advanced };
+      setClientLoggerDebugMode(nextAdvanced.debugMode);
+
+      return {
+        settings: {
+          ...state.settings,
+          advanced: nextAdvanced,
+        },
+      };
+    }),
 
   resetSettings: () => set({ settings: defaultSettings }),
 }));

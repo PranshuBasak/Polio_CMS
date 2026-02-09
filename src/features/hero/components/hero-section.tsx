@@ -9,7 +9,6 @@ import Link from 'next/link';
 import { CYBERPUNK_MESSAGES } from '@/data/cyberpunk-messages';
 import { useEffect, useState } from 'react';
 import { Waves } from '@/components/ui/wave-background';
-import Image from 'next/image';
 import { Typewriter } from '@/components/ui/typewriter';
 import ParallaxProfileImage from './parallax-profile-image';
 
@@ -19,6 +18,7 @@ export default function HeroSection() {
   const [randomMessage, setRandomMessage] = useState('');
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRandomMessage(CYBERPUNK_MESSAGES.hero[Math.floor(Math.random() * CYBERPUNK_MESSAGES.hero.length)]);
   }, []);
 

@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import CloudinaryImage from '@/components/ui/cloudinary-image';
 import type { Skill } from '@/lib/types';
 
 /**
@@ -17,8 +18,20 @@ export function SkillCard({ skill }: SkillCardProps) {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg flex justify-between">
-          <span>{skill.name}</span>
+        <CardTitle className="text-lg flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            {skill.icon && (
+              <div className="relative w-6 h-6">
+                <CloudinaryImage
+                  src={skill.icon}
+                  alt={skill.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            )}
+            <span>{skill.name}</span>
+          </div>
           <span className="text-muted-foreground">{skill.level}%</span>
         </CardTitle>
       </CardHeader>

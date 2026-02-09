@@ -1,7 +1,6 @@
 import CustomCursorWrapper from '@/components/custom-cursor-wrapper';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { DynamicThemeProvider } from '@/components/providers/dynamic-theme-provider';
-import { defaultSiteSettings } from '@/lib/stores/site-settings-store';
 import Footer from '@/shared/components/layout/footer';
 import Navbar from '@/shared/components/layout/navbar';
 import BackToTop from '@/shared/components/ui-enhancements/back-to-top';
@@ -10,60 +9,77 @@ import ScrollProgress from '@/shared/components/ui-enhancements/scroll-progress'
 import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import type React from 'react';
+import { Suspense, type ReactNode } from 'react';
 import { StoreProvider } from '../components/providers/store-provider';
 import { DirectionProvider } from '../lib/i18n/direction-provider';
 import { TranslationsProvider } from '../lib/i18n/translations-context';
 import { InitialDataFetcher } from '@/components/initial-data-fetcher';
+import { StrudelAudioProvider } from '@/components/providers/strudel-audio-provider';
 import './globals.css';
-import { createClient } from '@/lib/supabase/server';
 import { JsonLd, generatePersonSchema, generateWebsiteSchema } from '@/lib/seo/structured-data';
 import { PageViewTracker } from '@/components/analytics/page-view-tracker';
+import { getRuntimeSiteSettings } from '@/lib/seo/runtime-site-settings';
 
 const inter = Inter({ subsets: ['latin'] });
 
 async function getSiteSettings() {
-  const supabase = await createClient();
-  const { data } = await supabase.from('site_settings').select('*').single();
-  
-  if (!data) return defaultSiteSettings;
+  return getRuntimeSiteSettings();
+}
 
-  return {
-    siteName: data.site_name || defaultSiteSettings.siteName,
-    siteDescription: data.site_description || defaultSiteSettings.siteDescription,
-    siteUrl: data.site_url || defaultSiteSettings.siteUrl,
-    timezone: data.timezone || defaultSiteSettings.timezone,
-    publicProfile: data.public_profile ?? defaultSiteSettings.publicProfile,
-    social: (data.social as any) || defaultSiteSettings.social,
-    seo: (data.seo as any) || defaultSiteSettings.seo,
-    appearance: (data.appearance as any) || defaultSiteSettings.appearance,
-    advanced: (data.advanced as any) || defaultSiteSettings.advanced,
-  };
+function safeMetadataBase(siteUrl: string) {
+  try {
+    const parsedUrl = new URL(siteUrl);
+    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+      throw new Error('Invalid metadataBase protocol');
+    }
+
+    return parsedUrl;
+  } catch {
+    return new URL('https://pranshubasak.com');
+  }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
+  const ownerName = settings.siteName.replace(/\s*Portfolio$/i, '').trim() || settings.siteName;
+  const ogImage = settings.seo.ogImage || `${settings.siteUrl}/favicon.png`;
+  const twitterImage = settings.seo.twitterImage || ogImage;
+  const iconUrl = settings.seo.iconUrl || `${settings.siteUrl}/favicon.svg`;
+  const appleIconUrl = settings.seo.appleIconUrl || `${settings.siteUrl}/favicon.png`;
 
   return {
-    title: settings.seo.metaTitle,
-    description: settings.seo.metaDescription,
+    metadataBase: safeMetadataBase(settings.siteUrl),
+    title: settings.seo.metaTitle || settings.siteName,
+    description: settings.seo.metaDescription || settings.siteDescription,
     keywords: settings.seo.keywords,
-    authors: [{ name: settings.siteName.replace(' Portfolio', ''), url: settings.social.github }],
-    creator: settings.siteName.replace(' Portfolio', ''),
-    publisher: settings.siteName.replace(' Portfolio', ''),
+    authors: [{ name: ownerName, url: settings.social.github || settings.siteUrl }],
+    creator: ownerName,
+    publisher: ownerName,
+    alternates: {
+      canonical: settings.siteUrl,
+    },
     openGraph: {
       type: 'website',
       locale: 'en_US',
       url: settings.siteUrl,
-      title: settings.seo.metaTitle,
-      description: settings.seo.metaDescription,
+      title: settings.seo.metaTitle || settings.siteName,
+      description: settings.seo.metaDescription || settings.siteDescription,
       siteName: settings.siteName,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: settings.seo.metaTitle || settings.siteName,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: settings.seo.metaTitle,
-      description: settings.seo.metaDescription,
+      title: settings.seo.metaTitle || settings.siteName,
+      description: settings.seo.metaDescription || settings.siteDescription,
       creator: settings.social.twitter,
+      images: [twitterImage],
     },
     robots: {
       index: true,
@@ -78,11 +94,11 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     icons: {
       icon: [
-        { url: '/favicon.svg', type: 'image/svg+xml' },
+        { url: iconUrl },
         { url: '/favicon.ico', sizes: '32x32' },
       ],
-      shortcut: '/favicon.svg',
-      apple: '/apple-touch-icon.png',
+      shortcut: iconUrl,
+      apple: appleIconUrl,
     },
     manifest: '/site.webmanifest',
     generator: 'Next.js',
@@ -92,7 +108,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   const settings = await getSiteSettings();
   const personSchema = generatePersonSchema(settings);
@@ -115,19 +131,23 @@ export default async function RootLayout({
             <DirectionProvider>
               <StoreProvider>
                 <DynamicThemeProvider>
-                  <InitialDataFetcher />
-                  <PageViewTracker />
-                  <ErrorBoundary>
-                    <ScrollProgress />
-                    <CustomCursorWrapper />
-                    <div className="flex min-h-screen flex-col">
-                      <Navbar />
-                      <main className="flex-1">{children}</main>
-                      <Footer />
-                    </div>
-                    <BackToTop />
-                    <Analytics />
-                  </ErrorBoundary>
+                  <StrudelAudioProvider>
+                    <InitialDataFetcher />
+                    <Suspense fallback={null}>
+                      <PageViewTracker />
+                    </Suspense>
+                    <ErrorBoundary>
+                      <ScrollProgress />
+                      <CustomCursorWrapper />
+                      <div className="flex min-h-screen flex-col">
+                        <Navbar />
+                        <main className="flex-1">{children}</main>
+                        <Footer />
+                      </div>
+                      <BackToTop />
+                      <Analytics />
+                    </ErrorBoundary>
+                  </StrudelAudioProvider>
                 </DynamicThemeProvider>
               </StoreProvider>
             </DirectionProvider>

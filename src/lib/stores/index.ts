@@ -5,6 +5,12 @@
 
 // Re-export all stores
 export { useAboutStore, type AboutData, type AboutJourneyItem, type AboutValue } from './about-store';
+export {
+  useAiChatConfigStore,
+  type AiChatContextBlock,
+  type AiChatSettings,
+  type AiChatSkill,
+} from './ai-chat-config-store';
 export { useBlogStore, type BlogPost } from './blog-store';
 export { useHeroStore, type HeroData } from './hero-store';
 export { useProjectsStore, type Project } from './projects-store';

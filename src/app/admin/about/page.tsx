@@ -33,6 +33,13 @@ export default function AboutPage() {
       placeholder: "Your professional mission statement",
       required: true,
     },
+    {
+      name: "avatarUrl",
+      label: "About Image",
+      type: "image" as const,
+      description: "A professional photo for the about section",
+      required: false,
+    },
   ]
 
   return (

@@ -60,7 +60,7 @@ const translations: Record<Language, Record<string, string>> = {
     'projects.caseStudy.results': 'Results',
     'projects.caseStudy.viewCode': 'View Code',
     'skills.title': 'Skills',
-    'skills.description': 'My technical expertise and proficiency across various technologies, frameworks, and tools.',
+    'skills.description': 'Neural interface protocols, installed software mods, and the chrome that keeps me operational—my technical augmentations for navigating the digital wasteland.',
     'skills.category.core': 'Core',
     'skills.category.devops': 'DevOps',
     'skills.category.databases': 'Databases',

@@ -623,6 +623,80 @@ INSERT INTO skills (name, category, proficiency, icon, order_index) VALUES
   ('PostgreSQL', 'Database', 80, 'database', 5);
 
 -- =====================================================
+-- AI CHAT CONFIGURATION
+-- =====================================================
+CREATE TABLE ai_chat_settings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL DEFAULT 'default' UNIQUE,
+  provider TEXT NOT NULL DEFAULT 'google',
+  model TEXT NOT NULL DEFAULT 'gemini-3-flash-preview',
+  system_prompt TEXT NOT NULL,
+  temperature DOUBLE PRECISION,
+  top_p DOUBLE PRECISION,
+  max_output_tokens INTEGER,
+  include_site_context BOOLEAN DEFAULT true,
+  include_skills_context BOOLEAN DEFAULT true,
+  enabled BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE ai_chat_context_blocks (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  settings_id UUID NOT NULL REFERENCES ai_chat_settings(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  order_index INTEGER DEFAULT 0,
+  enabled BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE ai_chat_skills (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  settings_id UUID NOT NULL REFERENCES ai_chat_settings(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  description TEXT,
+  instructions TEXT NOT NULL,
+  order_index INTEGER DEFAULT 0,
+  enabled BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_ai_chat_settings_enabled ON ai_chat_settings(enabled);
+CREATE INDEX idx_ai_chat_context_blocks_order ON ai_chat_context_blocks(settings_id, order_index);
+CREATE INDEX idx_ai_chat_skills_order ON ai_chat_skills(settings_id, order_index);
+
+ALTER TABLE ai_chat_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ai_chat_context_blocks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ai_chat_skills ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public can view ai chat settings"
+  ON ai_chat_settings FOR SELECT USING (true);
+CREATE POLICY "Public can view ai chat context blocks"
+  ON ai_chat_context_blocks FOR SELECT USING (true);
+CREATE POLICY "Public can view ai chat skills"
+  ON ai_chat_skills FOR SELECT USING (true);
+
+CREATE POLICY "Authenticated users can manage ai chat settings"
+  ON ai_chat_settings FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Authenticated users can manage ai chat context blocks"
+  ON ai_chat_context_blocks FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Authenticated users can manage ai chat skills"
+  ON ai_chat_skills FOR ALL USING (auth.role() = 'authenticated');
+
+INSERT INTO ai_chat_settings (name, provider, model, system_prompt, enabled)
+VALUES (
+  'default',
+  'google',
+  'gemini-3-flash-preview',
+  'You are a helpful portfolio assistant. Keep answers concise and grounded in portfolio data.',
+  true
+)
+ON CONFLICT (name) DO NOTHING;
+
+-- =====================================================
 -- COMPLETION MESSAGE
 -- =====================================================
 -- Schema created successfully!

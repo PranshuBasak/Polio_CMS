@@ -53,6 +53,7 @@ export type Database = {
           name: string | null
           phone: string | null
           resume_url: string | null
+          status: string | null
           tagline: string | null
           updated_at: string | null
           years_experience: number | null
@@ -70,6 +71,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           resume_url?: string | null
+          status?: string | null
           tagline?: string | null
           updated_at?: string | null
           years_experience?: number | null
@@ -87,11 +89,145 @@ export type Database = {
           name?: string | null
           phone?: string | null
           resume_url?: string | null
+          status?: string | null
           tagline?: string | null
           updated_at?: string | null
           years_experience?: number | null
         }
         Relationships: []
+      }
+      ai_chat_context_blocks: {
+        Row: {
+          content: string
+          created_at: string
+          enabled: boolean
+          id: string
+          order_index: number
+          settings_id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          order_index?: number
+          settings_id: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          order_index?: number
+          settings_id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_chat_context_blocks_settings_id_fkey"
+            columns: ["settings_id"]
+            isOneToOne: false
+            referencedRelation: "ai_chat_settings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_chat_settings: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          id: string
+          include_site_context: boolean
+          include_skills_context: boolean
+          max_output_tokens: number | null
+          model: string
+          name: string
+          provider: string
+          system_prompt: string
+          temperature: number | null
+          top_p: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          include_site_context?: boolean
+          include_skills_context?: boolean
+          max_output_tokens?: number | null
+          model?: string
+          name?: string
+          provider?: string
+          system_prompt: string
+          temperature?: number | null
+          top_p?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          include_site_context?: boolean
+          include_skills_context?: boolean
+          max_output_tokens?: number | null
+          model?: string
+          name?: string
+          provider?: string
+          system_prompt?: string
+          temperature?: number | null
+          top_p?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      ai_chat_skills: {
+        Row: {
+          created_at: string
+          description: string | null
+          enabled: boolean
+          id: string
+          instructions: string
+          name: string
+          order_index: number
+          settings_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          id?: string
+          instructions: string
+          name: string
+          order_index?: number
+          settings_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          id?: string
+          instructions?: string
+          name?: string
+          order_index?: number
+          settings_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_chat_skills_settings_id_fkey"
+            columns: ["settings_id"]
+            isOneToOne: false
+            referencedRelation: "ai_chat_settings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       blog_posts: {
         Row: {
@@ -518,6 +654,7 @@ export type Database = {
       }
       projects: {
         Row: {
+          category: string | null
           content: string | null
           created_at: string | null
           description: string
@@ -539,6 +676,7 @@ export type Database = {
           youtube_url: string | null
         }
         Insert: {
+          category?: string | null
           content?: string | null
           created_at?: string | null
           description: string
@@ -560,6 +698,7 @@ export type Database = {
           youtube_url?: string | null
         }
         Update: {
+          category?: string | null
           content?: string | null
           created_at?: string | null
           description?: string

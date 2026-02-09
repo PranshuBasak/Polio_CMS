@@ -1,7 +1,7 @@
 "use client"
 // Force recompile
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { CliLoader } from "@/components/ui/cli-loader"
 import { useAppStore } from "@/lib/stores/app-store"
 import { TextGif } from "@/components/ui/text-gif"
@@ -11,18 +11,20 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ children }: HomeClientProps) {
-  const { 
-    hasInitialLoadCompleted, 
-    setHasInitialLoadCompleted, 
-    incrementHomePageLoadCount 
-  } = useAppStore()
+  const hasInitialLoadCompleted = useAppStore((state) => state.hasInitialLoadCompleted)
+  const setHasInitialLoadCompleted = useAppStore((state) => state.setHasInitialLoadCompleted)
+  const incrementHomePageLoadCount = useAppStore((state) => state.incrementHomePageLoadCount)
   
-  // Local state to handle hydration mismatch and loading phase
-  const [isClient, setIsClient] = useState(false)
+  // Local state for loading phase
   const [isLoading, setIsLoading] = useState(true)
+  const hasInitializedRef = useRef(false)
 
   useEffect(() => {
-    setIsClient(true)
+    if (hasInitializedRef.current) {
+      return
+    }
+    hasInitializedRef.current = true
+
     incrementHomePageLoadCount()
 
     if (!hasInitialLoadCompleted) {
@@ -35,6 +37,7 @@ export default function HomeClient({ children }: HomeClientProps) {
       // or set it to false immediately if we want instant load.
       // Let's show it for a short duration to be visible as a "fallback loader"
       const timer = setTimeout(() => setIsLoading(false), 1500)
+      
       return () => clearTimeout(timer)
     }
   }, [hasInitialLoadCompleted, incrementHomePageLoadCount])
@@ -43,8 +46,6 @@ export default function HomeClient({ children }: HomeClientProps) {
     setHasInitialLoadCompleted(false)
     setIsLoading(false)
   }
-
-  if (!isClient) return null // Prevent hydration mismatch
 
   return (
     <>

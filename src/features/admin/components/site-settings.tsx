@@ -377,6 +377,42 @@ export default function SiteSettings() {
                 placeholder="https://0xPranshu.dev/og-image.png"
               />
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="twitter-image">Twitter Image URL</Label>
+              <Input
+                id="twitter-image"
+                value={settings.seo.twitterImage || ''}
+                onChange={(e) =>
+                  updateSEO({ twitterImage: e.target.value })
+                }
+                placeholder="https://0xPranshu.dev/twitter-image.png"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="icon-url">Site Icon URL</Label>
+              <Input
+                id="icon-url"
+                value={settings.seo.iconUrl || ''}
+                onChange={(e) =>
+                  updateSEO({ iconUrl: e.target.value })
+                }
+                placeholder="https://0xPranshu.dev/favicon.svg"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="apple-icon-url">Apple Icon URL</Label>
+              <Input
+                id="apple-icon-url"
+                value={settings.seo.appleIconUrl || ''}
+                onChange={(e) =>
+                  updateSEO({ appleIconUrl: e.target.value })
+                }
+                placeholder="https://0xPranshu.dev/apple-touch-icon.png"
+              />
+            </div>
           </CardContent>
         </Card>
       </TabsContent>

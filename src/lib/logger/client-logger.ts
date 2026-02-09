@@ -9,13 +9,45 @@ interface LogMeta {
   [key: string]: unknown;
 }
 
+const CLIENT_DEBUG_MODE_KEY = 'site_debug_mode';
+
 class ClientLogger {
   private isDevelopment = process.env.NODE_ENV === 'development';
+  private debugMode: boolean | null = null;
+
+  private getPersistedDebugMode(): boolean | null {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    try {
+      const raw = window.localStorage.getItem(CLIENT_DEBUG_MODE_KEY);
+      if (raw === null) {
+        return null;
+      }
+
+      return raw === 'true';
+    } catch {
+      return null;
+    }
+  }
+
+  private isLoggingEnabled() {
+    const persistedDebugMode = this.getPersistedDebugMode();
+    const effectiveDebugMode =
+      this.debugMode ?? persistedDebugMode ?? this.isDevelopment;
+
+    return effectiveDebugMode;
+  }
 
   /**
    * Log to console and external service (Sentry, LogRocket, etc.)
    */
   private log(level: LogLevel, message: string, meta?: LogMeta) {
+    if (!this.isLoggingEnabled()) {
+      return;
+    }
+
     const timestamp = new Date().toISOString();
     const logData = {
       timestamp,
@@ -82,8 +114,18 @@ class ClientLogger {
   }
 
   debug(message: string, meta?: LogMeta) {
-    if (this.isDevelopment) {
-      this.log('debug', message, meta);
+    this.log('debug', message, meta);
+  }
+
+  setDebugMode(enabled: boolean) {
+    this.debugMode = enabled;
+
+    if (typeof window !== 'undefined') {
+      try {
+        window.localStorage.setItem(CLIENT_DEBUG_MODE_KEY, String(enabled));
+      } catch {
+        // Ignore localStorage write issues (private mode, quota, etc.)
+      }
     }
   }
 
@@ -104,5 +146,9 @@ class ClientLogger {
 
 // Singleton instance
 export const clientLogger = new ClientLogger();
+
+export const setClientLoggerDebugMode = (enabled: boolean) => {
+  clientLogger.setDebugMode(enabled);
+};
 
 export default clientLogger;

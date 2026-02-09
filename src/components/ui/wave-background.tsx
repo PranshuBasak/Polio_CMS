@@ -28,6 +28,7 @@ export function Waves({
     backgroundColor = "#000000",  // Black background
     pointerSize = 0.5
 }: WavesProps) {
+    // State refs
     const containerRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
     const mouseRef = useRef({
@@ -47,33 +48,6 @@ export function Waves({
     const noiseRef = useRef<((x: number, y: number) => number) | null>(null)
     const rafRef = useRef<number | null>(null)
     const boundingRef = useRef<DOMRect | null>(null)
-
-    // Initialization
-    useEffect(() => {
-        if (!containerRef.current || !svgRef.current) return
-
-        // Initialize noise generator
-        noiseRef.current = createNoise2D()
-
-        // Initialize size and lines
-        setSize()
-        setLines()
-
-        // Bind events
-        window.addEventListener('resize', onResize)
-        window.addEventListener('mousemove', onMouseMove)
-        containerRef.current.addEventListener('touchmove', onTouchMove, { passive: false })
-
-        // Start animation
-        rafRef.current = requestAnimationFrame(tick)
-
-        return () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current)
-            window.removeEventListener('resize', onResize)
-            window.removeEventListener('mousemove', onMouseMove)
-            containerRef.current?.removeEventListener('touchmove', onTouchMove)
-        }
-    }, [])
 
     // Set SVG size
     const setSize = () => {
@@ -152,18 +126,6 @@ export function Waves({
         setLines()
     }
 
-    // Mouse handler
-    const onMouseMove = (e: MouseEvent) => {
-        updateMousePosition(e.pageX, e.pageY)
-    }
-
-    // Touch handler
-    const onTouchMove = (e: TouchEvent) => {
-        e.preventDefault()
-        const touch = e.touches[0]
-        updateMousePosition(touch.clientX, touch.clientY)
-    }
-
     // Update mouse position
     const updateMousePosition = (x: number, y: number) => {
         if (!boundingRef.current) return
@@ -186,6 +148,18 @@ export function Waves({
             containerRef.current.style.setProperty('--x', `${mouse.sx}px`)
             containerRef.current.style.setProperty('--y', `${mouse.sy}px`)
         }
+    }
+
+    // Mouse handler
+    const onMouseMove = (e: MouseEvent) => {
+        updateMousePosition(e.pageX, e.pageY)
+    }
+
+    // Touch handler
+    const onTouchMove = (e: TouchEvent) => {
+        e.preventDefault()
+        const touch = e.touches[0]
+        updateMousePosition(touch.clientX, touch.clientY)
     }
 
     // Move points - smoother wave motion
@@ -303,6 +277,34 @@ export function Waves({
 
         rafRef.current = requestAnimationFrame(tick)
     }
+
+    // Initialization
+    useEffect(() => {
+        if (!containerRef.current || !svgRef.current) return
+
+        // Initialize noise generator
+        noiseRef.current = createNoise2D()
+
+        // Initialize size and lines
+        setSize()
+        setLines()
+
+        // Bind events
+        window.addEventListener('resize', onResize)
+        window.addEventListener('mousemove', onMouseMove)
+        containerRef.current.addEventListener('touchmove', onTouchMove, { passive: false })
+
+        // Start animation
+        rafRef.current = requestAnimationFrame(tick)
+
+        return () => {
+            if (rafRef.current) cancelAnimationFrame(rafRef.current)
+            window.removeEventListener('resize', onResize)
+            window.removeEventListener('mousemove', onMouseMove)
+            containerRef.current?.removeEventListener('touchmove', onTouchMove)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div

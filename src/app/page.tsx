@@ -13,11 +13,10 @@ import AboutSection from '@/features/about/components/about-section';
 import BlogSection from '@/features/blog/components/blog-section';
 import ContactSection from '@/features/contact/components/contact-section';
 import HeroSection from '@/features/hero/components/hero-section';
-import ProjectsSection from '@/features/projects/components/projects-section';
 import SkillsSection from '@/features/skills/components/skills-section';
+import { ProjectsSectionContainer } from '@/app/projects/_components/interactive/projects-section-container';
 
 // Keep client-only components
-import TechStackLogos from '@/shared/components/ui-enhancements/tech-stack-logos';
 import TimelineSection from '@/shared/components/ui-enhancements/timeline-section';
 import HomeClient from './home-client';
 import { TerminalSection } from '@/components/ui/terminal-section';
@@ -48,16 +47,13 @@ export default function Home() {
               <AboutSection />
             </Suspense>
           </ErrorBoundary>
-          <Suspense fallback={<div className="py-8" />}>
-            <TechStackLogos />
-          </Suspense>
           <AnimatedWaves position="bottom" />
         </div>
 
         {/* Projects Section - Server Component */}
         <ErrorBoundary>
           <Suspense fallback={<ProjectsSkeleton />}>
-            <ProjectsSection />
+            <ProjectsSectionContainer />
           </Suspense>
         </ErrorBoundary>
 

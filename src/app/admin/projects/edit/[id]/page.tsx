@@ -14,6 +14,8 @@ import { Checkbox } from "../../../../../components/ui/checkbox"
 import { Loader2 } from "lucide-react"
 import { Spinner } from "../../../../../components/ui/spinner"
 import { useHydration } from "../../../../../lib/hooks"
+import { Controller } from "react-hook-form"
+import CloudinaryUpload from "@/components/ui/cloudinary-upload"
 
 export default function EditProjectPage() {
   const params = useParams()
@@ -93,6 +95,16 @@ export default function EditProjectPage() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="category">Category</Label>
+              <Input
+                id="category"
+                placeholder="Web Development, Mobile App, AI, etc."
+                {...register("category")}
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="githubUrl">GitHub URL</Label>
               <Input
                 id="githubUrl"
@@ -118,22 +130,32 @@ export default function EditProjectPage() {
 
             <div className="space-y-2">
               <Label htmlFor="image">Image URL</Label>
-              <Input
-                id="image"
-                placeholder="https://example.com/project-image.png"
-                {...register("image")}
-                disabled={isSubmitting}
+              <Controller
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <CloudinaryUpload
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    disabled={isSubmitting}
+                  />
+                )}
               />
               {errors.image && <p className="text-sm text-destructive">{errors.image.message}</p>}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="icon">Icon URL</Label>
-              <Input
-                id="icon"
-                placeholder="https://example.com/project-icon.png"
-                {...register("icon")}
-                disabled={isSubmitting}
+              <Controller
+                control={form.control}
+                name="icon"
+                render={({ field }) => (
+                  <CloudinaryUpload
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    disabled={isSubmitting}
+                  />
+                )}
               />
               {errors.icon && <p className="text-sm text-destructive">{errors.icon.message}</p>}
             </div>
@@ -150,13 +172,18 @@ export default function EditProjectPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="screenshots">Screenshots (one URL per line)</Label>
-              <Textarea
-                id="screenshots"
-                placeholder="https://example.com/screenshot1.png&#10;https://example.com/screenshot2.png"
-                rows={4}
-                {...register("screenshots")}
-                disabled={isSubmitting}
+              <Label htmlFor="screenshots">Screenshots</Label>
+              <Controller
+                control={form.control}
+                name="screenshots"
+                render={({ field }) => (
+                  <CloudinaryUpload
+                    value={field.value || []}
+                    onChange={field.onChange}
+                    disabled={isSubmitting}
+                    multiple
+                  />
+                )}
               />
               {errors.screenshots && <p className="text-sm text-destructive">{errors.screenshots.message}</p>}
             </div>

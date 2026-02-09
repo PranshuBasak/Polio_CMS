@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../../../../../components/ui/card';
+import CloudinaryUpload from "@/components/ui/cloudinary-upload";
 import { Input } from '../../../../../components/ui/input';
 import { Label } from '../../../../../components/ui/label';
 import {
@@ -185,13 +186,10 @@ export default function EditSkillPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="icon">Icon URL (Optional)</Label>
-              <Input
-                id="icon"
-                name="icon"
+              <Label htmlFor="icon">Icon (Optional)</Label>
+              <CloudinaryUpload
                 value={formData.icon}
-                onChange={handleChange}
-                placeholder="e.g. https://example.com/icon.png"
+                onChange={(value) => setFormData((prev) => ({ ...prev, icon: value as string }))}
               />
             </div>
 

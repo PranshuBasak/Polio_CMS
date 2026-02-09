@@ -6,6 +6,7 @@ import { useState } from "react"
 import AdminHeader from "@/features/admin/components/admin-header"
 import { Button } from "../../../../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../components/ui/card"
+import CloudinaryUpload from "@/components/ui/cloudinary-upload"
 import { Input } from "../../../../components/ui/input"
 import { Label } from "../../../../components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../components/ui/select"
@@ -119,13 +120,10 @@ export default function NewSkillPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="icon">Icon URL (Optional)</Label>
-              <Input
-                id="icon"
-                name="icon"
+              <Label htmlFor="icon">Icon (Optional)</Label>
+              <CloudinaryUpload
                 value={formData.icon}
-                onChange={handleChange}
-                placeholder="e.g. https://example.com/icon.png"
+                onChange={(value) => setFormData((prev) => ({ ...prev, icon: value as string }))}
               />
             </div>
 

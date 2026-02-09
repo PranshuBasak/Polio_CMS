@@ -1,30 +1,39 @@
-"use client"
+'use client'
 
-import { useSkillsStore } from "../../../lib/stores"
-import { useMemo } from "react"
+import { useMemo } from 'react'
+
+import { useSkillsStore } from '../../../lib/stores'
 
 export function useSkillsData() {
   const skills = useSkillsStore((state) => state.skills)
   const categories = useSkillsStore((state) => state.categories)
 
-  const skillsByCategory = useMemo(() => {
-    const grouped: Record<string, typeof skills> = {}
+  const sortedCategories = useMemo(() => {
+    return [...(categories ?? [])].sort((a, b) => a.order - b.order)
+  }, [categories])
 
-    skills?.forEach((skill) => {
-      const category = skill.category || "Other"
-      if (!grouped[category]) {
-        grouped[category] = []
+  const sortedSkills = useMemo(() => {
+    return [...(skills ?? [])].sort((a, b) => a.orderIndex - b.orderIndex)
+  }, [skills])
+
+  const skillsByCategory = useMemo(() => {
+    const grouped: Record<string, typeof sortedSkills> = {}
+
+    sortedSkills.forEach((skill) => {
+      const categoryKey = skill.category || 'other'
+      if (!grouped[categoryKey]) {
+        grouped[categoryKey] = []
       }
-      grouped[category].push(skill)
+      grouped[categoryKey].push(skill)
     })
 
     return grouped
-  }, [skills])
+  }, [sortedSkills])
 
   return {
-    skills: skills ?? [],
-    categories: categories ?? [],
+    skills: sortedSkills,
+    categories: sortedCategories,
     skillsByCategory,
-    allSkills: skills ?? [],
+    allSkills: sortedSkills,
   }
 }

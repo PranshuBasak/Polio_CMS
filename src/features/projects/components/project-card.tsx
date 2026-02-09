@@ -2,6 +2,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import CloudinaryImage from '@/components/ui/cloudinary-image';
 import {
   Card,
   CardContent,
@@ -10,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type { Project } from '@/lib/types';
+import type { Project } from '@/lib/stores/projects-store';
 import { ExternalLink, Github } from 'lucide-react';
 
 /**
@@ -26,6 +27,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
       <CardHeader>
+        {project.image && (
+          <div className="mb-4 relative h-48 w-full overflow-hidden rounded-md border">
+            <CloudinaryImage
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+        )}
         <CardTitle className="text-balance">{project.title}</CardTitle>
         <CardDescription className="text-pretty line-clamp-2">
           {project.description}

@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import Image from 'next/image';
+import CloudinaryImage from '@/components/ui/cloudinary-image';
 import { useCursorStore } from '@/lib/stores/cursor-store';
 import { useSiteSettingsStore } from '@/lib/stores/site-settings-store';
 import { cn } from '@/lib/utils';
@@ -98,7 +98,7 @@ export default function ParallaxProfileImage({ imageUrl, className }: ParallaxPr
         
         {/* Image */}
         <div className="relative w-full h-full transform-style-3d translate-z-[20px]">
-          <Image
+          <CloudinaryImage
             src={imageUrl}
             alt="Profile"
             fill

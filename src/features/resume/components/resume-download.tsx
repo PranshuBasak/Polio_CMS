@@ -28,6 +28,14 @@ export default function ResumeDownload() {
   // Use the PDF URL from resumeData or fallback to a placeholder
   const resumeUrl = resumeData?.pdfUrl || '/placeholder.pdf';
 
+  // Helper to force download for Cloudinary URLs
+  const getDownloadUrl = (url: string) => {
+    if (url && url.includes('cloudinary.com') && url.includes('/upload/')) {
+      return url.replace('/upload/', '/upload/fl_attachment/');
+    }
+    return url;
+  };
+
   return (
     <Card className="w-full">
       <CardHeader className="pb-2">
@@ -69,7 +77,7 @@ export default function ResumeDownload() {
         </Dialog>
 
           <Button asChild className="flex items-center gap-2 flex-1">
-            <a href={resumeUrl} download="Pranshu_Resume.pdf">
+            <a href={getDownloadUrl(resumeUrl)} download="Pranshu_Resume.pdf">
               <FileDown className="h-4 w-4" />
               Download PDF
             </a>

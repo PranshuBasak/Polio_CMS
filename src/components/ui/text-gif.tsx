@@ -65,6 +65,7 @@ const TextGif = React.memo(function TextGifComponent({
 
   // Reset states when gifUrl changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoaded(false)
     setError(false)
   }, [gifUrl])
@@ -140,9 +141,8 @@ const gifUrls = [
   "https://media.giphy.com/media/9Pmfazv34l7aNIKK05/giphy.gif",
   "https://media.giphy.com/media/4bhs1boql4XVJgmm4H/giphy.gif",
 ]
-
 // Optional: Preloader component
-function PreloadGifs() {
+export function PreloadGifs() {
   return (
     <div className="hidden">
       {gifUrls.map((url) => (

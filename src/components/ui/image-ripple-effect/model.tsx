@@ -36,7 +36,7 @@ export default function Model({ imageUrl }: ModelProps) {
   const imageTexture = useTexture(imageUrl);
   
   // Brush System (Pure THREE objects, not R3F)
-  const brushSystem = useMemo(() => {
+  const [brushSystem] = useState(() => {
     const scene = new THREE.Scene();
     const meshes = [];
     const max = 100;
@@ -58,7 +58,7 @@ export default function Model({ imageUrl }: ModelProps) {
     }
     
     return { scene, meshes, currentWave: 0 };
-  }, [brushTexture]);
+  });
 
   const [prevMouse, setPrevMouse] = useState({ x: 0, y: 0 });
 
@@ -74,7 +74,18 @@ export default function Model({ imageUrl }: ModelProps) {
   const fboTexture = useFBO(size.width, size.height);
 
   // Setup Image Scene
-  const { imageScene, imageCamera, imageMesh } = useMemo(() => {
+  const { imageScene, imageCamera, imageMesh } = useMemo(() => { // Keeping useMemo for now, or change to useState?
+    // Changing to useState requires destructuring in the next line.
+    // Let's stick to valid changes.
+    // If I change to useState, I need to make sure dependency array [imageTexture] is handled.
+    // original useMemo had [imageTexture]. If imageTexture changes, we need to recreate?
+    // Textures don't usually change instance often if URL is static.
+    // If I use useState, I can't easily react to dependency changes without useEffect.
+    // So sticking to useMemo for imageScene might be safer logic-wise, but I can check if I can silence the mutation error or fix it.
+    // Actually, I'll update brushSystem first.
+    // AND I will update imageScene to useMemo but suppress checking or accept that objects are mutable.
+    // But wait, the error is `imageCamera.left = ...` in `useLayoutEffect`. 
+    // That should be allowed.
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(
       -1, 1, 1, -1, 0, 10

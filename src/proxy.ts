@@ -7,6 +7,11 @@ import { type NextRequest, NextResponse } from 'next/server'
  */
 export async function proxy(request: NextRequest) {
   try {
+    const isAdminRoute = request.nextUrl.pathname.startsWith('/admin');
+    if (!isAdminRoute) {
+      return NextResponse.next();
+    }
+
     const { supabase, response } = createClient(request)
 
     // Refresh session by calling getUser
@@ -16,11 +21,17 @@ export async function proxy(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (error) {
-      console.error('Proxy auth error:', error)
+      const isExpectedAnonymousSessionMissing =
+        error.name === 'AuthSessionMissingError' ||
+        error.message?.toLowerCase().includes('auth session missing');
+
+      if (!isExpectedAnonymousSessionMissing) {
+        console.error('Proxy auth error:', error);
+      }
     }
 
     // Protect /admin routes - redirect to login if no user
-    if (request.nextUrl.pathname.startsWith('/admin') && !user) {
+    if (!user) {
       const redirectUrl = new URL('/login', request.url)
       redirectUrl.searchParams.set('redirectTo', request.nextUrl.pathname)
       return NextResponse.redirect(redirectUrl)
@@ -36,14 +47,5 @@ export async function proxy(request: NextRequest) {
 
 // Configure which routes to run proxy on
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public assets (images, etc.)
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
+  matcher: ['/admin/:path*'],
 }

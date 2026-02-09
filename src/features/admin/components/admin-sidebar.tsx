@@ -65,7 +65,6 @@ export function AdminSidebar() {
     };
 
     checkMobile();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     window.addEventListener('resize', checkMobile);
 
@@ -145,7 +144,7 @@ export function AdminSidebar() {
             <div className="flex items-center gap-2 overflow-hidden">
               <Avatar className="h-8 w-8 shrink-0">
                 <AvatarImage
-                  src={heroData.image || '/avatar-placeholder.svg'}
+                  src={heroData.avatarUrl || '/avatar-placeholder.svg'}
                   alt={heroData.name}
                 />
                 <AvatarFallback>

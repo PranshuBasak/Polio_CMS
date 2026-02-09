@@ -41,7 +41,7 @@ export function HeroContent({ heroData }: HeroContentProps) {
 
       <div className="flex justify-center">
         <GlowingAvatar
-          src={heroData.image || '/avatar-placeholder.svg'}
+          src={heroData.avatarUrl || '/avatar-placeholder.svg'}
           alt={heroData.name}
           size={280}
         />

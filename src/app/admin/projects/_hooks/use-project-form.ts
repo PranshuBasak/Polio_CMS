@@ -17,7 +17,7 @@ const projectFormSchema = z.object({
   image: z.string().url('Invalid URL').optional().or(z.literal('')),
   icon: z.string().url('Invalid URL').optional().or(z.literal('')),
   youtubeUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
-  screenshots: z.string().optional(),
+  screenshots: z.array(z.string()).optional(),
   category: z.string().optional(),
   featured: z.boolean().optional(),
 });
@@ -29,7 +29,6 @@ export function useProjectForm(project?: Project) {
   const { toast } = useToast();
   const addProject = useProjectsStore((state) => state.addProject);
   const updateProject = useProjectsStore((state) => state.updateProject);
-  const deleteProject = useProjectsStore((state) => state.deleteProject);
 
   const form = useForm<ProjectFormData>({
     resolver: zodResolver(projectFormSchema),
@@ -37,13 +36,13 @@ export function useProjectForm(project?: Project) {
       title: project?.title || '',
       description: project?.description || '',
       technologies: project?.technologies?.join(', ') || '',
+      category: project?.category || '',
       githubUrl: project?.githubUrl || '',
       liveUrl: project?.liveUrl || '',
       image: project?.image || '',
       icon: project?.icon || '',
       youtubeUrl: project?.youtubeUrl || '',
-      screenshots: project?.screenshots?.join('\n') || '',
-      category: '',
+      screenshots: project?.screenshots || [],
       featured: false,
     },
   });
@@ -58,16 +57,20 @@ export function useProjectForm(project?: Project) {
           .split(',')
           .map((t) => t.trim())
           .filter(Boolean),
+        category: data.category?.trim() || undefined,
         githubUrl: data.githubUrl || undefined,
         liveUrl: data.liveUrl || undefined,
         image: data.image || undefined,
         icon: data.icon || undefined,
         youtubeUrl: data.youtubeUrl || undefined,
-        screenshots: data.screenshots
-          ? data.screenshots.split('\n').map((s) => s.trim()).filter(Boolean)
-          : [],
+        screenshots: data.screenshots || [],
         createdAt: project?.createdAt || new Date().toISOString(),
-        caseStudy: project?.caseStudy,
+        caseStudy: project?.caseStudy
+          ? {
+              ...project.caseStudy,
+              screenshots: data.screenshots || [],
+            }
+          : undefined,
       };
 
       if (project) {

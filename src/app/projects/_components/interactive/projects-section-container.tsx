@@ -3,9 +3,8 @@
 import { useHydration } from '@/lib/hooks/use-hydration';
 import { ErrorBoundary } from '@/shared/components/ui-enhancements/error-boundary';
 import { withSectionAnimation } from '@/shared/hoc/with-section-animation';
+import { ScrollingFeatureShowcase } from '@/components/ui/interactive-scrolling-story-component';
 import { useProjectsData } from '../../_hooks/use-projects-data';
-import { ProjectsGrid } from '../ui/projects-grid';
-import { SectionHeader } from '../ui/section-header';
 
 /**
  * Container component for Projects Section (Homepage)
@@ -17,23 +16,26 @@ function ProjectsSectionContainerBase() {
 
   if (!isHydrated) return null;
 
-  return (
-    <section id="projects" className="section-container bg-muted/30">
-      <div className="container mx-auto">
-        <SectionHeader
-          title="Featured Projects"
-          description="A selection of my recent work in software architecture and backend development."
-          showViewAll
-        />
+  const slides = featuredProjects.map((project) => ({
+    id: project.id,
+    title: project.title,
+    description: project.description,
+    imageUrl: project.image || project.screenshots?.[0],
+    ctaHref: '/projects',
+    ctaLabel: 'Explore Project',
+  }));
 
-        <ErrorBoundary>
-          <ProjectsGrid
-            projects={featuredProjects}
-            showCaseStudy={false}
-          />
-        </ErrorBoundary>
-      </div>
-    </section>
+  return (
+    <ErrorBoundary>
+      <ScrollingFeatureShowcase
+        slides={slides}
+        sectionTitle="Priority Targets"
+        sectionDescription="Stream through chrome-plated builds—scroll the dataflow to witness system architecture, compiled logic trees, and live-deployed operations."
+        viewAllHref="/projects"
+        viewAllLabel="View All Projects"
+        className="bg-muted/15"
+      />
+    </ErrorBoundary>
   );
 }
 

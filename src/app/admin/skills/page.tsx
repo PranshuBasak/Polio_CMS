@@ -7,6 +7,7 @@ import { useState } from "react"
 import { Badge } from "../../../components/ui/badge"
 import { Button } from "../../../components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../../components/ui/card"
+import CloudinaryImage from "@/components/ui/cloudinary-image"
 import { Progress } from "../../../components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
 import AdminHeader from "@/features/admin/components/admin-header"
@@ -114,7 +115,7 @@ export default function SkillsPage() {
                                     <CardTitle className="text-lg flex justify-between items-center">
                                       <div className="flex items-center gap-2">
                                         {skill.icon && (
-                                          <img src={skill.icon} alt={skill.name} className="w-6 h-6 object-contain" />
+                                          <CloudinaryImage src={skill.icon} alt={skill.name} className="w-6 h-6 object-contain" fallbackSrc="/placeholder.svg" />
                                         )}
                                         <span>{skill.name}</span>
                                       </div>

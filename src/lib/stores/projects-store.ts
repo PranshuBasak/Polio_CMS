@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/client"
-// import { Database } from "@/lib/types/supabase"
+import { Database } from "@/lib/types/supabase"
 // import { SupabaseClient } from "@supabase/supabase-js"
 import { create } from "zustand"
 
@@ -8,6 +8,7 @@ export type Project = {
   title: string
   description: string
   technologies: string[]
+  category?: string
   githubUrl?: string
   liveUrl?: string
   image?: string
@@ -62,7 +63,7 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
       if (error) throw error
 
       if (data) {
-        const mappedProjects: Project[] = data.map((p: any) => {
+        const mappedProjects: Project[] = data.map((p: Database['public']['Tables']['projects']['Row']) => {
           let caseStudy = undefined
           if (p.content) {
             try {
@@ -81,6 +82,7 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
             title: p.title,
             description: p.description,
             technologies: p.tech_stack || [],
+            category: p.category || p.tech_stack?.[0] || "Uncategorized",
             githubUrl: p.github_url || undefined,
             liveUrl: p.live_url || undefined,
             image: p.image_url || undefined,
@@ -99,9 +101,9 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
         })
         set({ projects: mappedProjects })
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Failed to fetch projects:", error)
-      set({ error: error?.message || "Failed to fetch projects" })
+      set({ error: (error as Error).message || "Failed to fetch projects" })
     } finally {
       set({ isLoading: false })
     }
@@ -118,6 +120,7 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
         slug: slug, // Simple slug generation
         description: project.description,
         tech_stack: project.technologies,
+        category: project.category || null,
         github_url: project.githubUrl,
         live_url: project.liveUrl,
         image_url: project.image,
@@ -132,12 +135,22 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
         .from("projects")
         .insert(dbProject)
 
-      if (error) throw error
+      if (error) {
+        const message = error.message.toLowerCase()
+        if (message.includes("category")) {
+          const { category, ...fallbackPayload } = dbProject
+          void category
+          const retry = await supabase.from("projects").insert(fallbackPayload)
+          if (retry.error) throw retry.error
+        } else {
+          throw error
+        }
+      }
 
       await get().fetchProjects()
-    } catch (error: any) {
+    } catch (error) {
       console.error("Failed to add project:", error)
-      set({ error: error?.message || "Failed to add project" })
+      set({ error: (error as Error).message || "Failed to add project" })
     } finally {
       set({ isLoading: false })
     }
@@ -148,13 +161,14 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
     try {
       const supabase = createClient()
       
-      const updates: any = {}
+      const updates: Database['public']['Tables']['projects']['Update'] = {}
       if (project.title) {
         updates.title = project.title
         updates.slug = generateSlug(project.title)
       }
       if (project.description) updates.description = project.description
       if (project.technologies) updates.tech_stack = project.technologies
+      if (project.category !== undefined) updates.category = project.category || null
       if (project.githubUrl !== undefined) updates.github_url = project.githubUrl
       if (project.liveUrl !== undefined) updates.live_url = project.liveUrl
       if (project.image !== undefined) updates.image_url = project.image
@@ -172,12 +186,25 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
         .update(updates)
         .eq("id", id)
 
-      if (error) throw error
+      if (error) {
+        const message = error.message.toLowerCase()
+        if (message.includes("category")) {
+          const { category, ...fallbackUpdates } = updates
+          void category
+          const retry = await supabase
+            .from("projects")
+            .update(fallbackUpdates)
+            .eq("id", id)
+          if (retry.error) throw retry.error
+        } else {
+          throw error
+        }
+      }
 
       await get().fetchProjects()
-    } catch (error: any) {
+    } catch (error) {
       console.error("Failed to update project:", error)
-      set({ error: error?.message || "Failed to update project" })
+      set({ error: (error as Error).message || "Failed to update project" })
     } finally {
       set({ isLoading: false })
     }

@@ -1,16 +1,9 @@
-import { createClient } from '@/lib/supabase/client';
+import { getRuntimeSiteSettings } from '@/lib/seo/runtime-site-settings';
 import { MetadataRoute } from 'next';
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const supabase = createClient();
-
-  // Fetch site settings for base URL
-  const { data: settings } = await supabase
-    .from('site_settings')
-    .select('site_url')
-    .single();
-
-  const baseUrl = settings?.site_url || 'https://pranshubasak.com'; // Fallback
+  const settings = await getRuntimeSiteSettings();
+  const baseUrl = settings.siteUrl;
 
   return {
     rules: {
@@ -18,6 +11,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
       allow: '/',
       disallow: '/admin/',
     },
+    host: baseUrl,
     sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

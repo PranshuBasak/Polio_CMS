@@ -16,16 +16,17 @@ export default memo(function Footer() {
   const settings = useSiteSettingsStore((state) => state.settings);
   const { settings: siteSettings } = useSiteSettingsStore();
 
+  const [randomFooterMessage, setRandomFooterMessage] = useState('');
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRandomFooterMessage(CYBERPUNK_MESSAGES.footer[Math.floor(Math.random() * CYBERPUNK_MESSAGES.footer.length)]);
+  }, []);
+
   // Hide footer on admin pages
   if (isAdmin) {
     return null;
   }
-
-  const [randomFooterMessage, setRandomFooterMessage] = useState('');
-
-  useEffect(() => {
-    setRandomFooterMessage(CYBERPUNK_MESSAGES.footer[Math.floor(Math.random() * CYBERPUNK_MESSAGES.footer.length)]);
-  }, []);
 
   return (
     <footer className="relative border-t border-primary/20 bg-black/95 overflow-hidden pb-24 md:pb-8">

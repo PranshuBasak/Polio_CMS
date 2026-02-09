@@ -3,6 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Carousel } from '@/components/ui/carousel';
 import {
     Dialog,
     DialogContent,
@@ -11,9 +12,9 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { Project } from '@/lib/types';
+import { useProjectsStore } from '@/lib/stores/projects-store';
+import type { Project } from '@/lib/stores/projects-store';
 import { ExternalLink, Github } from 'lucide-react';
-import Image from 'next/image';
 import { useState } from 'react';
 
 interface ProjectCaseStudyProps {
@@ -23,27 +24,9 @@ interface ProjectCaseStudyProps {
 export default function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Mock case study data - in a real implementation, this would come from your data provider
-  const caseStudy = {
-    challenge:
-      'The client needed a scalable microservice architecture that could handle high traffic loads while maintaining data consistency across services.',
-    solution:
-      'Implemented a robust microservice architecture using Spring Boot for core services and Node.js for lightweight services. Used Kafka for event-driven communication between services.',
-    results:
-      'The new architecture resulted in a 40% improvement in response times and enabled the system to handle 3x the previous traffic load without performance degradation.',
-    process: [
-      'Analyzed the existing monolithic architecture and identified service boundaries',
-      'Designed the new microservice architecture with clear domain boundaries',
-      'Implemented core services using Spring Boot with domain-driven design principles',
-      'Set up Kafka for event-driven communication between services',
-      'Deployed the solution using Docker and Kubernetes for scalability',
-    ],
-    screenshots: [
-      '/project-placeholder.svg',
-      '/project-placeholder.svg',
-      '/project-placeholder.svg',
-    ],
-  };
+  // Use project data directly
+  const caseStudy = project.caseStudy;
+  const screenshots = project.screenshots || [];
 
   return (
     <>
@@ -66,59 +49,63 @@ export default function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
             ))}
           </div>
 
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid grid-cols-4 mb-4">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="process">Process</TabsTrigger>
+          <Tabs defaultValue={caseStudy ? "overview" : "gallery"} className="w-full">
+            <TabsList className="grid w-full grid-cols-4 mb-4">
+              <TabsTrigger value="overview" disabled={!caseStudy}>Overview</TabsTrigger>
+              <TabsTrigger value="process" disabled={!caseStudy}>Process</TabsTrigger>
               <TabsTrigger value="tech">Tech Stack</TabsTrigger>
-              <TabsTrigger value="gallery">Gallery</TabsTrigger>
+              <TabsTrigger value="gallery" disabled={screenshots.length === 0}>Gallery</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Challenge</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p>{caseStudy.challenge}</p>
-                </CardContent>
-              </Card>
+            {caseStudy && (
+              <TabsContent value="overview" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Challenge</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p>{caseStudy.challenge}</p>
+                  </CardContent>
+                </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Solution</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p>{caseStudy.solution}</p>
-                </CardContent>
-              </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Solution</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p>{caseStudy.solution}</p>
+                  </CardContent>
+                </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Results</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p>{caseStudy.results}</p>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Results</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p>{caseStudy.results}</p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            )}
 
-            <TabsContent value="process" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Development Process</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ol className="space-y-4 list-decimal pl-5">
-                    {caseStudy.process.map((step, index) => (
-                      <li key={index} className="pl-2">
-                        {step}
-                      </li>
-                    ))}
-                  </ol>
-                </CardContent>
-              </Card>
-            </TabsContent>
+            {caseStudy && (
+              <TabsContent value="process" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Development Process</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ol className="space-y-4 list-decimal pl-5">
+                      {caseStudy.process.map((step, index) => (
+                        <li key={index} className="pl-2">
+                          {step}
+                        </li>
+                      ))}
+                    </ol>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            )}
 
             <TabsContent value="tech" className="space-y-4">
               <Card>
@@ -151,28 +138,7 @@ export default function ProjectCaseStudy({ project }: ProjectCaseStudyProps) {
                   <CardTitle>Project Gallery</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="relative">
-                    <div className="flex overflow-x-auto space-x-4 pb-4">
-                      {caseStudy.screenshots.map((screenshot, index) => (
-                        <div
-                          key={index}
-                          className="flex-shrink-0 w-full max-w-md"
-                        >
-                          <div className="relative h-64 w-full rounded-lg overflow-hidden border">
-                            <Image
-                              src={screenshot || '/placeholder.svg'}
-                              alt={`${project.title} screenshot ${index + 1}`}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                          <p className="text-center text-sm text-muted-foreground mt-2">
-                            Screenshot {index + 1}: {project.title}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  <Carousel images={screenshots} />
                 </CardContent>
               </Card>
             </TabsContent>
