@@ -63,12 +63,17 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
       if (error) throw error
 
       if (data) {
-        const mappedProjects: Project[] = data.map((p: Database['public']['Tables']['projects']['Row']) => {
+        type ProjectRow = Database["public"]["Tables"]["projects"]["Row"] & {
+          category?: string | null
+        }
+
+        const mappedProjects: Project[] = data.map((p) => {
+          const row = p as ProjectRow
           let caseStudy = undefined
-          if (p.content) {
+          if (row.content) {
             try {
               // Try to parse content as JSON case study
-              const parsed = JSON.parse(p.content)
+              const parsed = JSON.parse(row.content)
               if (parsed.challenge) {
                 caseStudy = parsed
               }
@@ -78,24 +83,24 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
           }
 
           return {
-            id: p.id,
-            title: p.title,
-            description: p.description,
-            technologies: p.tech_stack || [],
-            category: p.category || p.tech_stack?.[0] || "Uncategorized",
-            githubUrl: p.github_url || undefined,
-            liveUrl: p.live_url || undefined,
-            image: p.image_url || undefined,
-            icon: p.icon || undefined,
-            youtubeUrl: p.youtube_url || undefined,
-            screenshots: p.screenshots || [],
-            createdAt: p.created_at || new Date().toISOString(),
-            caseStudy: caseStudy || (p.screenshots ? {
+            id: row.id,
+            title: row.title,
+            description: row.description,
+            technologies: row.tech_stack || [],
+            category: row.category || row.tech_stack?.[0] || "Uncategorized",
+            githubUrl: row.github_url || undefined,
+            liveUrl: row.live_url || undefined,
+            image: row.image_url || undefined,
+            icon: row.icon || undefined,
+            youtubeUrl: row.youtube_url || undefined,
+            screenshots: row.screenshots || [],
+            createdAt: row.created_at || new Date().toISOString(),
+            caseStudy: caseStudy || (row.screenshots ? {
               challenge: "",
               solution: "",
               results: "",
               process: [],
-              screenshots: p.screenshots
+              screenshots: row.screenshots
             } : undefined)
           }
         })
@@ -168,7 +173,9 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
       }
       if (project.description) updates.description = project.description
       if (project.technologies) updates.tech_stack = project.technologies
-      if (project.category !== undefined) updates.category = project.category || null
+      if (project.category !== undefined) {
+        ;(updates as Record<string, unknown>).category = project.category || null
+      }
       if (project.githubUrl !== undefined) updates.github_url = project.githubUrl
       if (project.liveUrl !== undefined) updates.live_url = project.liveUrl
       if (project.image !== undefined) updates.image_url = project.image
@@ -189,11 +196,11 @@ export const useProjectsStore = create<ProjectsStore>((set, get) => ({
       if (error) {
         const message = error.message.toLowerCase()
         if (message.includes("category")) {
-          const { category, ...fallbackUpdates } = updates
-          void category
+          const fallbackUpdates = { ...updates } as Record<string, unknown>
+          delete fallbackUpdates.category
           const retry = await supabase
             .from("projects")
-            .update(fallbackUpdates)
+            .update(fallbackUpdates as Database["public"]["Tables"]["projects"]["Update"])
             .eq("id", id)
           if (retry.error) throw retry.error
         } else {

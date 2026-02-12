@@ -1,4 +1,4 @@
-import { Card, CardContent } from "../../../../components/ui/card"
+import { BentoMonoBody, BentoMonoCard, BentoMonoFooter, BentoMonoHeader, BentoMonoStat } from "@/components/ui/bento-monochrome-1"
 import type { ResumeEducation } from "../../../../lib/types"
 
 type EducationCardProps = {
@@ -15,20 +15,28 @@ export function EducationCard({ education, formatDateRange }: EducationCardProps
     : `${education.startDate} - ${education.endDate}`
 
   return (
-    <Card>
-      <CardContent className="p-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
-          <div>
-            <h3 className="text-xl font-bold text-balance">{education.degree}</h3>
-            <p className="text-primary">{education.institution}</p>
+    <BentoMonoCard>
+      <BentoMonoHeader className="mb-5">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
+          <div className="min-w-0">
+            <h3 className="text-xl font-bold text-balance text-foreground">{education.degree}</h3>
+            <p className="text-primary font-medium">{education.institution}</p>
           </div>
-          <p className="text-muted-foreground text-sm md:text-base">{dateRange}</p>
+          <p className="text-muted-foreground text-xs md:text-sm uppercase tracking-[0.18em]">{dateRange}</p>
         </div>
-        <p className="mb-4 leading-relaxed">{education.description}</p>
+      </BentoMonoHeader>
+
+      <BentoMonoBody>
+        <p className="leading-relaxed text-foreground/90">{education.description}</p>
         <p className="text-sm text-muted-foreground">
-          <strong>Relevant Coursework:</strong> {education.courses.join(", ")}
+          <strong className="text-foreground/90">Relevant Coursework:</strong> {education.courses.join(", ")}
         </p>
-      </CardContent>
-    </Card>
+      </BentoMonoBody>
+
+      <BentoMonoFooter className="grid gap-2 sm:grid-cols-2">
+        <BentoMonoStat label="Institution" value={education.institution} />
+        <BentoMonoStat label="Location" value={education.location || "N/A"} />
+      </BentoMonoFooter>
+    </BentoMonoCard>
   )
 }

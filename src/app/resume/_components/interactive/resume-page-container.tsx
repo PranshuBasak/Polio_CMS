@@ -1,218 +1,228 @@
 'use client';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Award,
+  BookOpenText,
+  Briefcase,
+  GraduationCap,
+  Languages,
+  Route,
+  Sparkles,
+} from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { InteractiveMenu, type InteractiveMenuItem } from '@/components/ui/modern-mobile-menu';
 import ResumeDownload from '@/features/resume/components/resume-download';
 import { ErrorBoundary } from '@/shared/components/ui-enhancements/error-boundary';
-import { motion } from 'framer-motion';
-import { Award, Briefcase, Code, GraduationCap, Languages, Globe } from 'lucide-react';
-import { Card, CardContent } from '../../../../components/ui/card';
-import { useHydration } from '../../../../lib/hooks/use-hydration';
+import { useHydration } from '@/lib/hooks/use-hydration';
 import { useResumeData } from '../../_hooks/use-resume-data';
 import { resumeService } from '../../_services/resume-service';
 import { CertificationCard } from '../ui/certification-card';
 import { EducationCard } from '../ui/education-card';
 import { ExperienceCard } from '../ui/experience-card';
-import { SkillsGrid } from '../ui/skills-grid';
+import ExperienceTimelineSection from '@/features/experience/components/experience-timeline-section';
 
-/**
- * Container component for Resume Page
- * Handles data fetching and layout
- */
+type ResumeSectionKey = 'journey' | 'experience' | 'education' | 'certifications' | 'personal';
+
+const menuItems: InteractiveMenuItem[] = [
+  { key: 'journey', label: 'Journey', icon: Route },
+  { key: 'experience', label: 'Experience', icon: Briefcase },
+  { key: 'education', label: 'Education', icon: GraduationCap },
+  { key: 'certifications', label: 'Certifications', icon: Award },
+  { key: 'personal', label: 'Personal', icon: BookOpenText },
+];
+
+const defaultSection: ResumeSectionKey = 'journey';
+
+const getSectionFromHash = (hashValue: string): ResumeSectionKey => {
+  const section = hashValue.replace('#', '') as ResumeSectionKey;
+  return menuItems.some((item) => item.key === section) ? section : defaultSection;
+};
+
 export function ResumePageContainer() {
-  const { experiences, education, skills, certifications, languages, interests } = useResumeData();
+  const { experiences, education, certifications, languages, interests } = useResumeData();
   const isHydrated = useHydration();
+  const [activeSection, setActiveSection] = useState<ResumeSectionKey>(defaultSection);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const initialSection = getSectionFromHash(window.location.hash);
+    setActiveSection(initialSection);
+
+    const onHashChange = () => {
+      setActiveSection(getSectionFromHash(window.location.hash));
+    };
+
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  const handleSectionChange = (nextSectionKey: string) => {
+    const typedSection = nextSectionKey as ResumeSectionKey;
+    setActiveSection(typedSection);
+    if (typeof window !== 'undefined') {
+      window.history.replaceState(null, '', `#${typedSection}`);
+    }
+  };
+
+  const sectionContent = useMemo(() => {
+    switch (activeSection) {
+      case 'journey':
+        return (
+          <section id="journey" className="space-y-4">
+            <ExperienceTimelineSection context="resume" />
+          </section>
+        );
+      case 'experience':
+        return (
+          <section id="experience" className="space-y-5">
+            {experiences.map((exp) => (
+              <ExperienceCard
+                key={exp.id}
+                experience={exp}
+                formatDateRange={resumeService.formatDateRange}
+              />
+            ))}
+          </section>
+        );
+      case 'education':
+        return (
+          <section id="education" className="space-y-5">
+            {education.map((edu) => (
+              <EducationCard
+                key={edu.id}
+                education={edu}
+                formatDateRange={resumeService.formatDateRange}
+              />
+            ))}
+          </section>
+        );
+      case 'certifications':
+        return (
+          <section id="certifications" className="space-y-5">
+            {certifications.map((cert) => (
+              <CertificationCard
+                key={cert.id}
+                certification={cert}
+                formatDate={resumeService.formatCertificationDate}
+              />
+            ))}
+          </section>
+        );
+      case 'personal':
+        return (
+          <section id="personal" className="grid gap-4 md:grid-cols-2">
+            <Card className="border-border/70 bg-card/80">
+              <CardContent className="p-5">
+                <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  <Languages className="mr-2 inline h-4 w-4" />
+                  Languages
+                </h3>
+                <div className="space-y-2">
+                  {languages.map((lang) => (
+                    <div key={lang.id || lang.name} className="rounded-lg border border-border/70 bg-background/65 px-3 py-2">
+                      <p className="font-medium text-foreground">{lang.name}</p>
+                      <p className="text-sm text-muted-foreground">{lang.proficiency}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/70 bg-card/80">
+              <CardContent className="p-5">
+                <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  <Sparkles className="mr-2 inline h-4 w-4" />
+                  Interests
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {interests.map((interest, idx) => (
+                    <span
+                      key={`${interest}-${idx}`}
+                      className="rounded-full border border-border/70 bg-background/65 px-3 py-1.5 text-sm text-foreground/90"
+                    >
+                      {interest}
+                    </span>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+        );
+      default:
+        return null;
+    }
+  }, [activeSection, certifications, education, experiences, interests, languages]);
 
   if (!isHydrated) return null;
 
   return (
-    <div className="container mx-auto px-4 py-16">
+    <div className="container mx-auto px-4 py-10 md:py-14">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.4 }}
       >
-        <h1 className="text-4xl font-bold mb-6 text-center text-balance">
-          Resume
-        </h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center text-balance">Resume</h1>
         <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto text-pretty leading-relaxed">
-          My professional experience, education, and skills.
+          Experience-first resume with professional journey, roles, education, and certifications.
         </p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
-          <div className="lg:col-span-1">
-            <div className="space-y-6 lg:sticky lg:top-20">
-              <div className="w-full">
-                <ResumeDownload />
-              </div>
+        <div className="mb-6 sticky top-16 z-20">
+          <InteractiveMenu
+            items={menuItems}
+            activeKey={activeSection}
+            onChange={handleSectionChange}
+            className="mx-auto max-w-5xl"
+          />
+        </div>
 
-              <Card className="w-full">
-                <CardContent className="p-4">
-                  <h3 className="font-medium mb-3">Quick Links</h3>
-                  <ul className="space-y-2">
-                    <li>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
+          <aside className="space-y-4 lg:sticky lg:top-36 lg:self-start">
+            <ResumeDownload />
+            <Card className="border-border/70 bg-card/80">
+              <CardContent className="p-4">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-2">
+                  Sections
+                </p>
+                <ul className="space-y-2 text-sm">
+                  {menuItems.map((item) => (
+                    <li key={item.key}>
                       <a
-                        href="#experience"
-                        className="text-sm text-primary hover:underline"
+                        href={`#${item.key}`}
+                        onClick={() => handleSectionChange(item.key)}
+                        className="text-primary hover:underline"
                       >
-                        Experience
+                        {item.label}
                       </a>
                     </li>
-                    <li>
-                      <a
-                        href="#education"
-                        className="text-sm text-primary hover:underline"
-                      >
-                        Education
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#skills"
-                        className="text-sm text-primary hover:underline"
-                      >
-                        Skills
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#certifications"
-                        className="text-sm text-primary hover:underline"
-                      >
-                        Certifications
-                      </a>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </aside>
 
-          <div className="lg:col-span-3">
-            <Tabs defaultValue="experience" className="w-full">
-              <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-8 h-auto">
-                <TabsTrigger
-                  value="experience"
-                  className="flex items-center gap-2"
+          <main className="min-w-0">
+            <ErrorBoundary>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={activeSection}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-5"
                 >
-                  <Briefcase className="h-4 w-4" />
-                  <span className="hidden sm:inline">Experience</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="education"
-                  className="flex items-center gap-2"
-                >
-                  <GraduationCap className="h-4 w-4" />
-                  <span className="hidden sm:inline">Education</span>
-                </TabsTrigger>
-                <TabsTrigger value="skills" className="flex items-center gap-2">
-                  <Code className="h-4 w-4" />
-                  <span className="hidden sm:inline">Skills</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="certifications"
-                  className="flex items-center gap-2"
-                >
-                  <Award className="h-4 w-4" />
-                  <span className="hidden sm:inline">Certifications</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="languages"
-                  className="flex items-center gap-2"
-                >
-                  <Languages className="h-4 w-4" />
-                  <span className="hidden sm:inline">Languages</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="interests"
-                  className="flex items-center gap-2"
-                >
-                  <Globe className="h-4 w-4" />
-                  <span className="hidden sm:inline">Interests</span>
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="experience" id="experience">
-                <ErrorBoundary>
-                  <div className="space-y-6">
-                    {experiences.map((exp) => (
-                      <ExperienceCard
-                        key={exp.id}
-                        experience={exp}
-                        formatDateRange={resumeService.formatDateRange}
-                      />
-                    ))}
-                  </div>
-                </ErrorBoundary>
-              </TabsContent>
-
-              <TabsContent value="education" id="education">
-                <ErrorBoundary>
-                  <div className="space-y-6">
-                    {education.map((edu) => (
-                      <EducationCard
-                        key={edu.id}
-                        education={edu}
-                        formatDateRange={resumeService.formatDateRange}
-                      />
-                    ))}
-                  </div>
-                </ErrorBoundary>
-              </TabsContent>
-
-              <TabsContent value="skills" id="skills">
-                <ErrorBoundary>
-                  <SkillsGrid skillGroups={skills} />
-                </ErrorBoundary>
-              </TabsContent>
-
-              <TabsContent value="certifications" id="certifications">
-                <ErrorBoundary>
-                  <div className="space-y-6">
-                    {certifications.map((cert) => (
-                      <CertificationCard
-                        key={cert.id}
-                        certification={cert}
-                        formatDate={resumeService.formatCertificationDate}
-                      />
-                    ))}
-                  </div>
-                </ErrorBoundary>
-              </TabsContent>
-
-              <TabsContent value="languages" id="languages">
-                <ErrorBoundary>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {languages.map((lang) => (
-                      <Card key={lang.id || lang.name}>
-                        <CardContent className="p-4 flex justify-between items-center">
-                          <span className="font-medium">{lang.name}</span>
-                          <span className="text-muted-foreground">{lang.proficiency}</span>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </ErrorBoundary>
-              </TabsContent>
-
-              <TabsContent value="interests" id="interests">
-                <ErrorBoundary>
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex flex-wrap gap-2">
-                        {interests.map((interest, idx) => (
-                          <div key={idx} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm">
-                            {interest}
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </ErrorBoundary>
-              </TabsContent>
-            </Tabs>
-          </div>
+                  {sectionContent}
+                </motion.div>
+              </AnimatePresence>
+            </ErrorBoundary>
+          </main>
         </div>
       </motion.div>
     </div>
   );
 }
+

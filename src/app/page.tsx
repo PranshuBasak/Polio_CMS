@@ -17,9 +17,9 @@ import SkillsSection from '@/features/skills/components/skills-section';
 import { ProjectsSectionContainer } from '@/app/projects/_components/interactive/projects-section-container';
 
 // Keep client-only components
-import TimelineSection from '@/shared/components/ui-enhancements/timeline-section';
 import HomeClient from './home-client';
 import { TerminalSection } from '@/components/ui/terminal-section';
+import ExperienceTimelineSection from '@/features/experience/components/experience-timeline-section';
 
 export default function Home() {
   return (
@@ -71,10 +71,10 @@ export default function Home() {
           />
         </div>
 
-        {/* Timeline Section - Client Component (keep as is) */}
+        {/* Experience Timeline - Client Component */}
         <ErrorBoundary>
           <Suspense fallback={<div className="py-20" />}>
-            <TimelineSection />
+            <ExperienceTimelineSection context="home" />
           </Suspense>
         </ErrorBoundary>
 

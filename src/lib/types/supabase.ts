@@ -560,6 +560,7 @@ export type Database = {
           description: string
           icon: string | null
           id: string
+          images: string[]
           order_index: number | null
           title: string
           updated_at: string | null
@@ -571,6 +572,7 @@ export type Database = {
           description: string
           icon?: string | null
           id?: string
+          images?: string[]
           order_index?: number | null
           title: string
           updated_at?: string | null
@@ -582,6 +584,7 @@ export type Database = {
           description?: string
           icon?: string | null
           id?: string
+          images?: string[]
           order_index?: number | null
           title?: string
           updated_at?: string | null
@@ -654,7 +657,6 @@ export type Database = {
       }
       projects: {
         Row: {
-          category: string | null
           content: string | null
           created_at: string | null
           description: string
@@ -676,7 +678,6 @@ export type Database = {
           youtube_url: string | null
         }
         Insert: {
-          category?: string | null
           content?: string | null
           created_at?: string | null
           description: string
@@ -698,7 +699,6 @@ export type Database = {
           youtube_url?: string | null
         }
         Update: {
-          category?: string | null
           content?: string | null
           created_at?: string | null
           description?: string

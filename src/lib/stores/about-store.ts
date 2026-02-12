@@ -9,6 +9,8 @@ export type AboutJourneyItem = {
   date: string
   description: string
   icon?: string | null
+  images?: string[]
+  order?: number | null
 }
 
 export type AboutValue = {
@@ -68,6 +70,8 @@ const mapJourneyRows = (rows: JourneyRow[] | null): AboutJourneyItem[] => {
     date: item.year || "",
     description: item.description,
     icon: item.icon,
+    images: item.images || [],
+    order: item.order_index ?? null,
   }))
 }
 
@@ -121,7 +125,7 @@ export const useAboutStore = create<AboutStore>((set, get) => ({
 
       const { data: journeyRows, error: journeyError } = await supabase
         .from("journey")
-        .select("id, title, company, year, description, icon")
+        .select("id, title, company, year, description, icon, images, order_index")
         .order("order_index", { ascending: true })
 
       if (journeyError && journeyError.code !== "PGRST116") {
@@ -230,6 +234,7 @@ export const useAboutStore = create<AboutStore>((set, get) => ({
             company: item.company,
             order_index: index,
             icon: item.icon || null,
+            images: item.images || [],
           })
         )
 
