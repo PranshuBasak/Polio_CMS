@@ -13,7 +13,7 @@ import { BlogPostsGrid } from '../ui/blog-posts-grid';
  * Handles data fetching and business logic
  */
 function BlogSectionContainerBase() {
-  const { latestInternalPosts } = useBlogData();
+  const { latestExternalPosts } = useBlogData();
   const isHydrated = useHydration();
 
   if (!isHydrated) return null;
@@ -23,7 +23,7 @@ function BlogSectionContainerBase() {
       <div className="container mx-auto">
         <SectionHeader
           title="Latest Blog Posts"
-          description="Thoughts and insights on software architecture, backend development, and technology trends."
+          description="Most recent external writing from my RSS-powered blog feed."
           showViewAll
           viewAllHref="/blog"
           viewAllText="View All Posts"
@@ -31,8 +31,8 @@ function BlogSectionContainerBase() {
 
         <ErrorBoundary>
           <BlogPostsGrid
-            posts={latestInternalPosts}
-            type="internal"
+            posts={latestExternalPosts}
+            type="external"
             formatDate={blogService.formatDate}
           />
         </ErrorBoundary>

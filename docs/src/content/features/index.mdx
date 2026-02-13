@@ -1,0 +1,37 @@
+# Portfolio Features
+
+Documentation for key features of the DynamicFolio CMS.
+
+## Overview
+
+The portfolio consists of several core feature modules that work together to provide a complete CMS experience.
+
+## Feature Modules
+
+<Cards>
+  <Card title="Admin Dashboard" href="/features/admin" icon="settings">
+    Managing content, analytics, and site settings.
+  </Card>
+  <Card title="Blog System" href="/features/blog" icon="pencil">
+    Internal blogging engine and Medium integration.
+  </Card>
+  <Card title="Internationalization" href="/features/i18n" icon="globe">
+    Multi-language support and RTL layouts.
+  </Card>
+  <Card title="Projects" href="/features/projects" icon="layers">
+    Portfolio project showcase and management.
+  </Card>
+</Cards>
+
+## Feature Architecture
+
+Each feature follows a co-located directory structure:
+
+```
+src/features/[feature-name]/
+├── components/          # Feature-specific UI
+├── hooks/              # Custom hooks
+├── services/           # Business logic
+├── types/              # TypeScript definitions
+└── utils/              # Helper functions
+```

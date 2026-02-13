@@ -1,0 +1,88 @@
+import { Bleed, Callout, Cards, FileTree, Steps, Table, Tabs } from 'nextra/components'
+
+# Built-ins Basics
+
+## Callout
+
+<Callout>Default callout</Callout>
+<Callout type="info">Informational callout</Callout>
+<Callout type="warning">Warning callout</Callout>
+<Callout type="error">Error callout</Callout>
+<Callout type="important">Important callout</Callout>
+
+## Cards
+
+<Cards>
+  <Cards.Card title="Architecture" href="/architecture" arrow />
+  <Cards.Card title="Pages" href="/pages" arrow />
+  <Cards.Card title="Components" href="/components" arrow />
+</Cards>
+
+## FileTree
+
+<FileTree>
+  <FileTree.Folder name="docs/src/content" defaultOpen>
+    <FileTree.File name="_meta.ts" />
+    <FileTree.File name="index.mdx" />
+    <FileTree.Folder name="nextra-lab" defaultOpen>
+      <FileTree.File name="basics.mdx" active />
+      <FileTree.File name="markdown.mdx" />
+      <FileTree.File name="advanced.mdx" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+## Steps
+
+<Steps>
+### Install docs dependencies
+
+Install `nextra` and `nextra-theme-docs` in `docs/package.json`.
+
+### Configure app router integration
+
+Use `docs/src/app/[[...mdxPath]]/page.tsx` with `importPage`.
+
+### Add content and metadata
+
+Build section indexes with `_meta.ts` + `index.mdx`.
+</Steps>
+
+## Tabs
+
+<Tabs items={['pnpm', 'npm', 'yarn']} defaultIndex="0">
+  <Tabs.Tab>pnpm workspace users can run `pnpm --dir docs dev`.</Tabs.Tab>
+  <Tabs.Tab>npm users can run scripts from within `docs/`.</Tabs.Tab>
+  <Tabs.Tab>yarn users can run `yarn dev` in `docs/`.</Tabs.Tab>
+</Tabs>
+
+## Table
+
+<Table>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Component</Table.Th>
+      <Table.Th>Status</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>Callout</Table.Td>
+      <Table.Td>Used</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>Cards</Table.Td>
+      <Table.Td>Used</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>FileTree</Table.Td>
+      <Table.Td>Used</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+## Bleed
+
+<Bleed className="border p-6 text-center">
+This section intentionally uses `<Bleed>` to overflow container bounds.
+</Bleed>

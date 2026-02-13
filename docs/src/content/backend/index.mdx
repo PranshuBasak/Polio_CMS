@@ -1,0 +1,30 @@
+# Backend & Database
+
+Documentation for the backend infrastructure, database schema, and API endpoints of DynamicFolio CMS.
+
+## Overview
+
+The application is transitioning from a purely client-side architecture (using `localStorage`) to a robust server-side architecture using **Supabase** (PostgreSQL) and **Next.js API Routes**.
+
+## Sections
+
+<Cards>
+  <Card title="Database Setup" href="/backend/database" icon="database">
+    Migration guide, schema details, and Supabase configuration.
+  </Card>
+  <Card title="API Reference" href="/backend/api" icon="server">
+    Documentation for API endpoints, response formats, and error handling.
+  </Card>
+</Cards>
+
+## Architecture Evolution
+
+### Current State (v1.0)
+- **Persistence**: Browser `localStorage`
+- **Logic**: Client-side Zustand stores
+- **Auth**: None (Public Admin)
+
+### Future State (v2.0)
+- **Persistence**: Supabase PostgreSQL
+- **Logic**: Server Actions & API Routes
+- **Auth**: Supabase Auth / NextAuth

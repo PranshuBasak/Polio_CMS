@@ -1,0 +1,16 @@
+import { Callout } from 'nextra/components'
+
+# State Architecture
+
+State management is centered around Zustand stores in `src/lib/stores`.
+
+## Source of Truth
+
+- Existing narrative docs:
+  - `docs/wiki/04-State/Zustand-Architecture.md`
+  - `docs/wiki/04-State/Store-Analysis.md`
+  - `docs/wiki/04-State/Persistence.md`
+
+<Callout type="warning">
+Some store domains overlap route domains (e.g. blog/projects/about), so ensure updates maintain shared invariants between admin and public pages.
+</Callout>

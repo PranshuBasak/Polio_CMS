@@ -1,0 +1,465 @@
+# Internationalization (i18n) Guide
+
+Complete guide for managing translations and multi-language support in DynamicFolio CMS.
+
+## Table of Contents
+- [Overview](#overview)
+- [Supported Languages](#supported-languages)
+- [Usage](#usage)
+- [Translation Keys](#translation-keys)
+- [Adding Translations](#adding-translations)
+- [RTL Support](#rtl-support)
+- [Date Formatting](#date-formatting)
+- [Best Practices](#best-practices)
+
+---
+
+## Overview
+
+DynamicFolio CMS includes built-in internationalization with:
+
+- 🌍 **6 Languages**: English, Spanish, French, Chinese, Arabic, Bengali
+- 📝 **100+ Translation Keys**: Comprehensive coverage of all UI text
+- ↔️ **RTL Support**: Automatic right-to-left layout for Arabic
+- 💾 **Persistence**: Language preference saved in localStorage
+- 🌐 **Auto-Detection**: Uses browser language as default
+
+### Architecture
+
+- **Context-based**: Uses React Context for global state
+- **Client-side**: All translations loaded upfront, no network requests
+- **Type-safe**: Full TypeScript support
+
+---
+
+## Supported Languages
+
+| Code | Language | Direction | Status |
+|------|----------|-----------|--------|
+| `en` | English | LTR | ✅ Default |
+| `es` | Spanish | LTR | ✅ Complete |
+| `fr` | French | LTR | ✅ Complete |
+| `zh` | Chinese | LTR | ✅ Complete |
+| `ar` | Arabic | RTL | ✅ Complete |
+| `bn` | Bengali | LTR | ✅ Complete |
+
+---
+
+## Usage
+
+### Setup
+
+The `TranslationsProvider` wraps the entire app in `layout.tsx`:
+
+```typescript
+// src/app/layout.tsx
+import { TranslationsProvider } from '@/lib/i18n/translations-context';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <TranslationsProvider>
+          {children}
+        </TranslationsProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+### Using Translations
+
+```typescript
+import { useTranslations } from '@/lib/i18n/translations-context';
+
+function MyComponent() {
+  const { t, language, setLanguage, dir } = useTranslations();
+  
+  return (
+    <div dir={dir}>
+      <h1>{t('hero.title')}</h1>
+      <button onClick={() => setLanguage('es')}>
+        {t('language.es')}
+      </button>
+    </div>
+  );
+}
+```
+
+### Hook API
+
+```typescript
+const {
+  language,        // Current language code: 'en' | 'es' | 'fr' | 'zh' | 'ar' | 'bn'
+  setLanguage,     // Function to change language
+  t,               // Translation function: (key: string) => string
+  formatDate,      // Date formatter: (date: Date | string) => string
+  dir,             // Text direction: 'ltr' | 'rtl'
+} = useTranslations();
+```
+
+---
+
+## Translation Keys
+
+### Key Structure
+
+Keys follow a hierarchical naming convention:
+
+```
+section.component.element
+```
+
+**Examples**:
+- `nav.home` → Navigation home link
+- `hero.viewProjects` → Hero section button
+- `about.tab.bio` → About page bio tab
+- `projects.caseStudy.overview` → Project case study section
+
+### Available Keys
+
+#### Navigation (`nav.*`)
+```typescript
+'nav.home': 'Home',
+'nav.about': 'About',
+'nav.projects': 'Projects',
+'nav.skills': 'Skills',
+'nav.resume': 'Resume',
+'nav.blog': 'Blog',
+'nav.contact': 'Contact',
+'nav.admin': 'Admin',
+```
+
+#### Hero Section (`hero.*`)
+```typescript
+'hero.viewProjects': 'View Projects',
+'hero.downloadResume': 'Download Resume',
+'hero.scrollDown': 'Scroll Down',
+```
+
+#### About Page (`about.*`)
+```typescript
+'about.title': 'About Me',
+'about.tab.bio': 'Biography',
+'about.tab.journey': 'Professional Journey',
+'about.tab.values': 'Core Values',
+'about.value.passion': 'Passion',
+'about.value.excellence': 'Excellence',
+'about.value.innovation': 'Innovation',
+'about.mission.title': 'My Mission',
+```
+
+#### Projects (`projects.*`)
+```typescript
+'projects.title': 'Featured Projects',
+'projects.description': 'A selection of my recent work...',
+'projects.viewAll': 'View All Projects',
+'projects.liveDemo': 'Live Demo',
+'projects.viewCaseStudy': 'View Case Study',
+'projects.caseStudy.overview': 'Overview',
+'projects.caseStudy.process': 'Process',
+'projects.caseStudy.tech': 'Tech Stack',
+'projects.caseStudy.gallery': 'Gallery',
+'projects.caseStudy.challenge': 'Challenge',
+'projects.caseStudy.solution': 'Solution',
+'projects.caseStudy.results': 'Results',
+'projects.caseStudy.viewCode': 'View Code',
+```
+
+#### Skills (`skills.*`)
+```typescript
+'skills.title': 'Skills',
+'skills.description': 'My technical expertise...',
+'skills.category.core': 'Core',
+'skills.category.devops': 'DevOps',
+'skills.category.databases': 'Databases',
+'skills.category.learning': 'Learning',
+```
+
+#### Blog (`blog.*`)
+```typescript
+'blog.title': 'Latest Blog Posts',
+'blog.description': 'Thoughts and insights...',
+'blog.viewAll': 'View All Posts',
+'blog.readMore': 'Read More',
+'blog.tab.internal': 'My Posts',
+'blog.tab.external': 'External Posts',
+'blog.search': 'Search blog posts...',
+'blog.noResults': 'No posts found matching your search.',
+```
+
+#### Contact (`contact.*`)
+```typescript
+'contact.title': 'Contact Me',
+'contact.description': "Let's discuss your next project...",
+'contact.form.title': 'Get in Touch',
+'contact.form.name': 'Name',
+'contact.form.email': 'Email',
+'contact.form.message': 'Message',
+'contact.form.send': 'Send Message',
+'contact.form.sending': 'Sending...',
+'contact.form.success.title': 'Message Sent!',
+'contact.form.success.description': 'Thank you for reaching out...',
+'contact.info.email': 'Email',
+'contact.info.location': 'Location',
+'contact.info.social': 'Social Profiles',
+```
+
+#### Footer (`footer.*`)
+```typescript
+'footer.quickLinks': 'Quick Links',
+'footer.connect': 'Connect',
+'footer.copyright': 'Built with ❤️ using TypeScript, Tailwind, Next.js',
+'footer.rights': 'All rights reserved.',
+```
+
+#### Language Names (`language.*`)
+```typescript
+'language.en': 'English',
+'language.es': 'Español',
+'language.fr': 'Français',
+'language.zh': '中文',
+'language.ar': 'العربية',
+'language.bn': 'বাংলা',
+```
+
+---
+
+## Adding Translations
+
+### Adding a New Key
+
+1. Open `src/lib/i18n/translations-context.tsx`
+2. Add the key to **all** language objects:
+
+```typescript
+const translations = {
+  en: {
+    'new.key': 'English text',
+    // ...existing keys
+  },
+  es: {
+    'new.key': 'Spanish text',
+    // ...existing keys
+  },
+  // Repeat for fr, zh, ar, bn
+};
+```
+
+3. Use in components:
+
+```typescript
+<p>{t('new.key')}</p>
+```
+
+### Adding a New Language
+
+1. Add language code to type:
+
+```typescript
+export type Language = 'en' | 'es' | 'fr' | 'zh' | 'ar' | 'bn' | 'de'; // Add 'de' for German
+```
+
+2. Add RTL if applicable:
+
+```typescript
+const rtlLanguages: Language[] = ['ar']; // Add language code if RTL
+```
+
+3. Add translations object:
+
+```typescript
+const translations = {
+  // ...existing languages
+  de: {
+    'nav.home': 'Startseite',
+    'nav.about': 'Über mich',
+    // ... all keys
+  },
+};
+```
+
+4. Add language name:
+
+```typescript
+// In each language object:
+'language.de': 'Deutsch',
+```
+
+5. Update browser detection:
+
+```typescript
+if (['en', 'es', 'fr', 'zh', 'ar', 'bn', 'de'].includes(browserLanguage)) {
+  setLanguage(browserLanguage);
+}
+```
+
+---
+
+## RTL Support
+
+Arabic (`ar`) automatically switches to right-to-left layout.
+
+### How It Works
+
+```typescript
+// In TranslationsProvider
+const setLanguage = (lang: Language) => {
+  // ...
+  document.documentElement.dir = rtlLanguages.includes(lang) ? 'rtl' : 'ltr';
+};
+```
+
+### Using in Components
+
+```typescript
+const { dir } = useTranslations();
+
+<div dir={dir} className="flex gap-4">
+  {/* Content flows RTL when Arabic is selected */}
+</div>
+```
+
+### RTL-Aware CSS
+
+Tailwind automatically flips these utilities in RTL:
+- `ml-4` → `mr-4`
+- `text-left` → `text-right`
+- `pl-6` → `pr-6`
+
+Use logical properties for explicit RTL support:
+- `ms-4` (margin-start)
+- `me-4` (margin-end)
+- `ps-6` (padding-start)
+- `pe-6` (padding-end)
+
+---
+
+## Date Formatting
+
+Format dates according to current locale:
+
+```typescript
+const { formatDate } = useTranslations();
+
+// Input: Date object or string
+const formatted = formatDate('2024-01-15');
+
+// Output varies by language:
+// en: "January 15, 2024"
+// es: "15 de enero de 2024"
+// fr: "15 janvier 2024"
+// zh: "2024年1月15日"
+// ar: "١٥ يناير ٢٠٢٤"
+// bn: "১৫ জানুয়ারী, ২০২৪"
+```
+
+---
+
+## Best Practices
+
+### 1. Always Use Keys, Not Hardcoded Text
+
+```typescript
+// ❌ Bad
+<Button>Save Project</Button>
+
+// ✅ Good
+<Button>{t('admin.saveProject')}</Button>
+```
+
+### 2. Keep Keys Consistent
+
+Follow the naming convention:
+```
+section.component.element
+```
+
+### 3. Provide Context in Keys
+
+```typescript
+// ❌ Ambiguous
+'button.save': 'Save'
+
+// ✅ Clear context
+'project.button.save': 'Save Project'
+'settings.button.save': 'Save Settings'
+```
+
+### 4. Handle Missing Translations
+
+The `t()` function falls back in this order:
+1. Current language translation
+2. English translation
+3. The key itself
+
+```typescript
+// If 'new.key' is missing in Spanish:
+t('new.key')
+// → English translation if available
+// → 'new.key' if no translation exists
+```
+
+### 5. Test RTL Layout
+
+Always test Arabic language to verify RTL layout works correctly.
+
+### 6. Keep Translations Synchronized
+
+When adding/modifying keys, update **all** language objects to prevent missing translations.
+
+---
+
+## Language Switcher Component
+
+Example implementation:
+
+```typescript
+import { useTranslations, Language } from '@/lib/i18n/translations-context';
+import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { Globe } from 'lucide-react';
+
+const languages: { code: Language; name: string }[] = [
+  { code: 'en', name: 'English' },
+  { code: 'es', name: 'Español' },
+  { code: 'fr', name: 'Français' },
+  { code: 'zh', name: '中文' },
+  { code: 'ar', name: 'العربية' },
+  { code: 'bn', name: 'বাংলা' },
+];
+
+function LanguageSwitcher() {
+  const { language, setLanguage, t } = useTranslations();
+  
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <Globe className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        {languages.map((lang) => (
+          <DropdownMenuItem
+            key={lang.code}
+            onClick={() => setLanguage(lang.code)}
+            className={language === lang.code ? 'bg-accent' : ''}
+          >
+            {t(`language.${lang.code}`)}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+```
+
+---
+
+## Additional Resources
+
+- [React i18n Best Practices](https://react.dev/learn/sharing-state-between-components)
+- [Tailwind CSS RTL](https://tailwindcss.com/docs/hover-focus-and-other-states#rtl-support)
+- [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat)

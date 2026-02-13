@@ -17,8 +17,20 @@ export function useBlogData() {
     fetchPosts();
   }, [fetchPosts]);
 
-  const internalPosts = useMemo(() => posts.filter(p => !p.externalUrl), [posts]);
-  const externalPosts = useMemo(() => posts.filter(p => !!p.externalUrl), [posts]);
+  const internalPosts = useMemo(
+    () =>
+      [...posts]
+        .filter((p) => !p.externalUrl)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+    [posts]
+  );
+  const externalPosts = useMemo(
+    () =>
+      [...posts]
+        .filter((p) => !!p.externalUrl)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+    [posts]
+  );
 
   // Memoized latest posts (first 3)
   const latestInternalPosts = useMemo(() => {
@@ -27,7 +39,7 @@ export function useBlogData() {
 
   const latestExternalPosts = useMemo(() => {
     return Array.isArray(externalPosts)
-      ? externalPosts.slice(0, 3)
+      ? externalPosts.slice(0, 4)
       : [];
   }, [externalPosts]);
 

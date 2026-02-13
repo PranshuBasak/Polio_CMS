@@ -1,13 +1,10 @@
 'use client';
 
 import { ErrorBoundary } from '@/shared/components/ui-enhancements/error-boundary';
-import { motion } from 'framer-motion';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '../../../../components/ui/tabs';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Globe, PenSquare } from 'lucide-react';
+import { useState } from 'react';
+import { InteractiveMenu, type InteractiveMenuItem } from '@/components/ui/modern-mobile-menu';
 import { useHydration } from '../../../../lib/hooks/use-hydration';
 import { useTranslations } from '../../../../lib/i18n/translations-context';
 import { useBlogData } from '../../_hooks/use-blog-data';
@@ -25,6 +22,7 @@ import { BlogSearch } from '../ui/blog-search';
 export function BlogPageContainer() {
   const { internalPosts, externalPosts } = useBlogData();
   const { t } = useTranslations();
+  const [activeTab, setActiveTab] = useState<'external' | 'internal'>('external');
   const {
     searchTerm,
     setSearchTerm,
@@ -44,6 +42,13 @@ export function BlogPageContainer() {
     internalPagination.resetPage();
     externalPagination.resetPage();
   };
+
+  const menuItems: InteractiveMenuItem[] = [
+    { key: 'external', label: t('blog.tab.external'), icon: Globe },
+    { key: 'internal', label: t('blog.tab.internal'), icon: PenSquare },
+  ];
+
+  const showExternal = activeTab === 'external';
 
   return (
     <div className="container mx-auto px-4 py-16">
@@ -68,54 +73,41 @@ export function BlogPageContainer() {
             />
           </div>
 
-          <Tabs defaultValue="internal" className="w-full">
-            <TabsList className="grid grid-cols-2 mb-8">
-              <TabsTrigger value="internal">
-                {t('blog.tab.internal')}
-              </TabsTrigger>
-              <TabsTrigger value="external">
-                {t('blog.tab.external')}
-              </TabsTrigger>
-            </TabsList>
+          <div className="mb-8">
+            <InteractiveMenu
+              items={menuItems}
+              activeKey={activeTab}
+              onChange={(key) => setActiveTab(key as 'external' | 'internal')}
+              className="mx-auto max-w-lg"
+            />
+          </div>
 
-            <TabsContent value="internal">
-              <ErrorBoundary>
+          <ErrorBoundary>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
+              >
                 <BlogPostsGrid
-                  posts={internalPagination.currentItems}
-                  type="internal"
+                  posts={showExternal ? externalPagination.currentItems : internalPagination.currentItems}
+                  type={showExternal ? 'external' : 'internal'}
                   formatDate={blogService.formatDate}
                   emptyMessage={t('blog.noResults')}
                 />
 
                 <BlogPagination
-                  currentPage={internalPagination.currentPage}
-                  totalPages={internalPagination.totalPages}
-                  onPageChange={internalPagination.goToPage}
-                  onNext={internalPagination.nextPage}
-                  onPrevious={internalPagination.previousPage}
+                  currentPage={showExternal ? externalPagination.currentPage : internalPagination.currentPage}
+                  totalPages={showExternal ? externalPagination.totalPages : internalPagination.totalPages}
+                  onPageChange={showExternal ? externalPagination.goToPage : internalPagination.goToPage}
+                  onNext={showExternal ? externalPagination.nextPage : internalPagination.nextPage}
+                  onPrevious={showExternal ? externalPagination.previousPage : internalPagination.previousPage}
                 />
-              </ErrorBoundary>
-            </TabsContent>
-
-            <TabsContent value="external">
-              <ErrorBoundary>
-                <BlogPostsGrid
-                  posts={externalPagination.currentItems}
-                  type="external"
-                  formatDate={blogService.formatDate}
-                  emptyMessage={t('blog.noResults')}
-                />
-
-                <BlogPagination
-                  currentPage={externalPagination.currentPage}
-                  totalPages={externalPagination.totalPages}
-                  onPageChange={externalPagination.goToPage}
-                  onNext={externalPagination.nextPage}
-                  onPrevious={externalPagination.previousPage}
-                />
-              </ErrorBoundary>
-            </TabsContent>
-          </Tabs>
+              </motion.div>
+            </AnimatePresence>
+          </ErrorBoundary>
         </motion.div>
       </div>
     </div>

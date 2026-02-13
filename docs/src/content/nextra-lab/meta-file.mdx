@@ -1,0 +1,148 @@
+import { Callout, FileTree, Tabs, Table } from 'nextra/components'
+
+# `_meta` File Guide (Nextra v4)
+
+This is a project-safe `_meta` guide based on Nextra v4 docs behavior.
+
+<Callout type="info">
+Reference: official docs at <a href="https://nextra.site/docs" target="_blank">nextra.site/docs</a>.
+</Callout>
+
+## What `_meta` does
+
+`_meta.ts` controls navigation labels, ordering, visibility, and page behavior in the docs sidebar/navbar.
+
+## Important rule (prevents your build error)
+
+Every key in `_meta` must match an existing file/folder in the same directory, unless it is a special item such as a link, separator, or menu.
+
+<Callout type="warning">
+If a key points to a non-existing page (for example `admin` without `admin.mdx` or `admin/`), Nextra page-map validation can fail during build.
+</Callout>
+
+## Basic structure
+
+```ts filename="_meta.ts"
+import type { MetaRecord } from 'nextra'
+
+const meta: MetaRecord = {
+  index: 'Overview',
+  'getting-started': 'Getting Started',
+  architecture: 'Architecture'
+}
+
+export default meta
+```
+
+## Folder layout example
+
+<FileTree>
+  <FileTree.Folder name="content" defaultOpen>
+    <FileTree.File name="_meta.ts" active />
+    <FileTree.File name="index.mdx" />
+    <FileTree.File name="getting-started.mdx" />
+    <FileTree.Folder name="architecture">
+      <FileTree.File name="index.mdx" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+## Common item types
+
+<Table>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Example</Table.Th>
+      <Table.Th>Use Case</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>Title string</Table.Td>
+      <Table.Td>`architecture: 'Architecture'`</Table.Td>
+      <Table.Td>Rename sidebar label</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>Page config</Table.Td>
+      <Table.Td>`about: {'{'} title: 'About', display: 'hidden' {'}'}`</Table.Td>
+      <Table.Td>Control visibility/theme/type</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>External link</Table.Td>
+      <Table.Td>`repo: {'{'} title: 'GitHub', href: 'https://...' {'}'}`</Table.Td>
+      <Table.Td>Add external/internal links</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>Separator</Table.Td>
+      <Table.Td>`'---': {'{'} type: 'separator' {'}'}`</Table.Td>
+      <Table.Td>Visual grouping</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+## Good patterns for this repo
+
+<Tabs items={['Safe root _meta', 'Section _meta', 'Links/Menu']}>
+  <Tabs.Tab>
+    Keep root `_meta` limited to actual root pages/folders:
+
+```ts filename="docs/src/content/_meta.ts"
+export default {
+  index: 'Introduction',
+  'getting-started': 'Getting Started',
+  architecture: 'Architecture',
+  components: 'Components'
+}
+```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Keep section keys aligned with files in that section only:
+
+```ts filename="docs/src/content/nextra-lab/_meta.ts"
+export default {
+  index: 'Lab Overview',
+  basics: 'Built-ins Basics',
+  markdown: 'Markdown + Alerts'
+}
+```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Add links/menu without creating files:
+
+```ts filename="_meta.ts"
+export default {
+  docs_repo: {
+    title: 'Repository',
+    href: 'https://github.com/PranshuBasak/dynamicFolio_CMS'
+  },
+  resources: {
+    type: 'menu',
+    title: 'Resources',
+    items: {
+      nextjs: { title: 'Next.js', href: 'https://nextjs.org/docs' },
+      nextra: { title: 'Nextra', href: 'https://nextra.site/docs' }
+    }
+  }
+}
+```
+  </Tabs.Tab>
+</Tabs>
+
+## Fallback configuration (`*`)
+
+```ts filename="_meta.ts"
+export default {
+  '*': { type: 'page' },
+  index: 'Home',
+  architecture: 'Architecture',
+  components: 'Components'
+}
+```
+
+## Validation checklist before build
+
+- Every plain key in `_meta` has a matching page or folder.
+- No stale keys left after renaming/moving files.
+- Use link/menu/separator items only where needed.
+- Run `pnpm docs:build` after `_meta` edits.

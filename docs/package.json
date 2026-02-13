@@ -1,0 +1,23 @@
+{
+  "name": "dynamicfolio-docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001"
+  },
+  "dependencies": {
+    "@theguild/remark-mermaid": "^0.3.0",
+    "next": "16.0.8",
+    "nextra": "latest",
+    "nextra-theme-docs": "latest",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "typescript": "^5"
+  }
+}

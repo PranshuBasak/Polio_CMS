@@ -31,11 +31,16 @@ export function useBlogData() {
     );
   }, [externalPosts]);
 
+  const latestExternalPosts = useMemo(() => {
+    return externalOnly.slice(0, 4);
+  }, [externalOnly]);
+
   return {
     allPosts,
     recentPosts,
     internalPosts: internalOnly,
     externalPosts: externalOnly,
+    latestExternalPosts,
     totalCount: allPosts.length,
   };
 }

@@ -15,13 +15,16 @@ export default function BlogSection() {
   const allPosts = useBlogStore((state) => state.posts);
   const isHydrated = useHydration();
 
-  // Get latest 6 internal blog posts for homepage
+  // Get latest 4 external blog posts for homepage
   const posts = useMemo(() => {
-    const internal = allPosts?.filter(p => !p.externalUrl) || [];
-    return internal.slice(0, 6);
+    const external = allPosts?.filter((p) => !!p.externalUrl) || [];
+    const sorted = [...external].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    return sorted.slice(0, 4);
   }, [allPosts]);
 
   if (!isHydrated) return null;
 
-  return <BlogClient posts={posts} />;
+  return <BlogClient posts={posts} isExternal />;
 }

@@ -1,0 +1,56 @@
+# File Conventions
+
+## `page.mdx` and `content` strategy
+
+This docs app uses:
+
+- `docs/src/content/**` for content files.
+- `docs/src/app/[[...mdxPath]]/page.tsx` as the gateway route.
+
+## `_meta.ts`
+
+Every content folder can define `_meta.ts` to control title/order/sidebar behavior.
+
+## `mdx-components.tsx`
+
+`useMDXComponents` is required and configured in:
+
+```txt
+docs/src/mdx-components.tsx
+```
+
+## `Head`, `Banner`, `Search` usage
+
+Layout-level integration is in `docs/src/app/layout.tsx`.
+
+```tsx
+import { Banner, Head } from 'nextra/components'
+import { Layout, Navbar, Footer } from 'nextra-theme-docs'
+```
+
+Search is enabled in `docs/next.config.ts` via Nextra options.
+
+## Turbopack compatibility
+
+Use serializable Nextra options only while running:
+
+```bash
+next dev --turbopack
+```
+
+And keep this alias in config:
+
+```ts
+turbopack: {
+  resolveAlias: {
+    'next-mdx-import-source-file': './src/mdx-components.tsx'
+  }
+}
+```
+
+## Optional integrations
+
+- Pagefind post-build indexing.
+- Inkeep assistant integration (`NEXT_PUBLIC_INKEEP_API_KEY`).
+
+These are optional and intentionally not forced in this baseline.

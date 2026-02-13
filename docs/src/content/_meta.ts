@@ -1,0 +1,20 @@
+export default {
+  index: "Introduction",
+  "getting-started": "Getting Started",
+  architecture: "Architecture",
+  backend: "Backend & Database",
+  features: "Features",
+  components: "Components",
+  state: "State Management",
+  stores: "Stores Reference",
+  hooks: "Hooks",
+  pages: "Pages",
+  styles: "Styles",
+  types: "Types",
+  config: "Configuration",
+  data: "Data",
+  schema: "Schema",
+  api: "API",
+  roadmap: "Roadmap",
+  "nextra-lab": "Nextra Lab"
+}

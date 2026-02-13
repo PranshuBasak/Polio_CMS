@@ -1,8 +1,10 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { useTranslations } from '@/lib/i18n/translations-context';
 import type { BlogPost } from '@/lib/types';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { BlogGrid } from './blog-grid';
 
 /**
@@ -10,16 +12,14 @@ import { BlogGrid } from './blog-grid';
  */
 interface BlogClientProps {
   posts: BlogPost[];
+  isExternal?: boolean;
 }
 
-export function BlogClient({ posts }: BlogClientProps) {
+export function BlogClient({ posts, isExternal = false }: BlogClientProps) {
   const { t } = useTranslations();
 
-  // All posts from service are combined - in real app, separate internal/external
-  const allPosts = posts;
-
   return (
-    <section id="blog" className="section-container">
+    <section id="blog" className="section-container px-20">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -33,7 +33,13 @@ export function BlogClient({ posts }: BlogClientProps) {
           </p>
         </div>
 
-        <BlogGrid posts={allPosts} />
+        <BlogGrid posts={posts} isExternal={isExternal} />
+
+        <div className="mt-10 flex justify-center">
+          <Button asChild size="lg">
+            <Link href="/blog">Read All Blog Posts</Link>
+          </Button>
+        </div>
       </motion.div>
     </section>
   );

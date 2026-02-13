@@ -1,0 +1,68 @@
+# Markdown + Alerts
+
+## GitHub Flavored Markdown
+
+~~strikethrough~~
+
+- [x] Write docs app scaffold
+- [x] Map source folders
+- [ ] Add optional integrations
+
+| Area       | Status      |
+| :--------- | :---------: |
+| Routing    | Complete    |
+| Components | Complete    |
+| Lab        | In Progress |
+
+Autolink example: https://nextjs.org
+
+## Custom heading id [#custom-heading-id]
+
+This heading has an explicit custom anchor id.
+
+## GitHub Alert Syntax
+
+> [!NOTE]
+>
+> Nextra docs theme converts GitHub alert syntax into styled callouts.
+
+> [!TIP]
+>
+> Keep docs pages small and link outward for deep details.
+
+> [!IMPORTANT]
+>
+> The docs app is intentionally isolated from `src/**`.
+
+> [!WARNING]
+>
+> Turbopack mode requires serializable Nextra options.
+
+> [!CAUTION]
+>
+> Do not place non-serializable plugin functions in Nextra config while using Turbopack.
+
+## Syntax Highlighting
+
+```ts showLineNumbers filename="store.ts" {2}
+type State = {
+  isOpen: boolean
+}
+
+export const initialState: State = {
+  isOpen: false
+}
+```
+
+```tsx /useState/
+import { useState } from 'react'
+
+export function Counter() {
+  const [count, setCount] = useState(0)
+  return <button onClick={() => setCount(v => v + 1)}>{count}</button>
+}
+```
+
+```bash copy
+pnpm --dir docs dev
+```
