@@ -5,9 +5,11 @@
   "scripts": {
     "dev": "next dev --turbopack -p 3001",
     "build": "next build",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "start": "next start -p 3001"
   },
   "dependencies": {
+    "@inkeep/cxkit-react": "^0.5.115",
     "@theguild/remark-mermaid": "^0.3.0",
     "next": "16.0.8",
     "nextra": "latest",
@@ -16,8 +18,10 @@
     "react-dom": "19.2.1"
   },
   "devDependencies": {
+    "@inkeep/cxkit-types": "^0.5.115",
     "@types/node": "^20",
     "@types/react": "^19",
+    "pagefind": "^1.4.0",
     "typescript": "^5"
   }
 }

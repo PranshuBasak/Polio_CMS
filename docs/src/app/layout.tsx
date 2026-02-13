@@ -4,6 +4,7 @@ import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { getPageMap } from 'nextra/page-map'
 
 import themeConfig from '../../theme.config'
+import { ChatButton } from '../components/inkeep-chat-button'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -79,6 +80,7 @@ export default async function RootLayout({
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <Head faviconGlyph="📚" />
       <body>
+        <ChatButton />
         <Layout
           banner={banner}
           navbar={navbar}
