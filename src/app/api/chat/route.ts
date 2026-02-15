@@ -13,7 +13,7 @@ import { z } from 'zod';
 import aiKnowledge from '@/data/ai-knowledge.json';
 import { serverLogger } from '@/lib/logger/server-logger';
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
