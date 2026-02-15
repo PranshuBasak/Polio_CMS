@@ -104,6 +104,9 @@ export default function SiteSettings() {
                 }
                 placeholder="https://0xPranshu.dev"
               />
+              <p className="text-xs text-muted-foreground">
+                Include protocol, for example <code>http://localhost:3000</code> or <code>https://yourdomain.com</code>.
+              </p>
             </div>
 
             <div className="space-y-2">

@@ -42,10 +42,10 @@ function safeMetadataBase(siteUrl: string) {
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   const ownerName = settings.siteName.replace(/\s*Portfolio$/i, '').trim() || settings.siteName;
-  const ogImage = settings.seo.ogImage || `${settings.siteUrl}/favicon.png`;
+  const ogImage = settings.seo.ogImage || '/android-chrome-512x512.png';
   const twitterImage = settings.seo.twitterImage || ogImage;
-  const iconUrl = settings.seo.iconUrl || `${settings.siteUrl}/favicon.svg`;
-  const appleIconUrl = settings.seo.appleIconUrl || `${settings.siteUrl}/favicon.png`;
+  const iconUrl = settings.seo.iconUrl || '/favicon-32x32.png';
+  const appleIconUrl = settings.seo.appleIconUrl || '/apple-touch-icon.png';
 
   return {
     metadataBase: safeMetadataBase(settings.siteUrl),
@@ -97,10 +97,14 @@ export async function generateMetadata(): Promise<Metadata> {
         { url: iconUrl },
         { url: '/favicon.ico', sizes: '32x32' },
       ],
-      shortcut: iconUrl,
+      shortcut: '/favicon.ico',
       apple: appleIconUrl,
     },
-    manifest: '/site.webmanifest',
+    manifest: '/manifest.json',
+    other: {
+      'msapplication-config': '/browserconfig.xml',
+      'msapplication-TileColor': '#0f172a',
+    },
     generator: 'Next.js',
   };
 }

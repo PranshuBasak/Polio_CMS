@@ -93,6 +93,7 @@ export default function Home() {
             <ContactSection />
           </Suspense>
         </ErrorBoundary>
+        <SectionWaveDivider flip />
 
       </div>
     </HomeClient>

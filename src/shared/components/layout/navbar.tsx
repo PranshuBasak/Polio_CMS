@@ -5,49 +5,28 @@ import { useTranslations } from '@/lib/i18n/translations-context';
 import { cn } from '@/lib/utils';
 import { LanguageSwitcher } from '@/shared/components/layout/language-switcher';
 import { ModeToggle } from '@/shared/components/layout/mode-toggle';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { LiquidGlass } from '@/components/ui/liquid-glass';
+import { BrandLogo } from '@/components/ui/brand-logo';
 import { usePathname } from 'next/navigation';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 const Navbar = memo(function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/admin');
   const { t } = useTranslations();
 
   const navLinks = [
     { name: t('nav.home'), href: '/' },
-    { name: t('nav.about'), href: '/#about' },
+    { name: t('nav.about'), href: '/about' },
     { name: t('nav.projects'), href: '/projects' },
-    { name: t('nav.skills'), href: '/#skills' },
+    { name: t('nav.skills'), href: '/skills' },
     { name: t('nav.resume'), href: '/resume' },
     { name: t('nav.blog'), href: '/blog' },
     { name: t('nav.contact'), href: '/#contact' },
   ];
-
-  const handleScroll = useCallback(() => {
-    setScrolled(window.scrollY > 10);
-  }, []);
-
-  useEffect(() => {
-    let ticking = false;
-    const throttledScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', throttledScroll, { passive: true });
-    return () => window.removeEventListener('scroll', throttledScroll);
-  }, [handleScroll]);
 
   // Click outside to close
   useEffect(() => {
@@ -146,10 +125,12 @@ const Navbar = memo(function Navbar() {
             </nav>
 
             {/* Home / Logo */}
-            <Link href="/" className="p-2 rounded-full hover:bg-primary/10 text-primary hover:text-primary transition-colors shrink-0 md:order-first">
-              <div className="w-8 h-8 flex items-center justify-center font-bold font-mono text-lg border-2 border-current rounded-full">
-                0x
-              </div>
+            <Link href="/" className="px-2 py-1 mx-1 rounded-full hover:bg-primary/10 text-primary hover:text-primary transition-colors shrink-0 md:order-first">
+              <BrandLogo
+                size={30}
+                priority
+                imageClassName="border border-primary/30 shadow-sm shadow-primary/20"
+              />
             </Link>
 
           </div>

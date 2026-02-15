@@ -4,10 +4,8 @@ import { Button } from '@/components/ui/button';
 import { useHeroStore } from '@/lib/stores/hero-store';
 import { useSiteSettingsStore } from '@/lib/stores/site-settings-store';
 import { motion } from 'framer-motion';
-import { ArrowRight, Download, Github, Linkedin, Mail, FileText } from 'lucide-react';
+import { Download, Github, Linkedin, Mail, FileText } from 'lucide-react';
 import Link from 'next/link';
-import { CYBERPUNK_MESSAGES } from '@/data/cyberpunk-messages';
-import { useEffect, useState } from 'react';
 import { Waves } from '@/components/ui/wave-background';
 import { Typewriter } from '@/components/ui/typewriter';
 import ParallaxProfileImage from './parallax-profile-image';
@@ -15,12 +13,7 @@ import ParallaxProfileImage from './parallax-profile-image';
 export default function HeroSection() {
   const { heroData } = useHeroStore();
   const { settings } = useSiteSettingsStore();
-  const [randomMessage, setRandomMessage] = useState('');
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setRandomMessage(CYBERPUNK_MESSAGES.hero[Math.floor(Math.random() * CYBERPUNK_MESSAGES.hero.length)]);
-  }, []);
+  const avatarUrl = heroData.avatarUrl?.trim() || '';
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-16 md:pt-0">
@@ -123,9 +116,15 @@ export default function HeroSection() {
             className="relative flex justify-center lg:justify-end"
           >
             <div className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px]">
-               <ParallaxProfileImage 
-                 imageUrl={heroData.avatarUrl || "https://media.licdn.com/dms/image/v2/D4D03AQHQrREy7e6Rtg/profile-displayphoto-scale_200_200/B4DZnJTBmyIgAY-/0/1760018833625?e=1764201600&v=beta&t=vyCLeSdMBoBRggqkBS6sLubEG0q6IUZIcbowwpyQ_Joi"}
-               />
+              {avatarUrl ? (
+                <ParallaxProfileImage imageUrl={avatarUrl} />
+              ) : (
+                <div className="relative h-full w-full overflow-hidden rounded-[2rem] border border-border/70 bg-muted/35">
+                  <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-muted/70 via-muted/40 to-muted/70" />
+                  <div className="absolute inset-x-10 bottom-12 h-4 rounded bg-muted-foreground/20" />
+                  <div className="absolute inset-x-16 bottom-6 h-3 rounded bg-muted-foreground/15" />
+                </div>
+              )}
             </div>
           </motion.div>
 

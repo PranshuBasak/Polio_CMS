@@ -4,13 +4,26 @@
  */
 import { SiteSettings } from '@/lib/stores/site-settings-store';
 
+const toAbsoluteAssetUrl = (siteUrl: string, assetUrl: string) => {
+  if (assetUrl.startsWith('/')) {
+    return `${siteUrl}${assetUrl}`;
+  }
+
+  return assetUrl;
+};
+
 export function generatePersonSchema(settings: SiteSettings) {
+  const personImage = toAbsoluteAssetUrl(
+    settings.siteUrl,
+    settings.seo.ogImage || '/android-chrome-512x512.png'
+  );
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: settings.siteName.replace(' Portfolio', ''),
     url: settings.siteUrl,
-    image: settings.seo.ogImage,
+    image: personImage,
     sameAs: [
       settings.social.github,
       settings.social.linkedin,
@@ -63,6 +76,11 @@ export function generateBlogPostSchema(post: {
   date: string;
   content: string;
 }, settings: SiteSettings) {
+  const logoUrl = toAbsoluteAssetUrl(
+    settings.siteUrl,
+    settings.seo.iconUrl || '/favicon-32x32.png'
+  );
+
   return {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -81,7 +99,7 @@ export function generateBlogPostSchema(post: {
       name: settings.siteName.replace(' Portfolio', ''),
       logo: {
         '@type': 'ImageObject',
-        url: `${settings.siteUrl}/favicon.svg`,
+        url: logoUrl,
       },
     },
     mainEntityOfPage: {

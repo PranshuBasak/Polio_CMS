@@ -77,7 +77,15 @@ export function ContactForm() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  type ContactApiResponse = {
+    success: boolean;
+    message?: string;
+    warning?: string;
+    error?: string;
+    emailStatus?: 'sent' | 'partial';
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -91,12 +99,37 @@ export function ContactForm() {
 
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const payload = (await response.json()) as ContactApiResponse;
+
+      if (!response.ok || !payload.success) {
+        toast({
+          title: 'Failed to send message',
+          description: payload.error || 'Please try again in a moment.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       toast({
         title: 'Message sent!',
-        description: "Thank you for your message. I'll get back to you soon.",
+        description:
+          payload.message ||
+          "Thank you for your message. I'll get back to you soon.",
       });
+
+      if (payload.warning) {
+        toast({
+          title: 'Message saved with warning',
+          description: payload.warning,
+        });
+      }
 
       setFormData({
         name: '',
@@ -111,7 +144,15 @@ export function ContactForm() {
       setTimeout(() => {
         setIsSuccess(false);
       }, 5000);
-    }, 1500);
+    } catch {
+      toast({
+        title: 'Failed to send message',
+        description: 'Contact service is temporarily unavailable.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

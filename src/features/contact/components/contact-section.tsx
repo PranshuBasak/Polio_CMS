@@ -12,7 +12,7 @@ export default async function ContactSection() {
     location: 'C.G. , India',
     social: {
       github: 'https://github.com/PranshuBasak',
-      linkedin: 'https://linkedin.com/in/0xPranshu',
+      linkedin: 'https://www.linkedin.com/in/pranshubasak',
       medium: 'https://medium.com/@0xPranshu',
     },
   };

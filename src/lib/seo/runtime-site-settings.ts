@@ -33,6 +33,28 @@ const toAbsoluteUrl = (value: unknown, fallback: string) => {
   }
 };
 
+const toSeoAssetUrl = (value: unknown, fallback: string) => {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    return fallback;
+  }
+
+  const normalized = value.trim();
+  if (normalized.startsWith('/')) {
+    return normalized;
+  }
+
+  try {
+    const url = new URL(normalized);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      throw new Error('Only http/https protocols are supported for runtime URLs');
+    }
+
+    return normalized;
+  } catch {
+    return fallback;
+  }
+};
+
 const normalizeSocialSettings = (social: Json | null): RuntimeSocialSettings => {
   if (!isRecord(social)) {
     return seoFallbackSettings.social;
@@ -77,24 +99,27 @@ const normalizeKeywords = (keywords: unknown): string[] => {
   return seoFallbackSettings.seo.keywords;
 };
 
-const normalizeSeoSettings = (seo: Json | null, siteUrl: string): RuntimeSeoSettings => {
+const normalizeSeoSettings = (seo: Json | null): RuntimeSeoSettings => {
   if (!isRecord(seo)) {
     return {
       ...seoFallbackSettings.seo,
-      ogImage: toAbsoluteUrl(seoFallbackSettings.seo.ogImage, `${siteUrl}/favicon.png`),
-      twitterImage: toAbsoluteUrl(
-        seoFallbackSettings.seo.twitterImage,
-        `${siteUrl}/favicon.png`
+      ogImage: toSeoAssetUrl(
+        seoFallbackSettings.seo.ogImage,
+        '/android-chrome-512x512.png'
       ),
-      iconUrl: toAbsoluteUrl(seoFallbackSettings.seo.iconUrl, `${siteUrl}/favicon.svg`),
-      appleIconUrl: toAbsoluteUrl(
+      twitterImage: toSeoAssetUrl(
+        seoFallbackSettings.seo.twitterImage,
+        '/android-chrome-512x512.png'
+      ),
+      iconUrl: toSeoAssetUrl(seoFallbackSettings.seo.iconUrl, '/favicon-32x32.png'),
+      appleIconUrl: toSeoAssetUrl(
         seoFallbackSettings.seo.appleIconUrl,
-        `${siteUrl}/favicon.png`
+        '/apple-touch-icon.png'
       ),
     };
   }
 
-  const ogImage = toAbsoluteUrl(seo.ogImage, `${siteUrl}/favicon.png`);
+  const ogImage = toSeoAssetUrl(seo.ogImage, '/android-chrome-512x512.png');
 
   return {
     metaTitle:
@@ -107,9 +132,9 @@ const normalizeSeoSettings = (seo: Json | null, siteUrl: string): RuntimeSeoSett
         : seoFallbackSettings.seo.metaDescription,
     keywords: normalizeKeywords(seo.keywords),
     ogImage,
-    twitterImage: toAbsoluteUrl(seo.twitterImage, ogImage),
-    iconUrl: toAbsoluteUrl(seo.iconUrl, `${siteUrl}/favicon.svg`),
-    appleIconUrl: toAbsoluteUrl(seo.appleIconUrl, `${siteUrl}/favicon.png`),
+    twitterImage: toSeoAssetUrl(seo.twitterImage, ogImage),
+    iconUrl: toSeoAssetUrl(seo.iconUrl, '/favicon-32x32.png'),
+    appleIconUrl: toSeoAssetUrl(seo.appleIconUrl, '/apple-touch-icon.png'),
   };
 };
 
@@ -160,6 +185,7 @@ const normalizeAdvancedSettings = (advanced: Json | null): RuntimeAdvancedSettin
 };
 
 const normalizeSiteSettingsRow = (row: SiteSettingsRow): RuntimeSiteSettings => {
+  // site_url must include protocol (for example: http://localhost:3000).
   const normalizedSiteUrl = toAbsoluteUrl(row.site_url, seoFallbackSettings.siteUrl);
 
   return {
@@ -169,7 +195,7 @@ const normalizeSiteSettingsRow = (row: SiteSettingsRow): RuntimeSiteSettings => 
     timezone: row.timezone || seoFallbackSettings.timezone,
     publicProfile: row.public_profile ?? seoFallbackSettings.publicProfile,
     social: normalizeSocialSettings(row.social),
-    seo: normalizeSeoSettings(row.seo, normalizedSiteUrl),
+    seo: normalizeSeoSettings(row.seo),
     appearance: normalizeAppearanceSettings(row.appearance),
     advanced: normalizeAdvancedSettings(row.advanced),
   };
