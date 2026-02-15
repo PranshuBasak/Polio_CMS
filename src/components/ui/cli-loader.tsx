@@ -133,6 +133,7 @@ export const CliLoader: React.FC<CliLoaderProps> = ({ onComplete }) => {
   const [status, setStatus] = useState<"booting" | "connecting" | "fetching" | "ready" | "error" | "access_denied">("booting")
   const [retryCount, setRetryCount] = useState(0)
   const [showWarning, setShowWarning] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
   
   const { fetchSettings, settings } = useSiteSettingsStore()
   const { fetchAboutData } = useAboutStore()
@@ -254,6 +255,7 @@ export const CliLoader: React.FC<CliLoaderProps> = ({ onComplete }) => {
         await runSequence(BOOT_SEQUENCE_FINAL)
         
         if (mounted) {
+          setIsVisible(false)
           onComplete()
         }
 
@@ -286,6 +288,10 @@ export const CliLoader: React.FC<CliLoaderProps> = ({ onComplete }) => {
   }, [retryCount]) 
 
   const primaryColor = settings?.appearance?.primaryColor || "#3b82f6" 
+
+  if (!isVisible) {
+    return null
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-black text-sm md:text-base font-mono p-4 overflow-hidden transition-colors duration-300">

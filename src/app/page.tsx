@@ -21,6 +21,14 @@ import HomeClient from './home-client';
 import { TerminalSection } from '@/components/ui/terminal-section';
 import ExperienceTimelineSection from '@/features/experience/components/experience-timeline-section';
 
+function SectionWaveDivider({ flip = false }: { flip?: boolean }) {
+  return (
+    <div className="relative h-10 w-full">
+      <AnimatedWaves position="bottom" flip={flip} height={48} />
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <HomeClient>
@@ -29,26 +37,23 @@ export default function Home() {
         <ErrorBoundary>
           <HeroSection />
         </ErrorBoundary>
+        <SectionWaveDivider />
 
         {/* Terminal Section */}  
-        <div className="relative">
-          <ErrorBoundary>
-            <Suspense fallback={<div className="py-20" />}>
+        <ErrorBoundary>
+          <Suspense fallback={<div className="py-20" />}>
             <TerminalSection />
-            </Suspense>
-          </ErrorBoundary>
-        </div>
+          </Suspense>
+        </ErrorBoundary>
+        <SectionWaveDivider flip />
 
-        {/* About Section with Animation Waves */}
-        <div className="relative">
-          <AnimatedWaves position="top" />
-          <ErrorBoundary>
-            <Suspense fallback={<div className="py-20" />}>
-              <AboutSection />
-            </Suspense>
-          </ErrorBoundary>
-          <AnimatedWaves position="bottom" />
-        </div>
+        {/* About Section */}
+        <ErrorBoundary>
+          <Suspense fallback={<div className="py-20" />}>
+            <AboutSection />
+          </Suspense>
+        </ErrorBoundary>
+        <SectionWaveDivider />
 
         {/* Projects Section - Server Component */}
         <ErrorBoundary>
@@ -56,20 +61,15 @@ export default function Home() {
             <ProjectsSectionContainer />
           </Suspense>
         </ErrorBoundary>
+        <SectionWaveDivider flip />
 
         {/* Skills Section - Server Component */}
-        <div className="relative">
-          <AnimatedWaves position="top" flip={true} />
-          <ErrorBoundary>
-            <Suspense fallback={<SkillsSkeleton />}>
-              <SkillsSection />
-            </Suspense>
-          </ErrorBoundary>
-          <AnimatedWaves
-            position="bottom"
-            flip={true}
-          />
-        </div>
+        <ErrorBoundary>
+          <Suspense fallback={<SkillsSkeleton />}>
+            <SkillsSection />
+          </Suspense>
+        </ErrorBoundary>
+        <SectionWaveDivider />
 
         {/* Experience Timeline - Client Component */}
         <ErrorBoundary>
@@ -77,6 +77,7 @@ export default function Home() {
             <ExperienceTimelineSection context="home" />
           </Suspense>
         </ErrorBoundary>
+        <SectionWaveDivider flip />
 
         {/* Blog Section - Server Component */}
         <ErrorBoundary>
@@ -84,6 +85,7 @@ export default function Home() {
             <BlogSection />
           </Suspense>
         </ErrorBoundary>
+        <SectionWaveDivider />
 
         {/* Contact Section - Server Component */}
         <ErrorBoundary>
@@ -92,8 +94,7 @@ export default function Home() {
           </Suspense>
         </ErrorBoundary>
 
-
-    </div>
+      </div>
     </HomeClient>
   );
 }

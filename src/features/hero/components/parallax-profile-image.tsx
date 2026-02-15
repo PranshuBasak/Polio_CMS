@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 import CloudinaryImage from '@/components/ui/cloudinary-image';
 import { useCursorStore } from '@/lib/stores/cursor-store';
 import { useSiteSettingsStore } from '@/lib/stores/site-settings-store';
@@ -22,13 +22,42 @@ export default function ParallaxProfileImage({ imageUrl, className }: ParallaxPr
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  // Smooth spring animation for tilt
-  const mouseX = useSpring(x, { stiffness: 150, damping: 15 });
-  const mouseY = useSpring(y, { stiffness: 150, damping: 15 });
+  // Interpolated target values for smoother mouse tracking
+  const targetX = useRef(0);
+  const targetY = useRef(0);
+  const rafId = useRef<number | null>(null);
+  const isHovering = useRef(false);
 
   // Transform mouse position to rotation degrees
-  const rotateX = useTransform(mouseY, [-0.5, 0.5], ["15deg", "-15deg"]);
-  const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-15deg", "15deg"]);
+  const rotateX = useTransform(y, [-0.5, 0.5], ['14deg', '-14deg']);
+  const rotateY = useTransform(x, [-0.5, 0.5], ['-14deg', '14deg']);
+
+  const animateTilt = () => {
+    const currentX = x.get();
+    const currentY = y.get();
+
+    // Lerp toward cursor target for buttery-smooth movement.
+    const nextX = currentX + (targetX.current - currentX) * 0.16;
+    const nextY = currentY + (targetY.current - currentY) * 0.16;
+
+    x.set(nextX);
+    y.set(nextY);
+
+    const settled =
+      Math.abs(targetX.current - nextX) < 0.0015 &&
+      Math.abs(targetY.current - nextY) < 0.0015;
+
+    if (!settled || isHovering.current) {
+      rafId.current = requestAnimationFrame(animateTilt);
+    } else {
+      rafId.current = null;
+    }
+  };
+
+  const startAnimationLoop = () => {
+    if (rafId.current !== null) return;
+    rafId.current = requestAnimationFrame(animateTilt);
+  };
 
   // Handle mouse move for tilt effect
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -44,20 +73,33 @@ export default function ParallaxProfileImage({ imageUrl, className }: ParallaxPr
     const xPct = mouseXPos / width - 0.5;
     const yPct = mouseYPos / height - 0.5;
 
-    x.set(xPct);
-    y.set(yPct);
+    targetX.current = xPct;
+    targetY.current = yPct;
+    startAnimationLoop();
   };
 
   const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
+    isHovering.current = false;
+    targetX.current = 0;
+    targetY.current = 0;
+    startAnimationLoop();
     resetCursor();
   };
 
   const handleMouseEnter = () => {
+    isHovering.current = true;
     setCursorColor(primaryColor);
     setCursorVariant('hover');
+    startAnimationLoop();
   };
+
+  useEffect(() => {
+    return () => {
+      if (rafId.current !== null) {
+        cancelAnimationFrame(rafId.current);
+      }
+    };
+  }, []);
 
   return (
     <motion.div
@@ -68,7 +110,9 @@ export default function ParallaxProfileImage({ imageUrl, className }: ParallaxPr
       style={{
         rotateX,
         rotateY,
-        transformStyle: "preserve-3d",
+        transformStyle: 'preserve-3d',
+        transformPerspective: 1000,
+        willChange: 'transform',
       }}
       className={cn("relative w-full h-full perspective-1000 cursor-none group", className)}
     >
