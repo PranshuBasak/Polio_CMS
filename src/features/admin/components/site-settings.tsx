@@ -22,6 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useSiteSettingsStore } from '@/lib/stores';
+import CloudinaryUpload from '@/components/ui/cloudinary-upload';
 import { useState } from 'react';
 
 export default function SiteSettings() {
@@ -370,7 +371,13 @@ export default function SiteSettings() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="og-image">Open Graph Image URL</Label>
+              <Label htmlFor="og-image">Open Graph Image</Label>
+              <CloudinaryUpload
+                value={settings.seo.ogImage || ''}
+                onChange={(value) =>
+                  updateSEO({ ogImage: value as string })
+                }
+              />
               <Input
                 id="og-image"
                 value={settings.seo.ogImage}
@@ -379,10 +386,19 @@ export default function SiteSettings() {
                 }
                 placeholder="https://0xPranshu.dev/og-image.png"
               />
+              <p className="text-xs text-muted-foreground">
+                Upload to CDN or paste a direct image URL.
+              </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="twitter-image">Twitter Image URL</Label>
+              <Label htmlFor="twitter-image">Twitter Image</Label>
+              <CloudinaryUpload
+                value={settings.seo.twitterImage || ''}
+                onChange={(value) =>
+                  updateSEO({ twitterImage: value as string })
+                }
+              />
               <Input
                 id="twitter-image"
                 value={settings.seo.twitterImage || ''}
@@ -391,10 +407,20 @@ export default function SiteSettings() {
                 }
                 placeholder="https://0xPranshu.dev/twitter-image.png"
               />
+              <p className="text-xs text-muted-foreground">
+                Upload to CDN or paste a direct image URL.
+              </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="icon-url">Site Icon URL</Label>
+              <Label htmlFor="icon-url">Site Icon</Label>
+              <CloudinaryUpload
+                value={settings.seo.iconUrl || ''}
+                onChange={(value) =>
+                  updateSEO({ iconUrl: value as string })
+                }
+                resourceType="auto"
+              />
               <Input
                 id="icon-url"
                 value={settings.seo.iconUrl || ''}
@@ -403,10 +429,20 @@ export default function SiteSettings() {
                 }
                 placeholder="https://0xPranshu.dev/favicon.svg"
               />
+              <p className="text-xs text-muted-foreground">
+                Upload to CDN or paste a direct icon URL.
+              </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="apple-icon-url">Apple Icon URL</Label>
+              <Label htmlFor="apple-icon-url">Apple Icon</Label>
+              <CloudinaryUpload
+                value={settings.seo.appleIconUrl || ''}
+                onChange={(value) =>
+                  updateSEO({ appleIconUrl: value as string })
+                }
+                resourceType="auto"
+              />
               <Input
                 id="apple-icon-url"
                 value={settings.seo.appleIconUrl || ''}
@@ -415,6 +451,9 @@ export default function SiteSettings() {
                 }
                 placeholder="https://0xPranshu.dev/apple-touch-icon.png"
               />
+              <p className="text-xs text-muted-foreground">
+                Upload to CDN or paste a direct icon URL.
+              </p>
             </div>
           </CardContent>
         </Card>

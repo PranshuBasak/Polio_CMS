@@ -3,6 +3,8 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/lib/types/supabase';
 import { MetadataRoute } from 'next';
 
+export const revalidate = 300;
+
 type StaticRouteConfig = {
   path: string;
   changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'];

@@ -17,6 +17,15 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
+const toNonEmptyString = (value: unknown): string | null => {
+  if (typeof value !== 'string') {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+};
+
 const toAbsoluteUrl = (value: unknown, fallback: string) => {
   if (typeof value !== 'string' || value.trim().length === 0) {
     return fallback;
@@ -61,26 +70,11 @@ const normalizeSocialSettings = (social: Json | null): RuntimeSocialSettings => 
   }
 
   return {
-    github:
-      typeof social.github === 'string'
-        ? social.github
-        : seoFallbackSettings.social.github,
-    linkedin:
-      typeof social.linkedin === 'string'
-        ? social.linkedin
-        : seoFallbackSettings.social.linkedin,
-    email:
-      typeof social.email === 'string'
-        ? social.email
-        : seoFallbackSettings.social.email,
-    medium:
-      typeof social.medium === 'string'
-        ? social.medium
-        : seoFallbackSettings.social.medium,
-    twitter:
-      typeof social.twitter === 'string'
-        ? social.twitter
-        : seoFallbackSettings.social.twitter,
+    github: toNonEmptyString(social.github) ?? seoFallbackSettings.social.github,
+    linkedin: toNonEmptyString(social.linkedin) ?? seoFallbackSettings.social.linkedin,
+    email: toNonEmptyString(social.email) ?? seoFallbackSettings.social.email,
+    medium: toNonEmptyString(social.medium) ?? seoFallbackSettings.social.medium,
+    twitter: toNonEmptyString(social.twitter) ?? seoFallbackSettings.social.twitter,
   };
 };
 
@@ -122,14 +116,9 @@ const normalizeSeoSettings = (seo: Json | null): RuntimeSeoSettings => {
   const ogImage = toSeoAssetUrl(seo.ogImage, '/android-chrome-512x512.png');
 
   return {
-    metaTitle:
-      typeof seo.metaTitle === 'string'
-        ? seo.metaTitle
-        : seoFallbackSettings.seo.metaTitle,
+    metaTitle: toNonEmptyString(seo.metaTitle) ?? seoFallbackSettings.seo.metaTitle,
     metaDescription:
-      typeof seo.metaDescription === 'string'
-        ? seo.metaDescription
-        : seoFallbackSettings.seo.metaDescription,
+      toNonEmptyString(seo.metaDescription) ?? seoFallbackSettings.seo.metaDescription,
     keywords: normalizeKeywords(seo.keywords),
     ogImage,
     twitterImage: toSeoAssetUrl(seo.twitterImage, ogImage),
@@ -189,8 +178,9 @@ const normalizeSiteSettingsRow = (row: SiteSettingsRow): RuntimeSiteSettings => 
   const normalizedSiteUrl = toAbsoluteUrl(row.site_url, seoFallbackSettings.siteUrl);
 
   return {
-    siteName: row.site_name || seoFallbackSettings.siteName,
-    siteDescription: row.site_description || seoFallbackSettings.siteDescription,
+    siteName: toNonEmptyString(row.site_name) ?? seoFallbackSettings.siteName,
+    siteDescription:
+      toNonEmptyString(row.site_description) ?? seoFallbackSettings.siteDescription,
     siteUrl: normalizedSiteUrl,
     timezone: row.timezone || seoFallbackSettings.timezone,
     publicProfile: row.public_profile ?? seoFallbackSettings.publicProfile,

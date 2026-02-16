@@ -19,8 +19,10 @@ import './globals.css';
 import { JsonLd, generatePersonSchema, generateWebsiteSchema } from '@/lib/seo/structured-data';
 import { PageViewTracker } from '@/components/analytics/page-view-tracker';
 import { getRuntimeSiteSettings } from '@/lib/seo/runtime-site-settings';
+import { seoFallbackSettings } from '@/config/seo-fallback';
 
 const inter = Inter({ subsets: ['latin'] });
+export const revalidate = 300;
 
 async function getSiteSettings() {
   return getRuntimeSiteSettings();
@@ -39,6 +41,17 @@ function safeMetadataBase(siteUrl: string) {
   }
 }
 
+function safeMetadataTitle(metaTitle: string, siteName: string) {
+  const candidate = metaTitle.trim() || siteName.trim();
+
+  // Prevent URLs from rendering as the page title in production.
+  if (/^https?:\/\//i.test(candidate)) {
+    return seoFallbackSettings.seo.metaTitle;
+  }
+
+  return candidate || seoFallbackSettings.seo.metaTitle;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   const ownerName = settings.siteName.replace(/\s*Portfolio$/i, '').trim() || settings.siteName;
@@ -46,11 +59,13 @@ export async function generateMetadata(): Promise<Metadata> {
   const twitterImage = settings.seo.twitterImage || ogImage;
   const iconUrl = settings.seo.iconUrl || '/favicon-32x32.png';
   const appleIconUrl = settings.seo.appleIconUrl || '/apple-touch-icon.png';
+  const resolvedTitle = safeMetadataTitle(settings.seo.metaTitle, settings.siteName);
+  const resolvedDescription = settings.seo.metaDescription || settings.siteDescription;
 
   return {
     metadataBase: safeMetadataBase(settings.siteUrl),
-    title: settings.seo.metaTitle || settings.siteName,
-    description: settings.seo.metaDescription || settings.siteDescription,
+    title: resolvedTitle,
+    description: resolvedDescription,
     keywords: settings.seo.keywords,
     authors: [{ name: ownerName, url: settings.social.github || settings.siteUrl }],
     creator: ownerName,
@@ -62,22 +77,22 @@ export async function generateMetadata(): Promise<Metadata> {
       type: 'website',
       locale: 'en_US',
       url: settings.siteUrl,
-      title: settings.seo.metaTitle || settings.siteName,
-      description: settings.seo.metaDescription || settings.siteDescription,
+      title: resolvedTitle,
+      description: resolvedDescription,
       siteName: settings.siteName,
       images: [
         {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: settings.seo.metaTitle || settings.siteName,
+          alt: resolvedTitle,
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: settings.seo.metaTitle || settings.siteName,
-      description: settings.seo.metaDescription || settings.siteDescription,
+      title: resolvedTitle,
+      description: resolvedDescription,
       creator: settings.social.twitter,
       images: [twitterImage],
     },
